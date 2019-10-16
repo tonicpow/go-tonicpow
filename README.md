@@ -44,10 +44,6 @@ You can view the generated [documentation here](https://godoc.org/github.com/ton
 ## Examples & Tests
 All unit tests and [examples](tonicpow_test.go) run via [Travis CI](https://travis-ci.org/tonicpow/tonicpow-go) and uses [Go version 1.13.x](https://golang.org/doc/go1.13). View the [deployment configuration file](.travis.yml).
 
-- [helper examples & tests](helper_test.go)
-- [tonicpow examples &  tests](tonicpow_test.go)
-- [response tests](response_test.go)
-
 Run all tests (including integration tests)
 ```bash
 $ cd ../tonicpow-go
@@ -72,8 +68,6 @@ Read more about this Go project's [code standards](CODE_STANDARDS.md).
 
 ## Usage
 - View the [examples & benchmarks](tonicpow_test.go)
-- View the [helper examples & benchmarks](helper_test.go)
-- View the [response tests](response_test.go)
 
 Basic implementation:
 ```golang
@@ -84,7 +78,8 @@ import (
 )
 
 func main() {
-
+    client, _ := NewClient(privateGUID)
+    resp, _ = client.ConvertGoal("signup-goal", "f773c231ee9.....", 0, "")
 }
 ```
 
