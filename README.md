@@ -1,9 +1,8 @@
 # tonicpow-go
 **tonicpow-go** is the official golang implementation for the TonicPow API
 
-[![Build Status](https://travis-ci.org/tonicpow/tonicpow-go.svg?branch=master)](https://travis-ci.org/tonicpow/tonicpow-go)
-[![Report](https://goreportcard.com/badge/github.com/tonicpow/tonicpow-go?style=flat)](https://goreportcard.com/report/github.com/tonicpow/tonicpow-go)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/01708ca3079e4933bafb3b39fe2aaa9d)](https://www.codacy.com/app/mrz1818/tonicpow-go?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=tonicpow/tonicpow-go&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.org/tonicpow/tonicpow-go.svg?branch=master&v=1)](https://travis-ci.org/tonicpow/tonicpow-go)
+[![Report](https://goreportcard.com/badge/github.com/tonicpow/tonicpow-go?style=flat&v=1)](https://goreportcard.com/report/github.com/tonicpow/tonicpow-go)
 [![Release](https://img.shields.io/github/release-pre/tonicpow/tonicpow-go.svg?style=flat)](https://github.com/tonicpow/tonicpow-go/releases)
 [![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat)](https://github.com/RichardLitt/standard-readme)
 [![GoDoc](https://godoc.org/github.com/tonicpow/tonicpow-go?status.svg&style=flat)](https://godoc.org/github.com/tonicpow/tonicpow-go)
