@@ -11,7 +11,6 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"strconv"
 	"strings"
 
 	"github.com/gojek/heimdall"
@@ -179,7 +178,7 @@ func (c *Client) Request(endpoint string, method string, params *url.Values) (re
 }
 
 // ConvertGoal fires a conversion on a given goal name
-func (c *Client) ConvertGoal(goalName string, sessionTxID string, userID uint64, additionalData string) (response *ConversionResponse, err error) {
+func (c *Client) ConvertGoal(goalName string, sessionTxID string, userID string, additionalData string) (response *ConversionResponse, err error) {
 
 	// Start the post data
 	postData := url.Values{}
@@ -201,9 +200,9 @@ func (c *Client) ConvertGoal(goalName string, sessionTxID string, userID uint64,
 		return
 	}
 
-	// Add the user id if not zero
-	if userID > 0 {
-		postData.Add("user_id", strconv.FormatUint(userID, 10))
+	// Add the user id if not found
+	if len(userID) > 0 {
+		postData.Add("user_id", userID)
 	}
 
 	// Add the additional data if found
