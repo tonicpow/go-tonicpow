@@ -51,7 +51,7 @@ func TestClient_ConvertGoal(t *testing.T) {
 
 	goalName := "signupgoal"
 	sessionTxID := "f773c231ee9383125fe7932d6dbdb5447577c39cae8cc28210d19f6471294485"
-	userID := uint64(123)
+	userID := "123"
 	additionalData := "test data"
 
 	var resp *ConversionResponse
