@@ -7,7 +7,7 @@ type ConversionResponse struct {
 	ConversionGoalID   uint64 `json:"conversion_goal_id"`
 	ConversionGoalName string `json:"conversion_goal_name"`
 	ID                 uint64 `json:"id"`
-	UserID             uint64 `json:"user_id"`
+	UserID             string `json:"user_id"`
 	ConversionTxID     string `json:"conversion_tx_id"`
 	PayoutTxID         string `json:"payout_tx_id"`
 }
