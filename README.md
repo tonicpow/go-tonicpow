@@ -20,15 +20,9 @@
 
 ## Installation
 
-**tonicpow-go** requires a [supported release of Go](https://golang.org/doc/devel/release.html#policy) and [dep](https://github.com/golang/dep).
+**tonicpow-go** requires a [supported release of Go](https://golang.org/doc/devel/release.html#policy).
 ```bash
 $ go get -u github.com/tonicpow/tonicpow-go
-```
-
-Updating dependencies in **tonicpow-go**:
-```bash
-$ cd ../tonicpow-go
-$ dep ensure -update -v
 ```
 
 ## Documentation
