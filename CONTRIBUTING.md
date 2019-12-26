@@ -15,4 +15,4 @@ This project follows [effective Go standards](https://golang.org/doc/effective_g
 - [godoc](https://godoc.org/golang.org/x/tools/cmd/godoc)
 - [golint](https://github.com/golang/lint)
 - [vet](https://golang.org/cmd/vet/)
-- [GoReportCard.com](https://goreportcard.com/report/github.com/tonicpow/tonicpow-go)
+- [GoReportCard.com](https://goreportcard.com/report/github.com/tonicpow/go-tonicpow)

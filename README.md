@@ -1,11 +1,11 @@
-# tonicpow-go
-**tonicpow-go** is the official golang implementation for interacting with the TonicPow API
+# go-tonicpow
+**go-tonicpow** is the official golang implementation for interacting with the TonicPow API
 
-[![Build Status](https://travis-ci.com/tonicpow/tonicpow-go.svg?branch=master)](https://travis-ci.com/tonicpow/tonicpow-go)
-[![Report](https://goreportcard.com/badge/github.com/tonicpow/tonicpow-go?style=flat)](https://goreportcard.com/report/github.com/tonicpow/tonicpow-go)
-[![Release](https://img.shields.io/github/release-pre/tonicpow/tonicpow-go.svg?style=flat)](https://github.com/tonicpow/tonicpow-go/releases)
+[![Build Status](https://travis-ci.com/tonicpow/go-tonicpow.svg?branch=master)](https://travis-ci.com/tonicpow/go-tonicpow)
+[![Report](https://goreportcard.com/badge/github.com/tonicpow/go-tonicpow?style=flat)](https://goreportcard.com/report/github.com/tonicpow/go-tonicpow)
+[![Release](https://img.shields.io/github/release-pre/tonicpow/go-tonicpow.svg?style=flat)](https://github.com/tonicpow/go-tonicpow/releases)
 [![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat)](https://github.com/RichardLitt/standard-readme)
-[![GoDoc](https://godoc.org/github.com/tonicpow/tonicpow-go?status.svg&style=flat)](https://godoc.org/github.com/tonicpow/tonicpow-go)
+[![GoDoc](https://godoc.org/github.com/tonicpow/go-tonicpow?status.svg&style=flat)](https://godoc.org/github.com/tonicpow/go-tonicpow)
 
 ## Table of Contents
 - [Installation](#installation)
@@ -20,13 +20,13 @@
 
 ## Installation
 
-**tonicpow-go** requires a [supported release of Go](https://golang.org/doc/devel/release.html#policy).
+**go-tonicpow** requires a [supported release of Go](https://golang.org/doc/devel/release.html#policy).
 ```bash
-$ go get -u github.com/tonicpow/tonicpow-go
+$ go get -u github.com/tonicpow/go-tonicpow
 ```
 
 ## Documentation
-You can view the generated [documentation here](https://godoc.org/github.com/tonicpow/tonicpow-go).
+You can view the generated [documentation here](https://godoc.org/github.com/tonicpow/go-tonicpow).
 
 ### Features
 - Complete coverage for the [TonicPow.com](https://tonicpow.com/) API
@@ -35,24 +35,24 @@ You can view the generated [documentation here](https://godoc.org/github.com/ton
 - Using [heimdall http client](https://github.com/gojek/heimdall) with exponential backoff & more
 
 ## Examples & Tests
-All unit tests and [examples](tonicpow_test.go) run via [Travis CI](https://travis-ci.org/tonicpow/tonicpow-go) and uses [Go version 1.13.x](https://golang.org/doc/go1.13). View the [deployment configuration file](.travis.yml).
+All unit tests and [examples](tonicpow_test.go) run via [Travis CI](https://travis-ci.org/tonicpow/go-tonicpow) and uses [Go version 1.13.x](https://golang.org/doc/go1.13). View the [deployment configuration file](.travis.yml).
 
 Run all tests (including integration tests)
 ```bash
-$ cd ../tonicpow-go
+$ cd ../go-tonicpow
 $ go test ./... -v
 ```
 
 Run tests (excluding integration tests)
 ```bash
-$ cd ../tonicpow-go
+$ cd ../go-tonicpow
 $ go test ./... -v -test.short
 ```
 
 ## Benchmarks
 Run the Go [benchmarks](tonicpow_test.go):
 ```bash
-$ cd ../tonicpow-go
+$ cd ../go-tonicpow
 $ go test -bench . -benchmem
 ```
 
@@ -67,7 +67,7 @@ Basic implementation:
 package main
 
 import (
-	"github.com/tonicpow/tonicpow-go"
+	"github.com/tonicpow/go-tonicpow"
 )
 
 func main() {
@@ -78,7 +78,7 @@ func main() {
 
 ## Maintainers
 
-[@MrZ1836](https://github.com/mrz1836)
+[@MrZ](https://github.com/mrz1836)
 
 ## Contributing
 
@@ -88,8 +88,8 @@ View the [contributing guidelines](CONTRIBUTING.md) and follow the [code of cond
 
 Support the development of this project 🙏
 
-[![Donate](https://img.shields.io/badge/donate-bitcoin-brightgreen.svg)](https://mrz1818.com/?tab=tips&af=tonicpow-go)
+[![Donate](https://img.shields.io/badge/donate-bitcoin-brightgreen.svg)](https://mrz1818.com/?tab=tips&af=go-tonicpow)
 
 ## License
 
-![License](https://img.shields.io/github/license/tonicpow/tonicpow-go.svg?style=flat)
+![License](https://img.shields.io/github/license/tonicpow/go-tonicpow.svg?style=flat)

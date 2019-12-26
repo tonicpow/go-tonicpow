@@ -20,7 +20,7 @@ The package [golint](https://github.com/golang/lint) differs from [gofmt](https:
 How to install [golint](https://github.com/golang/lint):
 ```bash
 $ go get -u golang.org/x/lint/golint
-$ cd ../tonicpow-go
+$ cd ../go-tonicpow
 $ golint
 ```
 
@@ -29,7 +29,7 @@ $ golint
 
 How to run [vet](https://golang.org/cmd/vet/):
 ```bash
-$ cd ../tonicpow-go
+$ cd ../go-tonicpow
 $ go vet -v
 ```
 
