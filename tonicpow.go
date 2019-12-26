@@ -44,7 +44,7 @@ type RequestParameters struct {
 	UserAgent string
 }
 
-// LastRequest is used to track what was submitted to whatsonchain on the Request()
+// LastRequest is used to track what was submitted via the Request()
 type LastRequest struct {
 
 	// Method is either POST or GET
@@ -63,7 +63,7 @@ type LastRequest struct {
 // NewClient creates a new client to submit queries with.
 // Parameters values are set to the defaults defined by TonicPow.
 //
-// For more information: https://tonicpow.com
+// For more information: https://docs.tonicpow.com
 func NewClient(advertiserSecretKey string) (c *Client, err error) {
 
 	// Create a client
@@ -213,8 +213,7 @@ func (c *Client) ConvertGoal(goalName string, sessionTxID string, userID string,
 
 	// Fire the request
 	var resp string
-	resp, err = c.Request("conversions", "POST", &postData)
-	if err != nil {
+	if resp, err = c.Request("conversions", "POST", &postData); err != nil {
 		return
 	}
 
