@@ -1,18 +1,36 @@
 package tonicpow
 
-// ConversionResponse is the structure response from a conversion
-type ConversionResponse struct {
-	Error
-	AdditionalData     string `json:"additional_data"`
-	ConversionGoalID   uint64 `json:"conversion_goal_id"`
-	ConversionGoalName string `json:"conversion_goal_name"`
-	ID                 uint64 `json:"id"`
-	UserID             string `json:"user_id"`
-	ConversionTxID     string `json:"conversion_tx_id"`
-	PayoutTxID         string `json:"payout_tx_id"`
-}
+// APIEnvironment is used to differentiate the environment when making requests
+type APIEnvironment string
 
-// Error is the response from the request
+const (
+
+	// APIKeyName is the key name for requests
+	APIKeyName = "api_key"
+
+	// APIVersion current version for all endpoints
+	APIVersion = "v1"
+
+	// DefaultUserAgent is the default user agent for all requests
+	DefaultUserAgent string = "go-tonicpow: " + APIVersion
+
+	// LiveEnvironment is the live production environment
+	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + APIVersion + "/"
+
+	// LocalEnvironment is for testing locally using your own api instance
+	LocalEnvironment APIEnvironment = "http://localhost:3000/" + APIVersion + "/"
+
+	// StagingEnvironment is used for production-like testing
+	StagingEnvironment APIEnvironment = "https://apistaging.tonicpow.com/" + APIVersion + "/"
+
+	// SessionCookie is the cookie name for session tokens
+	SessionCookie = "session_token"
+
+	// TestEnvironment is a test-only environment
+	//TestEnvironment APIEnvironment = "https://test.tonicpow.com/"+APIVersion+"/"
+)
+
+// Error is the universal error response from the API
 type Error struct {
 	Code        int    `json:"code"`
 	Data        string `json:"data"`

@@ -29,10 +29,15 @@ $ go get -u github.com/tonicpow/go-tonicpow
 You can view the generated [documentation here](https://godoc.org/github.com/tonicpow/go-tonicpow).
 
 ### Features
-- Complete coverage for the [TonicPow.com](https://tonicpow.com/) API
 - Client is completely configurable
-- Customize API Key and User Agent per request
 - Using [heimdall http client](https://github.com/gojek/heimdall) with exponential backoff & more
+- Coverage for the [TonicPow.com](https://docs.tonicpow.com/) API
+    - [x] Authentication
+    - [ ] Users
+    - [ ] Advertiser Profiles
+    - [ ] Campaigns
+    - [ ] Goals
+    - [ ] Links
 
 ## Examples & Tests
 All unit tests and [examples](tonicpow_test.go) run via [Travis CI](https://travis-ci.org/tonicpow/go-tonicpow) and uses [Go version 1.13.x](https://golang.org/doc/go1.13). View the [deployment configuration file](.travis.yml).
@@ -67,12 +72,13 @@ Basic implementation:
 package main
 
 import (
+	"os"
 	"github.com/tonicpow/go-tonicpow"
 )
 
 func main() {
-    client, _ := NewClient(privateGUID)
-    resp, _ = client.ConvertGoal("signup-goal", "f773c231ee9.....", 0, "")
+    api, _ := tonicpow.NewClient(os.Getenv("TONICPOW_API_KEY"), tonicpow.LiveEnvironment, nil)
+    _ = api.ProlongSession("")
 }
 ```
 
