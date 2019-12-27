@@ -18,6 +18,10 @@ var (
 
 // TestNewClient test new client
 func TestNewClient(t *testing.T) {
+	// Skip this test in short mode (not needed)
+	if testing.Short() {
+		t.Skip("skipping testing in short mode")
+	}
 
 	client, err := NewClient(testAPIKey, LocalEnvironment, nil)
 	if err != nil {
