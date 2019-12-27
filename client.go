@@ -17,9 +17,9 @@ import (
 
 // Client is the parent struct that wraps the heimdall client
 type Client struct {
-	httpClient  heimdall.Client `json:"-"`            // carries out the POST operations
-	LastRequest *LastRequest    `json:"last_request"` // is the raw information from the last request
-	Parameters  *Parameters     `json:"parameters"`   // contains application specific values
+	httpClient  heimdall.Client // carries out the POST operations
+	LastRequest *LastRequest    // is the raw information from the last request
+	Parameters  *Parameters     // contains application specific values
 }
 
 // Options holds all the configuration for connection, dialer and transport
@@ -49,11 +49,11 @@ type LastRequest struct {
 
 // Parameters are application specific values for requests
 type Parameters struct {
-	apiKey            string         `json:"-"`                   // is the given api key for the user
-	apiSessionCookie  *http.Cookie   `json:"-"`                   // is the current session cookie for the api key
-	environment       APIEnvironment `json:"-"`                   // is the current api environment to use
-	UserAgent         string         `json:"user_agent"`          // (optional for changing user agents)
-	UserSessionCookie *http.Cookie   `json:"user_session_cookie"` // is the current session cookie for a user (on behalf)
+	apiKey            string         // is the given api key for the user
+	apiSessionCookie  *http.Cookie   // is the current session cookie for the api key
+	environment       APIEnvironment // is the current api environment to use
+	UserAgent         string         // (optional for changing user agents)
+	UserSessionCookie *http.Cookie   // is the current session cookie for a user (on behalf)
 }
 
 // ClientDefaultOptions will return an Options struct with the default settings
