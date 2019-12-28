@@ -36,7 +36,7 @@ You can view the generated [documentation here](https://godoc.org/github.com/ton
     - [x] Users
     - [x] Advertiser Profiles
     - [x] Campaigns
-    - [ ] Goals
+    - [x] Goals
     - [ ] Links
 
 ## Examples & Tests

@@ -29,7 +29,7 @@ func (c *Client) CreateCampaign(campaign *Campaign, userSessionToken string) (cr
 
 	// Fire the request
 	var response string
-	if response, err = c.request("campaigns", http.MethodPost, campaign, userSessionToken); err != nil {
+	if response, err = c.request(modelCampaign, http.MethodPost, campaign, userSessionToken); err != nil {
 		return
 	}
 
@@ -59,7 +59,7 @@ func (c *Client) GetCampaign(campaignID uint64, userSessionToken string) (campai
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("campaigns/details/%d", campaignID), http.MethodGet, nil, userSessionToken); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/details/%d", modelCampaign, campaignID), http.MethodGet, nil, userSessionToken); err != nil {
 		return
 	}
 
@@ -74,14 +74,14 @@ func (c *Client) GetCampaign(campaignID uint64, userSessionToken string) (campai
 	return
 }
 
-// GetCampaignBalance will update a campaigns's balance from the chain
+// GetCampaignBalance will update the models's balance from the chain
 //
 // For more information: https://docs.tonicpow.com/#b6c60c63-8ac5-4c74-a4a2-cf3e858e5a8d
 func (c *Client) GetCampaignBalance(campaignID uint64) (campaign *Campaign, err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("campaigns/balance/%d", campaignID), http.MethodGet, nil, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/balance/%d", modelCampaign, campaignID), http.MethodGet, nil, ""); err != nil {
 		return
 	}
 
@@ -113,7 +113,7 @@ func (c *Client) UpdateCampaign(campaign *Campaign, userSessionToken string) (up
 
 	// Fire the request
 	var response string
-	if response, err = c.request("campaigns", http.MethodPut, campaign, userSessionToken); err != nil {
+	if response, err = c.request(modelCampaign, http.MethodPut, campaign, userSessionToken); err != nil {
 		return
 	}
 

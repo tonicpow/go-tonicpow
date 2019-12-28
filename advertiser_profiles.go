@@ -25,7 +25,7 @@ func (c *Client) CreateAdvertiserProfile(profile *AdvertiserProfile, userSession
 
 	// Fire the request
 	var response string
-	if response, err = c.request("advertisers", http.MethodPost, profile, userSessionToken); err != nil {
+	if response, err = c.request(modelAdvertiser, http.MethodPost, profile, userSessionToken); err != nil {
 		return
 	}
 
@@ -55,7 +55,7 @@ func (c *Client) GetAdvertiserProfile(profileID uint64, userSessionToken string)
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("advertisers/details/%d", profileID), http.MethodGet, nil, userSessionToken); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/details/%d", modelAdvertiser, profileID), http.MethodGet, nil, userSessionToken); err != nil {
 		return
 	}
 
@@ -87,7 +87,7 @@ func (c *Client) UpdateAdvertiserProfile(profile *AdvertiserProfile, userSession
 
 	// Fire the request
 	var response string
-	if response, err = c.request("advertisers", http.MethodPut, profile, userSessionToken); err != nil {
+	if response, err = c.request(modelAdvertiser, http.MethodPut, profile, userSessionToken); err != nil {
 		return
 	}
 

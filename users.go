@@ -30,7 +30,7 @@ func (c *Client) CreateUser(user *User) (createdUser *User, err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request("users", http.MethodPost, user, ""); err != nil {
+	if response, err = c.request(modelUser, http.MethodPost, user, ""); err != nil {
 		return
 	}
 
@@ -62,7 +62,7 @@ func (c *Client) UpdateUser(user *User, userSessionToken string) (updatedUser *U
 
 	// Fire the request
 	var response string
-	if response, err = c.request("users", http.MethodPut, user, userSessionToken); err != nil {
+	if response, err = c.request(modelUser, http.MethodPut, user, userSessionToken); err != nil {
 		return
 	}
 
@@ -100,7 +100,7 @@ func (c *Client) GetUser(byID uint64, byEmail string) (user *User, err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request("users/details", http.MethodGet, params, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/details", modelUser), http.MethodGet, params, ""); err != nil {
 		return
 	}
 
@@ -122,7 +122,7 @@ func (c *Client) GetUserBalance(userID uint64) (user *User, err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("users/balance/%d", userID), http.MethodGet, nil, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/balance/%d", modelUser, userID), http.MethodGet, nil, ""); err != nil {
 		return
 	}
 
@@ -151,7 +151,7 @@ func (c *Client) CurrentUser() (user *User, err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request("users/account", http.MethodGet, nil, c.Parameters.UserSessionCookie.Value); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/account", modelUser), http.MethodGet, nil, c.Parameters.UserSessionCookie.Value); err != nil {
 		return
 	}
 
@@ -182,7 +182,7 @@ func (c *Client) LoginUser(user *User) (userSessionToken string, err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request("users/login", http.MethodPost, user, c.Parameters.apiSessionCookie.Value); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/login", modelUser), http.MethodPost, user, c.Parameters.apiSessionCookie.Value); err != nil {
 		return
 	}
 
@@ -209,7 +209,7 @@ func (c *Client) LogoutUser(userSessionToken string) (err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request("auth/session", http.MethodDelete, nil, userSessionToken); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/logout", modelUser), http.MethodDelete, nil, userSessionToken); err != nil {
 		return
 	}
 	// Only a 200 is treated as a success
@@ -233,7 +233,7 @@ func (c *Client) ForgotPassword(emailAddress string) (err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request("users/password/forgot", http.MethodPost, data, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/password/forgot", modelUser), http.MethodPost, data, ""); err != nil {
 		return
 	}
 
@@ -261,7 +261,7 @@ func (c *Client) ResetPassword(token, password, passwordConfirm string) (err err
 
 	// Fire the request
 	var response string
-	if response, err = c.request("users/password/reset", http.MethodPost, data, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/password/reset", modelUser), http.MethodPut, data, ""); err != nil {
 		return
 	}
 
@@ -286,7 +286,7 @@ func (c *Client) CompleteEmailVerification(token string) (err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request("users/verify/email", http.MethodPut, data, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/verify/%s", modelUser, fieldEmail), http.MethodPut, data, ""); err != nil {
 		return
 	}
 
@@ -314,7 +314,7 @@ func (c *Client) CompletePhoneVerification(phone, code string) (err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request("users/verify/phone", http.MethodPut, data, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/verify/%s", modelUser, fieldPhone), http.MethodPut, data, ""); err != nil {
 		return
 	}
 
