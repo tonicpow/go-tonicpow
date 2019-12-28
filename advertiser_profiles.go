@@ -14,7 +14,7 @@ func (a *AdvertiserProfile) permitFields() {
 // CreateAdvertiserProfile will make a new advertiser profile
 //
 // For more information: https://docs.tonicpow.com/#153c0b65-2d4c-4972-9aab-f791db05b37b
-func (c *Client) CreateAdvertiserProfile(profile *AdvertiserProfile) (createdProfile *AdvertiserProfile, err error) {
+func (c *Client) CreateAdvertiserProfile(profile *AdvertiserProfile, userSessionToken string) (createdProfile *AdvertiserProfile, err error) {
 
 	// Basic requirements
 	if profile.UserID == 0 {
@@ -24,7 +24,7 @@ func (c *Client) CreateAdvertiserProfile(profile *AdvertiserProfile) (createdPro
 
 	// Fire the request
 	var response string
-	if response, err = c.request("advertisers", http.MethodPost, profile, ""); err != nil {
+	if response, err = c.request("advertisers", http.MethodPost, profile, userSessionToken); err != nil {
 		return
 	}
 
@@ -43,7 +43,7 @@ func (c *Client) CreateAdvertiserProfile(profile *AdvertiserProfile) (createdPro
 // This will return an error if the profile is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#b3a62d35-7778-4314-9321-01f5266c3b51
-func (c *Client) GetAdvertiserProfile(profileID uint64) (profile *AdvertiserProfile, err error) {
+func (c *Client) GetAdvertiserProfile(profileID uint64, userSessionToken string) (profile *AdvertiserProfile, err error) {
 
 	// Must have an id
 	if profileID == 0 {
@@ -53,7 +53,7 @@ func (c *Client) GetAdvertiserProfile(profileID uint64) (profile *AdvertiserProf
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("advertisers/details/%d", profileID), http.MethodGet, nil, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("advertisers/details/%d", profileID), http.MethodGet, nil, userSessionToken); err != nil {
 		return
 	}
 
@@ -65,5 +65,36 @@ func (c *Client) GetAdvertiserProfile(profileID uint64) (profile *AdvertiserProf
 	// Convert model response
 	profile = new(AdvertiserProfile)
 	err = json.Unmarshal([]byte(response), profile)
+	return
+}
+
+// UpdateAdvertiserProfile will update an existing profile
+//
+// For more information: https://docs.tonicpow.com/#0cebd1ff-b1ce-4111-aff6-9d586f632a84
+func (c *Client) UpdateAdvertiserProfile(profile *AdvertiserProfile, userSessionToken string) (updatedProfile *AdvertiserProfile, err error) {
+
+	// Basic requirements
+	if profile.ID == 0 {
+		err = fmt.Errorf("missing required attribute: %s", fieldID)
+		return
+	}
+
+	// Permit fields
+	profile.permitFields()
+
+	// Fire the request
+	var response string
+	if response, err = c.request("advertisers", http.MethodPut, profile, userSessionToken); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	if err = c.error(http.StatusOK, response); err != nil {
+		return
+	}
+
+	// Convert model response
+	updatedProfile = new(AdvertiserProfile)
+	err = json.Unmarshal([]byte(response), updatedProfile)
 	return
 }

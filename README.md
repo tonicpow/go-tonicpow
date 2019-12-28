@@ -34,7 +34,7 @@ You can view the generated [documentation here](https://godoc.org/github.com/ton
 - Coverage for the [TonicPow.com API](https://docs.tonicpow.com/)
     - [x] Authentication
     - [x] Users
-    - [ ] Advertiser Profiles
+    - [x] Advertiser Profiles
     - [ ] Campaigns
     - [ ] Goals
     - [ ] Links
