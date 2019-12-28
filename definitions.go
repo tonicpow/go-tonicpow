@@ -40,3 +40,17 @@ type Error struct {
 	RequestGUID string `json:"request_guid"`
 	URL         string `json:"url"`
 }
+
+// User is the user model
+type User struct {
+	Balance         uint64 `json:"balance"`
+	Email           string `json:"email"`
+	FirstName       string `json:"first_name"`
+	ID              uint64 `json:"id"`
+	InternalAddress string `json:"internal_address"`
+	LastName        string `json:"last_name"`
+	MiddleName      string `json:"middle_name"`
+	PayoutAddress   string `json:"payout_address"`
+	Phone           string `json:"phone"`
+	Status          string `json:"status"`
+}

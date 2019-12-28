@@ -1,14 +1,13 @@
 package tonicpow
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"net"
 	"net/http"
 	"net/url"
-	"strings"
 	"time"
 
 	"github.com/gojek/heimdall"
@@ -41,6 +40,7 @@ type Options struct {
 
 // LastRequest is used to track what was submitted via the Request()
 type LastRequest struct {
+	Error      *Error `json:"error"`       // error is the last error response from the api
 	Method     string `json:"method"`      // method is the HTTP method used
 	PostData   string `json:"post_data"`   // postData is the post data submitted if POST/PUT request
 	StatusCode int    `json:"status_code"` // statusCode is the last code from the request
@@ -131,6 +131,7 @@ func createClient(options *Options) (c *Client) {
 
 	// Create a last request and parameters struct
 	c.LastRequest = new(LastRequest)
+	c.LastRequest.Error = new(Error)
 	c.Parameters = &Parameters{
 		UserAgent: options.UserAgent,
 	}
@@ -138,10 +139,10 @@ func createClient(options *Options) (c *Client) {
 }
 
 // request is a generic wrapper for all api requests
-func (c *Client) request(endpoint string, method string, params *url.Values, customSessionToken string) (response string, err error) {
+func (c *Client) request(endpoint string, method string, payload interface{}, customSessionToken string) (response string, err error) {
 
-	// Set reader
-	var bodyReader io.Reader
+	// Set post value
+	var jsonValue []byte
 
 	// Add the network value
 	endpoint = fmt.Sprintf("%s%s", c.Parameters.environment, endpoint)
@@ -150,13 +151,14 @@ func (c *Client) request(endpoint string, method string, params *url.Values, cus
 	switch method {
 	case http.MethodPost, http.MethodPut:
 		{
-			encodedParams := params.Encode()
-			bodyReader = strings.NewReader(encodedParams)
-			c.LastRequest.PostData = encodedParams
+			if jsonValue, err = json.Marshal(payload); err != nil {
+				return
+			}
 		}
 	case http.MethodGet:
 		{
-			if params != nil {
+			if payload != nil {
+				params := payload.(url.Values)
 				endpoint += "?" + params.Encode()
 			}
 		}
@@ -164,11 +166,12 @@ func (c *Client) request(endpoint string, method string, params *url.Values, cus
 
 	// Store for debugging purposes
 	c.LastRequest.Method = method
+	c.LastRequest.PostData = string(jsonValue)
 	c.LastRequest.URL = endpoint
 
 	// Start the request
 	var request *http.Request
-	if request, err = http.NewRequest(method, endpoint, bodyReader); err != nil {
+	if request, err = http.NewRequest(method, endpoint, bytes.NewBuffer(jsonValue)); err != nil {
 		return
 	}
 
@@ -177,7 +180,7 @@ func (c *Client) request(endpoint string, method string, params *url.Values, cus
 
 	// Set the content type
 	if method == http.MethodPost || method == http.MethodPut {
-		request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		request.Header.Set("Content-Type", "application/json")
 	}
 
 	// Custom token, used for user related requests
@@ -235,11 +238,11 @@ func (c *Client) request(endpoint string, method string, params *url.Values, cus
 // error will handle all basic error cases
 func (c *Client) error(expectedStatusCode int, response string) (err error) {
 	if c.LastRequest.StatusCode != expectedStatusCode {
-		resp := new(Error)
-		if err = json.Unmarshal([]byte(response), resp); err != nil {
+		c.LastRequest.Error = new(Error)
+		if err = json.Unmarshal([]byte(response), c.LastRequest.Error); err != nil {
 			return
 		}
-		err = fmt.Errorf("error code: %d message: %s", resp.Code, resp.Message)
+		err = fmt.Errorf("%s", c.LastRequest.Error.Message)
 	}
 	return
 }

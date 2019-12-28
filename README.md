@@ -31,7 +31,7 @@ You can view the generated [documentation here](https://godoc.org/github.com/ton
 ### Features
 - Client is completely configurable
 - Using [heimdall http client](https://github.com/gojek/heimdall) with exponential backoff & more
-- Coverage for the [TonicPow.com](https://docs.tonicpow.com/) API
+- Coverage for the [TonicPow.com API](https://docs.tonicpow.com/)
     - [x] Authentication
     - [ ] Users
     - [ ] Advertiser Profiles
@@ -41,6 +41,8 @@ You can view the generated [documentation here](https://godoc.org/github.com/ton
 
 ## Examples & Tests
 All unit tests and [examples](tonicpow_test.go) run via [Travis CI](https://travis-ci.org/tonicpow/go-tonicpow) and uses [Go version 1.13.x](https://golang.org/doc/go1.13). View the [deployment configuration file](.travis.yml).
+
+View a [full example application](examples/examples.go).
 
 Run all tests (including integration tests)
 ```bash

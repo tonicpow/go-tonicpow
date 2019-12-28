@@ -38,10 +38,32 @@ func main() {
 		_ = TonicPowAPI.EndSession("")
 	}()
 
+	var err error
+
 	// Example: Prolong a session
-	if err := TonicPowAPI.ProlongSession(""); err != nil {
+	if err = TonicPowAPI.ProlongSession(""); err != nil {
 		log.Fatalf("ProlongSession: %s", err.Error())
 	}
 
-	log.Println("Session created and prolonged! Ending...")
+	log.Println("session created and prolonged...")
+
+	// Example: Create a user
+	user := &tonicpow.User{
+		Email:     "Austin+Testing4@TonicPow.com",
+		FirstName: "Austin",
+	}
+	if user, err = TonicPowAPI.CreateUser(user); err != nil {
+		log.Fatalf("create user failed - api error: %s data: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
+	}
+
+	log.Printf("user %d created", user.ID)
+
+	// Example: Update a user
+	user.MiddleName = "Danger"
+	if user, err = TonicPowAPI.UpdateUser(user, ""); err != nil {
+		log.Fatalf("update user failed - api error: %s data: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
+	}
+
+	log.Printf("user %d updated - middle_name: %s", user.ID, user.MiddleName)
+
 }

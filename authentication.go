@@ -2,7 +2,6 @@ package tonicpow
 
 import (
 	"net/http"
-	"net/url"
 )
 
 // createSession will establish a new session with the api
@@ -11,15 +10,12 @@ import (
 // For more information: https://docs.tonicpow.com/#632ed94a-3afd-4323-af91-bdf307a399d2
 func (c *Client) createSession() (err error) {
 
-	// Start the post data
-	postData := url.Values{}
-
-	// Add the key
-	postData.Add(APIKeyName, c.Parameters.apiKey)
+	// Start the post data with api key
+	data := map[string]string{APIKeyName: c.Parameters.apiKey}
 
 	// Fire the request
 	var response string
-	if response, err = c.request("auth/session", http.MethodPost, &postData, ""); err != nil {
+	if response, err = c.request("auth/session", http.MethodPost, data, ""); err != nil {
 		return
 	}
 
