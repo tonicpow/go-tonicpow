@@ -20,7 +20,7 @@ func (c *Client) CreateGoal(goal *Goal, userSessionToken string) (createdGoal *G
 
 	// Basic requirements
 	if goal.CampaignID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldAdvertiserProfileID)
+		err = fmt.Errorf("missing required attribute: %s", fieldCampaignID)
 		return
 	}
 

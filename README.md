@@ -37,7 +37,7 @@ You can view the generated [documentation here](https://godoc.org/github.com/ton
     - [x] Advertiser Profiles
     - [x] Campaigns
     - [x] Goals
-    - [ ] Links
+    - [x] Links
 
 ## Examples & Tests
 All unit tests and [examples](tonicpow_test.go) run via [Travis CI](https://travis-ci.org/tonicpow/go-tonicpow) and uses [Go version 1.13.x](https://golang.org/doc/go1.13). View the [deployment configuration file](.travis.yml).
@@ -80,7 +80,7 @@ import (
 
 func main() {
     api, _ := tonicpow.NewClient(os.Getenv("TONICPOW_API_KEY"), tonicpow.LiveEnvironment, nil)
-    _ = api.ProlongSession("")
+    _ = api.ConvertGoal("new-lead-goal", "s358wef983283...", "", "")
 }
 ```
 

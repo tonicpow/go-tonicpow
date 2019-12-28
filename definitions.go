@@ -18,12 +18,15 @@ const (
 	fieldPhoneCode           = "phone_code"
 	fieldToken               = "token"
 	fieldUserID              = "user_id"
+	fieldCampaignID          = "campaign_id"
 	fieldVisitorSessionID    = "visitor_session_id"
+	fieldShortCode           = "short_code"
 
 	// Model names (used for request endpoints)
 	modelAdvertiser = "advertisers"
 	modelCampaign   = "campaigns"
 	modelGoal       = "goals"
+	modelLink       = "links"
 	modelUser       = "users"
 
 	// apiVersion current version for all endpoints
@@ -133,4 +136,17 @@ type Conversion struct {
 	GoalID         uint64 `json:"goal_id,omitempty"`
 	GoalName       string `json:"goal_name,omitempty"`
 	UserID         string `json:"user_id,omitempty"`
+}
+
+// Link is the link model (child of User) (relates Campaign to User)
+// Use the CustomShortCode on create for using your own short code
+//
+// For more information: https://docs.tonicpow.com/#ee74c3ce-b4df-4d57-abf2-ccf3a80e4e1e
+type Link struct {
+	CampaignID      uint64 `json:"campaign_id,omitempty"`
+	CustomShortCode string `json:"custom_short_code,omitempty"`
+	ID              uint64 `json:"id,omitempty"`
+	ShortCode       string `json:"short_code,omitempty"`
+	ShortCodeURL    string `json:"short_code_url,omitempty"`
+	UserID          uint64 `json:"user_id,omitempty"`
 }
