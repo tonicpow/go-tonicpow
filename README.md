@@ -1,5 +1,5 @@
 # go-tonicpow
-**go-tonicpow** is the official golang implementation for interacting with the TonicPow API
+**go-tonicpow** is the official golang implementation for interacting with the [TonicPow API](https://docs.tonicpow.com)
 
 [![Build Status](https://travis-ci.com/tonicpow/go-tonicpow.svg?branch=master)](https://travis-ci.com/tonicpow/go-tonicpow)
 [![Report](https://goreportcard.com/badge/github.com/tonicpow/go-tonicpow?style=flat)](https://goreportcard.com/report/github.com/tonicpow/go-tonicpow)
@@ -29,7 +29,7 @@ $ go get -u github.com/tonicpow/go-tonicpow
 You can view the generated [documentation here](https://godoc.org/github.com/tonicpow/go-tonicpow).
 
 ### Features
-- Client is completely configurable
+- [Client](client.go) is completely configurable
 - Using [heimdall http client](https://github.com/gojek/heimdall) with exponential backoff & more
 - Coverage for the [TonicPow.com API](https://docs.tonicpow.com/)
     - [x] Authentication
