@@ -17,6 +17,9 @@ func (c *Client) CreateUser(user *User) (createdUser *User, err error) {
 		return
 	}
 
+	// Permit fields before creating
+	user.permitFields()
+
 	// Fire the request
 	var response string
 	if response, err = c.request("users", http.MethodPost, user, ""); err != nil {
@@ -46,6 +49,9 @@ func (c *Client) UpdateUser(user *User, customSessionToken string) (updatedUser 
 		return
 	}
 
+	// Permit fields before updating
+	user.permitFields()
+
 	// Fire the request
 	var response string
 	if response, err = c.request("users", http.MethodPut, user, customSessionToken); err != nil {
@@ -61,4 +67,11 @@ func (c *Client) UpdateUser(user *User, customSessionToken string) (updatedUser 
 	updatedUser = new(User)
 	err = json.Unmarshal([]byte(response), updatedUser)
 	return
+}
+
+// permitFields will remove fields that cannot be used
+func (u *User) permitFields() {
+	u.Balance = 0
+	u.InternalAddress = ""
+	u.Status = ""
 }

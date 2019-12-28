@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"math/rand"
 	"os"
 
 	"github.com/tonicpow/go-tonicpow"
@@ -49,7 +51,7 @@ func main() {
 
 	// Example: Create a user
 	user := &tonicpow.User{
-		Email:     "Austin+Testing4@TonicPow.com",
+		Email:     fmt.Sprintf("Testing%d@TonicPow.com", rand.Intn(100000)),
 		FirstName: "Austin",
 	}
 	if user, err = TonicPowAPI.CreateUser(user); err != nil {

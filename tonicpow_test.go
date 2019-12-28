@@ -2,6 +2,7 @@ package tonicpow
 
 import (
 	"fmt"
+	"math/rand"
 	"net/http"
 	"os"
 	"testing"
@@ -216,5 +217,56 @@ func TestClient_ProlongSession(t *testing.T) {
 	err = client.ProlongSession(customSessionToken)
 	if err != nil {
 		t.Fatal(err)
+	}
+}
+
+// TestClient_CreateUser tests the CreateUser() method
+func TestClient_CreateUser(t *testing.T) {
+
+	// Skip this test in short mode (not needed)
+	if testing.Short() {
+		t.Skip("skipping testing in short mode")
+	}
+
+	// Start a new client
+	client, err := NewClient(testAPIKey, LocalEnvironment, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	user := &User{
+		Email:     fmt.Sprintf("Testing%d@TonicPow.com", rand.Intn(100000)),
+		FirstName: "Austin",
+	}
+	if user, err = client.CreateUser(user); err != nil {
+		t.Fatalf("%s", err.Error())
+	}
+}
+
+// TestClient_UpdateUser tests the UpdateUser() method
+func TestClient_UpdateUser(t *testing.T) {
+
+	// Skip this test in short mode (not needed)
+	if testing.Short() {
+		t.Skip("skipping testing in short mode")
+	}
+
+	// Start a new client
+	client, err := NewClient(testAPIKey, LocalEnvironment, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	user := &User{
+		Email:     fmt.Sprintf("Testing%d@TonicPow.com", rand.Intn(100000)),
+		FirstName: "Austin",
+	}
+	if user, err = client.CreateUser(user); err != nil {
+		t.Fatalf("%s", err.Error())
+	}
+
+	user.MiddleName = "Danger"
+	if user, err = client.UpdateUser(user, ""); err != nil {
+		t.Fatalf("%s", err.Error())
 	}
 }

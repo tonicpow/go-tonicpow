@@ -43,14 +43,14 @@ type Error struct {
 
 // User is the user model
 type User struct {
-	Balance         uint64 `json:"balance"`
-	Email           string `json:"email"`
-	FirstName       string `json:"first_name"`
-	ID              uint64 `json:"id"`
-	InternalAddress string `json:"internal_address"`
-	LastName        string `json:"last_name"`
-	MiddleName      string `json:"middle_name"`
-	PayoutAddress   string `json:"payout_address"`
-	Phone           string `json:"phone"`
-	Status          string `json:"status"`
+	Balance         uint64 `json:"balance,omitempty"`
+	Email           string `json:"email,omitempty"`
+	FirstName       string `json:"first_name,omitempty"`
+	ID              uint64 `json:"id,omitempty"`
+	InternalAddress string `json:"internal_address,omitempty"`
+	LastName        string `json:"last_name,omitempty"`
+	MiddleName      string `json:"middle_name,omitempty"`
+	PayoutAddress   string `json:"payout_address,omitempty"`
+	Phone           string `json:"phone,omitempty"`
+	Status          string `json:"status,omitempty"`
 }
