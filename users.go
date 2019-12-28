@@ -21,7 +21,7 @@ func (c *Client) CreateUser(user *User) (createdUser *User, err error) {
 
 	// Basic requirements
 	if len(user.Email) == 0 {
-		err = fmt.Errorf("missing required attribute: %s", "email")
+		err = fmt.Errorf("missing required attribute: %s", fieldEmail)
 		return
 	}
 
@@ -53,7 +53,7 @@ func (c *Client) UpdateUser(user *User, customSessionToken string) (updatedUser 
 
 	// Basic requirements
 	if user.ID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", "id")
+		err = fmt.Errorf("missing required attribute: %s", fieldID)
 		return
 	}
 
@@ -86,21 +86,72 @@ func (c *Client) GetUser(byID uint64, byEmail string) (user *User, err error) {
 
 	// Must have either an ID or email
 	if byID == 0 && len(byEmail) == 0 {
-		err = fmt.Errorf("missing id/email")
+		err = fmt.Errorf("missing either %s or %s", fieldID, fieldEmail)
 		return
 	}
 
 	// Set the values
 	params := url.Values{}
 	if byID > 0 {
-		params.Add("id", fmt.Sprintf("%d", byID))
+		params.Add(fieldID, fmt.Sprintf("%d", byID))
 	} else {
-		params.Add("email", byEmail)
+		params.Add(fieldEmail, byEmail)
 	}
 
 	// Fire the request
 	var response string
 	if response, err = c.request("users/details", http.MethodGet, params, ""); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	if err = c.error(http.StatusOK, response); err != nil {
+		return
+	}
+
+	// Convert model response
+	user = new(User)
+	err = json.Unmarshal([]byte(response), user)
+	return
+}
+
+// GetUserBalance will update a user's balance from the chain
+//
+// For more information: https://docs.tonicpow.com/#8478765b-95b8-47ad-8b86-2db5bce54924
+func (c *Client) GetUserBalance(id uint64) (user *User, err error) {
+
+	// Fire the request
+	var response string
+	if response, err = c.request(fmt.Sprintf("users/balance/%d", id), http.MethodGet, nil, ""); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	if err = c.error(http.StatusOK, response); err != nil {
+		return
+	}
+
+	// Convert model response
+	user = new(User)
+	err = json.Unmarshal([]byte(response), user)
+	return
+}
+
+// CurrentUser will the current user based on token
+// Required: LoginUser()
+//
+// For more information: https://docs.tonicpow.com/#7f6e9b5d-8c7f-4afc-8e07-7aafdd891521
+func (c *Client) CurrentUser() (user *User, err error) {
+
+	// No current user
+	if c.Parameters.UserSessionCookie == nil {
+		err = fmt.Errorf("missing user session, use LoginUser() first")
+		return
+	}
+
+	// Fire the request
+	var response string
+	if response, err = c.request("users/account", http.MethodGet, nil, c.Parameters.UserSessionCookie.Value); err != nil {
 		return
 	}
 
@@ -122,10 +173,10 @@ func (c *Client) LoginUser(user *User) (sessionToken string, err error) {
 
 	// Basic requirements
 	if len(user.Email) == 0 {
-		err = fmt.Errorf("missing required attribute: %s", "email")
+		err = fmt.Errorf("missing required attribute: %s", fieldEmail)
 		return
 	} else if len(user.Password) == 0 {
-		err = fmt.Errorf("missing required attribute: %s", "password")
+		err = fmt.Errorf("missing required attribute: %s", fieldPassword)
 		return
 	}
 
@@ -142,5 +193,132 @@ func (c *Client) LoginUser(user *User) (sessionToken string, err error) {
 
 	// Convert model response
 	sessionToken = c.Parameters.UserSessionCookie.Value
+	return
+}
+
+// LogoutUser will logout a given session token
+//
+// For more information: https://docs.tonicpow.com/#39d65294-376a-4366-8f71-a02b08f9abdf
+func (c *Client) LogoutUser(sessionToken string) (err error) {
+
+	// Basic requirements
+	if len(sessionToken) == 0 {
+		err = fmt.Errorf("missing required attribute: %s", SessionCookie)
+		return
+	}
+
+	// Fire the request
+	var response string
+	if response, err = c.request("auth/session", http.MethodDelete, nil, sessionToken); err != nil {
+		return
+	}
+	// Only a 200 is treated as a success
+	err = c.error(http.StatusOK, response)
+	return
+}
+
+// ForgotPassword will fire a forgot password request
+//
+// For more information: https://docs.tonicpow.com/#2c33dae4-d6b1-4949-9e84-fb02157ab7cd
+func (c *Client) ForgotPassword(emailAddress string) (err error) {
+
+	// Basic requirements
+	if len(emailAddress) == 0 {
+		err = fmt.Errorf("missing required attribute: %s", fieldEmail)
+		return
+	}
+
+	// Start the post data
+	data := map[string]string{fieldEmail: emailAddress}
+
+	// Fire the request
+	var response string
+	if response, err = c.request("users/password/forgot", http.MethodPost, data, ""); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	err = c.error(http.StatusOK, response)
+	return
+}
+
+// ResetPassword will reset a password from a ForgotPassword() request
+//
+// For more information: https://docs.tonicpow.com/#370fbeec-adb2-4ed3-82dc-2dffa840e490
+func (c *Client) ResetPassword(token, password, passwordConfirm string) (err error) {
+
+	// Basic requirements
+	if len(token) == 0 {
+		err = fmt.Errorf("missing required attribute: %s", fieldToken)
+		return
+	} else if len(password) == 0 || len(passwordConfirm) == 0 {
+		err = fmt.Errorf("missing required attribute: %s or %s", fieldPassword, fieldPasswordConfirm)
+		return
+	}
+
+	// Start the post data
+	data := map[string]string{fieldToken: token, fieldPassword: password, fieldPasswordConfirm: passwordConfirm}
+
+	// Fire the request
+	var response string
+	if response, err = c.request("users/password/reset", http.MethodPost, data, ""); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	err = c.error(http.StatusOK, response)
+	return
+}
+
+// CompleteEmailVerification will complete an email verification with a given token
+//
+// For more information: https://docs.tonicpow.com/#f5081800-a224-4f36-8014-94981f0bd55d
+func (c *Client) CompleteEmailVerification(token string) (err error) {
+
+	// Basic requirements
+	if len(token) == 0 {
+		err = fmt.Errorf("missing required attribute: %s", fieldToken)
+		return
+	}
+
+	// Start the post data
+	data := map[string]string{fieldToken: token}
+
+	// Fire the request
+	var response string
+	if response, err = c.request("users/verify/email", http.MethodPut, data, ""); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	err = c.error(http.StatusOK, response)
+	return
+}
+
+// CompletePhoneVerification will complete a phone verification with a given code and number
+//
+// For more information: https://docs.tonicpow.com/#573403c4-b872-475d-ac04-de32a88ecd19
+func (c *Client) CompletePhoneVerification(phone, code string) (err error) {
+
+	// Basic requirements
+	if len(phone) == 0 {
+		err = fmt.Errorf("missing required attribute: %s", fieldPhone)
+		return
+	} else if len(code) == 0 {
+		err = fmt.Errorf("missing required attribute: %s", fieldPhoneCode)
+		return
+	}
+
+	// Start the post data
+	data := map[string]string{fieldPhone: phone, fieldPhoneCode: code}
+
+	// Fire the request
+	var response string
+	if response, err = c.request("users/verify/phone", http.MethodPut, data, ""); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	err = c.error(http.StatusOK, response)
 	return
 }

@@ -11,7 +11,7 @@ import (
 func (c *Client) createSession() (err error) {
 
 	// Start the post data with api key
-	data := map[string]string{APIKeyName: c.Parameters.apiKey}
+	data := map[string]string{fieldApiKey: c.Parameters.apiKey}
 
 	// Fire the request
 	var response string

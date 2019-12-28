@@ -5,8 +5,15 @@ type APIEnvironment string
 
 const (
 
-	// APIKeyName is the key name for requests
-	APIKeyName = "api_key"
+	// Field key names for model requests
+	fieldApiKey          = "api_key"
+	fieldEmail           = "email"
+	fieldID              = "id"
+	fieldPassword        = "password"
+	fieldPasswordConfirm = "password_confirm"
+	fieldPhone           = "phone"
+	fieldPhoneCode       = "phone_code"
+	fieldToken           = "token"
 
 	// APIVersion current version for all endpoints
 	APIVersion = "v1"

@@ -33,7 +33,7 @@ You can view the generated [documentation here](https://godoc.org/github.com/ton
 - Using [heimdall http client](https://github.com/gojek/heimdall) with exponential backoff & more
 - Coverage for the [TonicPow.com API](https://docs.tonicpow.com/)
     - [x] Authentication
-    - [ ] Users
+    - [x] Users
     - [ ] Advertiser Profiles
     - [ ] Campaigns
     - [ ] Goals

@@ -101,6 +101,24 @@ func main() {
 	}
 
 	//
+	// Example: Get new updated balance for user
+	//
+	if user, err = TonicPowAPI.GetUserBalance(user.ID); err != nil {
+		log.Fatalf("get user failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
+	} else {
+		log.Printf("user balance: %d", user.Balance)
+	}
+
+	//
+	// Example: Forgot password
+	//
+	if err = TonicPowAPI.ForgotPassword(user.Email); err != nil {
+		log.Fatalf("forgot password failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
+	} else {
+		log.Printf("sent forgot password: %s", user.Email)
+	}
+
+	//
 	// Example: Login for a user
 	//
 	user.Password = testPassword
@@ -109,5 +127,23 @@ func main() {
 		log.Fatalf("user login failed - api error: %s data: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
 	} else {
 		log.Printf("user login: %s token: %s", user.Email, userSessionToken)
+	}
+
+	//
+	// Example: Logout (just for our example)
+	//
+	defer func(token string) {
+		_ = TonicPowAPI.LogoutUser(token)
+		log.Println("user logout complete")
+	}(userSessionToken)
+
+	//
+	// Example: Current user details
+	//
+	user, err = TonicPowAPI.CurrentUser()
+	if err != nil {
+		log.Fatalf("current user failed - api error: %s data: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
+	} else {
+		log.Printf("current user: %s", user.Email)
 	}
 }
