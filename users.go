@@ -46,10 +46,10 @@ func (c *Client) CreateUser(user *User) (createdUser *User, err error) {
 }
 
 // UpdateUser will update an existing user model
-// Use the customSessionToken if the current user is editing their own user model
+// Use the userSessionToken if the current user is editing their own user model
 //
 // For more information: https://docs.tonicpow.com/#7c3c3c3a-f636-469f-a884-449cf6fb35fe
-func (c *Client) UpdateUser(user *User, customSessionToken string) (updatedUser *User, err error) {
+func (c *Client) UpdateUser(user *User, userSessionToken string) (updatedUser *User, err error) {
 
 	// Basic requirements
 	if user.ID == 0 {
@@ -62,7 +62,7 @@ func (c *Client) UpdateUser(user *User, customSessionToken string) (updatedUser 
 
 	// Fire the request
 	var response string
-	if response, err = c.request("users", http.MethodPut, user, customSessionToken); err != nil {
+	if response, err = c.request("users", http.MethodPut, user, userSessionToken); err != nil {
 		return
 	}
 
@@ -199,17 +199,17 @@ func (c *Client) LoginUser(user *User) (userSessionToken string, err error) {
 // LogoutUser will logout a given session token
 //
 // For more information: https://docs.tonicpow.com/#39d65294-376a-4366-8f71-a02b08f9abdf
-func (c *Client) LogoutUser(sessionToken string) (err error) {
+func (c *Client) LogoutUser(userSessionToken string) (err error) {
 
 	// Basic requirements
-	if len(sessionToken) == 0 {
+	if len(userSessionToken) == 0 {
 		err = fmt.Errorf("missing required attribute: %s", SessionCookie)
 		return
 	}
 
 	// Fire the request
 	var response string
-	if response, err = c.request("auth/session", http.MethodDelete, nil, sessionToken); err != nil {
+	if response, err = c.request("auth/session", http.MethodDelete, nil, userSessionToken); err != nil {
 		return
 	}
 	// Only a 200 is treated as a success
