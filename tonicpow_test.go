@@ -270,3 +270,30 @@ func TestClient_UpdateUser(t *testing.T) {
 		t.Fatalf("%s", err.Error())
 	}
 }
+
+// TestClient_GetUser tests the GetUser() method
+func TestClient_GetUser(t *testing.T) {
+
+	// Skip this test in short mode (not needed)
+	if testing.Short() {
+		t.Skip("skipping testing in short mode")
+	}
+
+	// Start a new client
+	client, err := NewClient(testAPIKey, LocalEnvironment, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	user := &User{
+		Email:     fmt.Sprintf("Testing%d@TonicPow.com", rand.Intn(100000)),
+		FirstName: "Austin",
+	}
+	if user, err = client.CreateUser(user); err != nil {
+		t.Fatalf("%s", err.Error())
+	}
+
+	if user, err = client.GetUser(user.ID, user.Email); err != nil {
+		t.Fatalf("%s", err.Error())
+	}
+}
