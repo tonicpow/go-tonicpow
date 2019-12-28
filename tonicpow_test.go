@@ -57,7 +57,7 @@ func TestNewClient(t *testing.T) {
 		t.Fatalf("expected value to be set, was empty/nil")
 	}
 
-	if client.LastRequest.PostData != fmt.Sprintf(`{"%s":"%s"}`, APIKeyName, testAPIKey) {
+	if client.LastRequest.PostData != fmt.Sprintf(`{"%s":"%s"}`, fieldApiKey, testAPIKey) {
 		t.Fatalf("expected value wrong,got %s", client.LastRequest.PostData)
 	}
 }
