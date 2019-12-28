@@ -118,11 +118,11 @@ func (c *Client) GetUser(byID uint64, byEmail string) (user *User, err error) {
 // GetUserBalance will update a user's balance from the chain
 //
 // For more information: https://docs.tonicpow.com/#8478765b-95b8-47ad-8b86-2db5bce54924
-func (c *Client) GetUserBalance(id uint64) (user *User, err error) {
+func (c *Client) GetUserBalance(userID uint64) (user *User, err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("users/balance/%d", id), http.MethodGet, nil, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("users/balance/%d", userID), http.MethodGet, nil, ""); err != nil {
 		return
 	}
 
@@ -169,7 +169,7 @@ func (c *Client) CurrentUser() (user *User, err error) {
 // LoginUser will login for a given user
 //
 // For more information: https://docs.tonicpow.com/#5cad3e9a-5931-44bf-b110-4c4b74c7a070
-func (c *Client) LoginUser(user *User) (sessionToken string, err error) {
+func (c *Client) LoginUser(user *User) (userSessionToken string, err error) {
 
 	// Basic requirements
 	if len(user.Email) == 0 {
@@ -192,7 +192,7 @@ func (c *Client) LoginUser(user *User) (sessionToken string, err error) {
 	}
 
 	// Convert model response
-	sessionToken = c.Parameters.UserSessionCookie.Value
+	userSessionToken = c.Parameters.UserSessionCookie.Value
 	return
 }
 

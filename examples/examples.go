@@ -119,6 +119,30 @@ func main() {
 	}
 
 	//
+	// Example: Create an advertiser
+	//
+	advertiser := &tonicpow.AdvertiserProfile{
+		UserID:      user.ID,
+		Name:        "Acme Advertising",
+		HomepageURL: "https://tonicpow.com",
+		IconURL:     "https://tonicpow.com/images/logos/apple-touch-icon.png",
+	}
+	if advertiser, err = TonicPowAPI.CreateAdvertiserProfile(advertiser); err != nil {
+		log.Fatalf("create advertiser failed - api error: %s data: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
+	} else {
+		log.Printf("advertiser profile %s id %d created", advertiser.Name, advertiser.ID)
+	}
+
+	//
+	// Example: Get an advertiser profile
+	//
+	if advertiser, err = TonicPowAPI.GetAdvertiserProfile(advertiser.ID); err != nil {
+		log.Fatalf("get advertiser profile failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
+	} else {
+		log.Printf("got advertiser profile by id %d", advertiser.ID)
+	}
+
+	//
 	// Example: Login for a user
 	//
 	user.Password = testPassword

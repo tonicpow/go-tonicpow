@@ -14,6 +14,7 @@ const (
 	fieldPhone           = "phone"
 	fieldPhoneCode       = "phone_code"
 	fieldToken           = "token"
+	fieldUserID          = "user_id"
 
 	// APIVersion current version for all endpoints
 	APIVersion = "v1"
@@ -38,6 +39,8 @@ const (
 )
 
 // Error is the universal error response from the API
+//
+// For more information: https://docs.tonicpow.com/#d7fe13a3-2b6d-4399-8d0f-1d6b8ad6ebd9
 type Error struct {
 	Code        int    `json:"code"`
 	Data        string `json:"data"`
@@ -49,6 +52,8 @@ type Error struct {
 }
 
 // User is the user model
+//
+// For more information: https://docs.tonicpow.com/#50b3c130-7254-4a05-b312-b14647736e38
 type User struct {
 	Balance            uint64 `json:"balance,omitempty"`
 	Email              string `json:"email,omitempty"`
@@ -63,4 +68,15 @@ type User struct {
 	PayoutAddress      string `json:"payout_address,omitempty"`
 	Phone              string `json:"phone,omitempty"`
 	Status             string `json:"status,omitempty"`
+}
+
+// AdvertiserProfile is the advertiser_profile model
+//
+// For more information: https://docs.tonicpow.com/#2f9ec542-0f88-4671-b47c-d0ee390af5ea
+type AdvertiserProfile struct {
+	HomepageURL string `json:"homepage_url,omitempty"`
+	IconURL     string `json:"icon_url,omitempty"`
+	ID          uint64 `json:"id,omitempty"`
+	Name        string `json:"name,omitempty"`
+	UserID      uint64 `json:"user_id,omitempty"`
 }
