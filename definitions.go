@@ -9,6 +9,7 @@ const (
 	fieldAdditionalData      = "additional_data"
 	fieldAdvertiserProfileID = "advertiser_profile_id"
 	fieldApiKey              = "api_key"
+	fieldCampaignID          = "campaign_id"
 	fieldEmail               = "email"
 	fieldID                  = "id"
 	fieldName                = "name"
@@ -16,11 +17,10 @@ const (
 	fieldPasswordConfirm     = "password_confirm"
 	fieldPhone               = "phone"
 	fieldPhoneCode           = "phone_code"
+	fieldShortCode           = "short_code"
 	fieldToken               = "token"
 	fieldUserID              = "user_id"
-	fieldCampaignID          = "campaign_id"
 	fieldVisitorSessionID    = "visitor_session_id"
-	fieldShortCode           = "short_code"
 
 	// Model names (used for request endpoints)
 	modelAdvertiser = "advertisers"

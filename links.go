@@ -72,7 +72,6 @@ func (c *Client) GetLink(linkID uint64, userSessionToken string) (link *Link, er
 
 // CheckLink will check for an existing link with a short_code
 // This will return an error if the link is not found (404)
-// Use the userSessionToken if making request on behalf of another user
 //
 // For more information: https://docs.tonicpow.com/#cc9780b7-0d84-4a60-a28f-664b2ecb209b
 func (c *Client) CheckLink(shortCode string) (link *Link, err error) {
