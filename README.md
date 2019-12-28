@@ -35,7 +35,7 @@ You can view the generated [documentation here](https://godoc.org/github.com/ton
     - [x] Authentication
     - [x] Users
     - [x] Advertiser Profiles
-    - [ ] Campaigns
+    - [x] Campaigns
     - [ ] Goals
     - [ ] Links
 
