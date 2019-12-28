@@ -41,8 +41,8 @@ func TestNewClient(t *testing.T) {
 		t.Fatalf("expected value to be %s, got %s", LocalEnvironment, client.Parameters.environment)
 	}
 
-	if client.Parameters.UserAgent != DefaultUserAgent {
-		t.Fatalf("expected value to be %s, got %s", DefaultUserAgent, client.Parameters.UserAgent)
+	if client.Parameters.UserAgent != defaultUserAgent {
+		t.Fatalf("expected value to be %s, got %s", defaultUserAgent, client.Parameters.UserAgent)
 	}
 
 	if client.LastRequest.StatusCode != http.StatusCreated {
@@ -81,8 +81,8 @@ func TestDefaultOptions(t *testing.T) {
 
 	options := ClientDefaultOptions()
 
-	if options.UserAgent != DefaultUserAgent {
-		t.Fatalf("expected value: %s got: %s", DefaultUserAgent, options.UserAgent)
+	if options.UserAgent != defaultUserAgent {
+		t.Fatalf("expected value: %s got: %s", defaultUserAgent, options.UserAgent)
 	}
 
 	if options.BackOffExponentFactor != 2.0 {

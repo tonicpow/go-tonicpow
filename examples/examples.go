@@ -195,4 +195,22 @@ func main() {
 	} else {
 		log.Printf("advertiser profile %s id %d updated", advertiser.Name, advertiser.ID)
 	}
+
+	//
+	// Example: Create a campaign
+	//
+	campaign := &tonicpow.Campaign{
+		AdvertiserProfileID: advertiser.ID,
+		Currency:            "USD",
+		Description:         "Earn BSV for sharing things you like.",
+		ImageURL:            "https://i.imgur.com/TbRFiaR.png",
+		PayPerClickRate:     0.01,
+		TargetURL:           "https://offers.tonicpow.com",
+		Title:               "TonicPow Offers",
+	}
+	if campaign, err = TonicPowAPI.CreateCampaign(campaign, userSessionToken); err != nil {
+		log.Fatalf("create campaign failed - api error: %s data: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
+	} else {
+		log.Printf("campaign %s id %d created", campaign.Title, campaign.ID)
+	}
 }

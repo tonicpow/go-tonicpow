@@ -5,37 +5,38 @@ type APIEnvironment string
 
 const (
 
-	// Field key names for model requests
-	fieldApiKey          = "api_key"
-	fieldEmail           = "email"
-	fieldID              = "id"
-	fieldPassword        = "password"
-	fieldPasswordConfirm = "password_confirm"
-	fieldPhone           = "phone"
-	fieldPhoneCode       = "phone_code"
-	fieldToken           = "token"
-	fieldUserID          = "user_id"
+	// Field key names for various model requests
+	fieldAdvertiserProfileID = "advertiser_profile_id"
+	fieldApiKey              = "api_key"
+	fieldEmail               = "email"
+	fieldID                  = "id"
+	fieldPassword            = "password"
+	fieldPasswordConfirm     = "password_confirm"
+	fieldPhone               = "phone"
+	fieldPhoneCode           = "phone_code"
+	fieldToken               = "token"
+	fieldUserID              = "user_id"
 
-	// APIVersion current version for all endpoints
-	APIVersion = "v1"
+	// apiVersion current version for all endpoints
+	apiVersion = "v1"
 
-	// DefaultUserAgent is the default user agent for all requests
-	DefaultUserAgent string = "go-tonicpow: " + APIVersion
+	// defaultUserAgent is the default user agent for all requests
+	defaultUserAgent string = "go-tonicpow: " + apiVersion
 
 	// LiveEnvironment is the live production environment
-	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + APIVersion + "/"
+	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
 
 	// LocalEnvironment is for testing locally using your own api instance
-	LocalEnvironment APIEnvironment = "http://localhost:3000/" + APIVersion + "/"
+	LocalEnvironment APIEnvironment = "http://localhost:3000/" + apiVersion + "/"
 
 	// StagingEnvironment is used for production-like testing
-	StagingEnvironment APIEnvironment = "https://apistaging.tonicpow.com/" + APIVersion + "/"
+	StagingEnvironment APIEnvironment = "https://apistaging.tonicpow.com/" + apiVersion + "/"
 
-	// SessionCookie is the cookie name for session tokens
-	SessionCookie = "session_token"
+	// sessionCookie is the cookie name for session tokens
+	sessionCookie = "session_token"
 
 	// TestEnvironment is a test-only environment
-	//TestEnvironment APIEnvironment = "https://test.tonicpow.com/"+APIVersion+"/"
+	//TestEnvironment APIEnvironment = "https://test.tonicpow.com/"+apiVersion+"/"
 )
 
 // Error is the universal error response from the API
@@ -79,4 +80,22 @@ type AdvertiserProfile struct {
 	ID          uint64 `json:"id,omitempty"`
 	Name        string `json:"name,omitempty"`
 	UserID      uint64 `json:"user_id,omitempty"`
+}
+
+// Campaign is the campaign model
+//
+// For more information: https://docs.tonicpow.com/#5aca2fc7-b3c8-445b-aa88-f62a681f8e0c
+type Campaign struct {
+	AdvertiserProfileID uint64  `json:"advertiser_profile_id,omitempty"`
+	Balance             float64 `json:"balance,omitempty"`
+	BalanceSatoshis     int64   `json:"balance_satoshis,omitempty"`
+	Currency            string  `json:"currency,omitempty"`
+	Description         string  `json:"description,omitempty"`
+	FundingAddress      string  `json:"funding_address,omitempty"`
+	ID                  uint64  `json:"id,omitempty"`
+	ImageURL            string  `json:"image_url,omitempty"`
+	PayPerClickRate     float64 `json:"pay_per_click_rate,omitempty"`
+	PublicGUID          string  `json:"public_guid,omitempty"`
+	TargetURL           string  `json:"target_url,omitempty"`
+	Title               string  `json:"title,omitempty"`
 }

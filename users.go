@@ -203,7 +203,7 @@ func (c *Client) LogoutUser(userSessionToken string) (err error) {
 
 	// Basic requirements
 	if len(userSessionToken) == 0 {
-		err = fmt.Errorf("missing required attribute: %s", SessionCookie)
+		err = fmt.Errorf("missing required attribute: %s", sessionCookie)
 		return
 	}
 

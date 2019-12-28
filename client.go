@@ -72,7 +72,7 @@ func ClientDefaultOptions() (clientOptions *Options) {
 		TransportIdleTimeout:           20 * time.Second,
 		TransportMaxIdleConnections:    10,
 		TransportTLSHandshakeTimeout:   5 * time.Second,
-		UserAgent:                      DefaultUserAgent,
+		UserAgent:                      defaultUserAgent,
 	}
 }
 
@@ -186,7 +186,7 @@ func (c *Client) request(endpoint string, method string, payload interface{}, cu
 	// Custom token, used for user related requests
 	if len(customSessionToken) > 0 {
 		request.AddCookie(&http.Cookie{
-			Name:     SessionCookie,
+			Name:     sessionCookie,
 			Value:    customSessionToken,
 			MaxAge:   60 * 60 * 24,
 			HttpOnly: true,
@@ -217,7 +217,7 @@ func (c *Client) request(endpoint string, method string, payload interface{}, cu
 
 	// Got a session token? Set the session token for the api user or user via on behalf
 	for _, cookie := range resp.Cookies() {
-		if cookie.Name == SessionCookie {
+		if cookie.Name == sessionCookie {
 			if cookie.MaxAge <= 0 {
 				cookie = nil
 			}
