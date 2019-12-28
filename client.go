@@ -16,7 +16,7 @@ import (
 
 // Client is the parent struct that wraps the heimdall client
 type Client struct {
-	httpClient  heimdall.Client // carries out the POST operations
+	httpClient  heimdall.Client // carries out the http operations
 	LastRequest *LastRequest    // is the raw information from the last request
 	Parameters  *Parameters     // contains application specific values
 }
