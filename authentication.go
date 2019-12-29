@@ -5,7 +5,7 @@ import (
 )
 
 // createSession will establish a new session with the api
-// This is run in the NewClient() method
+// This is run in the NewClient() method automatically
 //
 // For more information: https://docs.tonicpow.com/#632ed94a-3afd-4323-af91-bdf307a399d2
 func (c *Client) createSession() (err error) {

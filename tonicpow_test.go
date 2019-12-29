@@ -211,10 +211,10 @@ func TestClient_ProlongSession(t *testing.T) {
 	}
 
 	// Using a custom token approach
-	customSessionToken := client.Parameters.apiSessionCookie.Value
+	token := client.Parameters.apiSessionCookie.Value
 
 	// Prolong should success
-	err = client.ProlongSession(customSessionToken)
+	err = client.ProlongSession(token)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -297,3 +297,7 @@ func TestClient_GetUser(t *testing.T) {
 		t.Fatalf("%s", err.Error())
 	}
 }
+
+// todo: add more tests (covering all requests)
+
+// todo: add examples for each request that can be viewed in godocs
