@@ -141,17 +141,17 @@ func (c *Client) GetUserBalance(userID uint64) (user *User, err error) {
 // Required: LoginUser()
 //
 // For more information: https://docs.tonicpow.com/#7f6e9b5d-8c7f-4afc-8e07-7aafdd891521
-func (c *Client) CurrentUser() (user *User, err error) {
+func (c *Client) CurrentUser(userSessionToken string) (user *User, err error) {
 
 	// No current user
-	if c.Parameters.UserSessionCookie == nil {
-		err = fmt.Errorf("missing user session, use LoginUser() first")
+	if len(userSessionToken) == 0 {
+		err = fmt.Errorf("missing user session token")
 		return
 	}
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/account", modelUser), http.MethodGet, nil, c.Parameters.UserSessionCookie.Value); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/account", modelUser), http.MethodGet, nil, userSessionToken); err != nil {
 		return
 	}
 
@@ -192,7 +192,7 @@ func (c *Client) LoginUser(user *User) (userSessionToken string, err error) {
 	}
 
 	// Convert model response
-	userSessionToken = c.Parameters.UserSessionCookie.Value
+	userSessionToken = c.Parameters.userSessionCookie.Value
 	return
 }
 

@@ -164,7 +164,7 @@ func main() {
 	//
 	// Example: Current user details
 	//
-	user, err = TonicPowAPI.CurrentUser()
+	user, err = TonicPowAPI.CurrentUser(userSessionToken)
 	if err != nil {
 		log.Fatalf("current user failed - api error: %s data: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
 	} else {

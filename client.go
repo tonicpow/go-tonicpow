@@ -53,7 +53,7 @@ type Parameters struct {
 	apiSessionCookie  *http.Cookie   // is the current session cookie for the api key
 	environment       APIEnvironment // is the current api environment to use
 	UserAgent         string         // (optional for changing user agents)
-	UserSessionCookie *http.Cookie   // is the current session cookie for a user (on behalf)
+	userSessionCookie *http.Cookie   // is the current session cookie for a user (on behalf)
 }
 
 // ClientDefaultOptions will return an Options struct with the default settings
@@ -222,7 +222,7 @@ func (c *Client) request(endpoint string, method string, payload interface{}, cu
 				cookie = nil
 			}
 			if len(customSessionToken) > 0 {
-				c.Parameters.UserSessionCookie = cookie
+				c.Parameters.userSessionCookie = cookie
 			} else {
 				c.Parameters.apiSessionCookie = cookie
 			}
