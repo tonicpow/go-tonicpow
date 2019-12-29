@@ -35,8 +35,7 @@ func (c *Client) CreateLink(link *Link, userSessionToken string) (createdLink *L
 	}
 
 	// Convert model response
-	createdLink = new(Link)
-	err = json.Unmarshal([]byte(response), createdLink)
+	err = json.Unmarshal([]byte(response), &createdLink)
 	return
 }
 
@@ -65,8 +64,7 @@ func (c *Client) GetLink(linkID uint64, userSessionToken string) (link *Link, er
 	}
 
 	// Convert model response
-	link = new(Link)
-	err = json.Unmarshal([]byte(response), link)
+	err = json.Unmarshal([]byte(response), &link)
 	return
 }
 
@@ -94,7 +92,6 @@ func (c *Client) CheckLink(shortCode string) (link *Link, err error) {
 	}
 
 	// Convert model response
-	link = new(Link)
-	err = json.Unmarshal([]byte(response), link)
+	err = json.Unmarshal([]byte(response), &link)
 	return
 }

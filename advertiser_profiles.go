@@ -35,8 +35,7 @@ func (c *Client) CreateAdvertiserProfile(profile *AdvertiserProfile, userSession
 	}
 
 	// Convert model response
-	createdProfile = new(AdvertiserProfile)
-	err = json.Unmarshal([]byte(response), createdProfile)
+	err = json.Unmarshal([]byte(response), &createdProfile)
 	return
 }
 
@@ -65,8 +64,7 @@ func (c *Client) GetAdvertiserProfile(profileID uint64, userSessionToken string)
 	}
 
 	// Convert model response
-	profile = new(AdvertiserProfile)
-	err = json.Unmarshal([]byte(response), profile)
+	err = json.Unmarshal([]byte(response), &profile)
 	return
 }
 
@@ -97,7 +95,6 @@ func (c *Client) UpdateAdvertiserProfile(profile *AdvertiserProfile, userSession
 	}
 
 	// Convert model response
-	updatedProfile = new(AdvertiserProfile)
-	err = json.Unmarshal([]byte(response), updatedProfile)
+	err = json.Unmarshal([]byte(response), &updatedProfile)
 	return
 }

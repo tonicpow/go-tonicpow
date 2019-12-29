@@ -40,8 +40,7 @@ func (c *Client) CreateUser(user *User) (createdUser *User, err error) {
 	}
 
 	// Convert model response
-	createdUser = new(User)
-	err = json.Unmarshal([]byte(response), createdUser)
+	err = json.Unmarshal([]byte(response), &createdUser)
 	return
 }
 
@@ -72,8 +71,7 @@ func (c *Client) UpdateUser(user *User, userSessionToken string) (updatedUser *U
 	}
 
 	// Convert model response
-	updatedUser = new(User)
-	err = json.Unmarshal([]byte(response), updatedUser)
+	err = json.Unmarshal([]byte(response), &updatedUser)
 	return
 }
 
@@ -110,8 +108,7 @@ func (c *Client) GetUser(byID uint64, byEmail string) (user *User, err error) {
 	}
 
 	// Convert model response
-	user = new(User)
-	err = json.Unmarshal([]byte(response), user)
+	err = json.Unmarshal([]byte(response), &user)
 	return
 }
 
@@ -132,8 +129,7 @@ func (c *Client) GetUserBalance(userID uint64) (user *User, err error) {
 	}
 
 	// Convert model response
-	user = new(User)
-	err = json.Unmarshal([]byte(response), user)
+	err = json.Unmarshal([]byte(response), &user)
 	return
 }
 
@@ -161,8 +157,7 @@ func (c *Client) CurrentUser(userSessionToken string) (user *User, err error) {
 	}
 
 	// Convert model response
-	user = new(User)
-	err = json.Unmarshal([]byte(response), user)
+	err = json.Unmarshal([]byte(response), &user)
 	return
 }
 

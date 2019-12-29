@@ -39,8 +39,7 @@ func (c *Client) CreateCampaign(campaign *Campaign, userSessionToken string) (cr
 	}
 
 	// Convert model response
-	createdCampaign = new(Campaign)
-	err = json.Unmarshal([]byte(response), createdCampaign)
+	err = json.Unmarshal([]byte(response), &createdCampaign)
 	return
 }
 
@@ -69,8 +68,7 @@ func (c *Client) GetCampaign(campaignID uint64, userSessionToken string) (campai
 	}
 
 	// Convert model response
-	campaign = new(Campaign)
-	err = json.Unmarshal([]byte(response), campaign)
+	err = json.Unmarshal([]byte(response), &campaign)
 	return
 }
 
@@ -91,8 +89,7 @@ func (c *Client) GetCampaignBalance(campaignID uint64) (campaign *Campaign, err 
 	}
 
 	// Convert model response
-	campaign = new(Campaign)
-	err = json.Unmarshal([]byte(response), campaign)
+	err = json.Unmarshal([]byte(response), &campaign)
 	return
 }
 
@@ -123,7 +120,6 @@ func (c *Client) UpdateCampaign(campaign *Campaign, userSessionToken string) (up
 	}
 
 	// Convert model response
-	updatedCampaign = new(Campaign)
-	err = json.Unmarshal([]byte(response), updatedCampaign)
+	err = json.Unmarshal([]byte(response), &updatedCampaign)
 	return
 }

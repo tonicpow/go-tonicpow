@@ -36,8 +36,7 @@ func (c *Client) CreateGoal(goal *Goal, userSessionToken string) (createdGoal *G
 	}
 
 	// Convert model response
-	createdGoal = new(Goal)
-	err = json.Unmarshal([]byte(response), createdGoal)
+	err = json.Unmarshal([]byte(response), &createdGoal)
 	return
 }
 
@@ -66,8 +65,7 @@ func (c *Client) GetGoal(goalID uint64, userSessionToken string) (goal *Goal, er
 	}
 
 	// Convert model response
-	goal = new(Goal)
-	err = json.Unmarshal([]byte(response), goal)
+	err = json.Unmarshal([]byte(response), &goal)
 	return
 }
 
@@ -98,8 +96,7 @@ func (c *Client) UpdateGoal(goal *Goal, userSessionToken string) (updatedGoal *G
 	}
 
 	// Convert model response
-	updatedGoal = new(Goal)
-	err = json.Unmarshal([]byte(response), updatedGoal)
+	err = json.Unmarshal([]byte(response), &updatedGoal)
 	return
 }
 
@@ -135,7 +132,6 @@ func (c *Client) ConvertGoal(goalName, visitorSessionID, additionalData, customU
 	}
 
 	// Convert model response
-	conversion = new(Conversion)
-	err = json.Unmarshal([]byte(response), conversion)
+	err = json.Unmarshal([]byte(response), &conversion)
 	return
 }
