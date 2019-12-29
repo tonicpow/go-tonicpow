@@ -90,7 +90,7 @@ func main() {
 
 ## Contributing
 
-If you're looking for a JS version, checkout [this package](https://github.com/tonicpow/tonicpow-js)
+If you're looking for a library using JavaScript, checkout [tonicpow-js](https://github.com/tonicpow/tonicpow-js)
 
 View the [contributing guidelines](CONTRIBUTING.md) and follow the [code of conduct](CODE_OF_CONDUCT.md).
 
