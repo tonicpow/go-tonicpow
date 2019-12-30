@@ -35,12 +35,12 @@ You can view the generated [documentation here](https://godoc.org/github.com/ton
 - [Client](client.go) is completely configurable
 - Using [heimdall http client](https://github.com/gojek/heimdall) with exponential backoff & more
 - Coverage for the [TonicPow.com API](https://docs.tonicpow.com/)
-    - [x] Authentication
-    - [x] Users
-    - [x] Advertiser Profiles
-    - [x] Campaigns
-    - [x] Goals
-    - [x] Links
+    - [x] [Authentication](https://docs.tonicpow.com/#632ed94a-3afd-4323-af91-bdf307a399d2)
+    - [x] [Users](https://docs.tonicpow.com/#50b3c130-7254-4a05-b312-b14647736e38)
+    - [x] [Advertiser Profiles](https://docs.tonicpow.com/#2f9ec542-0f88-4671-b47c-d0ee390af5ea)
+    - [x] [Campaigns](https://docs.tonicpow.com/#5aca2fc7-b3c8-445b-aa88-f62a681f8e0c)
+    - [x] [Goals](https://docs.tonicpow.com/#316b77ab-4900-4f3d-96a7-e67c00af10ca)
+    - [x] [Links](https://docs.tonicpow.com/#ee74c3ce-b4df-4d57-abf2-ccf3a80e4e1e)
 
 ## Examples & Tests
 All unit tests and [examples](tonicpow_test.go) run via [Travis CI](https://travis-ci.org/tonicpow/go-tonicpow) and uses [Go version 1.13.x](https://golang.org/doc/go1.13). View the [deployment configuration file](.travis.yml).
