@@ -1,6 +1,7 @@
 # go-tonicpow
 **go-tonicpow** is the official golang implementation for interacting with the [TonicPow API](https://docs.tonicpow.com)
 
+[![Go](https://img.shields.io/github/go-mod/go-version/tonicpow/go-tonicpow)](https://golang.org/)
 [![Build Status](https://travis-ci.com/tonicpow/go-tonicpow.svg?branch=master)](https://travis-ci.com/tonicpow/go-tonicpow)
 [![Report](https://goreportcard.com/badge/github.com/tonicpow/go-tonicpow?style=flat)](https://goreportcard.com/report/github.com/tonicpow/go-tonicpow)
 [![Release](https://img.shields.io/github/release-pre/tonicpow/go-tonicpow.svg?style=flat)](https://github.com/tonicpow/go-tonicpow/releases)
