@@ -103,4 +103,4 @@ Support the development of this project 🙏
 
 ## License
 
-![License](https://img.shields.io/github/license/tonicpow/go-tonicpow.svg?style=flat)
+[![license](https://img.shields.io/badge/license-Open%20BSV-brightgreen.svg?style=flat)](/LICENSE)
