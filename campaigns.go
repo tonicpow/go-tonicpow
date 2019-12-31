@@ -75,13 +75,14 @@ func (c *Client) GetCampaign(campaignID uint64, userSessionToken string) (campai
 }
 
 // ListCampaigns will return a list of active campaigns
+// Use the customSessionToken if making request on behalf of another user / advertiser
 //
 // For more information: https://docs.tonicpow.com/#c1b17be6-cb10-48b3-a519-4686961ff41c
-func (c *Client) ListCampaigns() (campaigns []*Campaign, err error) {
+func (c *Client) ListCampaigns(customSessionToken string) (campaigns []*Campaign, err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/list", modelCampaign), http.MethodGet, nil, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/list", modelCampaign), http.MethodGet, nil, customSessionToken); err != nil {
 		return
 	}
 
