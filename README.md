@@ -1,5 +1,4 @@
-<img src="https://repository-images.githubusercontent.com/215606155/bf4a1180-2b4d-11ea-96a0-3b4020e72e35" height="100" alt="TonicPow & Go">
-
+<img src="https://repository-images.githubusercontent.com/215606155/bf4a1180-2b4d-11ea-96a0-3b4020e72e35" alt="TonicPow & Go">
 
 **go-tonicpow** is the official golang implementation for interacting with the [TonicPow API](https://docs.tonicpow.com)
 
