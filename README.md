@@ -90,7 +90,9 @@ func main() {
 
 ## Maintainers
 
-[@MrZ](https://github.com/mrz1836)
+| [<img src="https://github.com/mrz1836.png" height="50" alt="MrZ" />](https://github.com/mrz1836) | [<img src="https://github.com/rohenaz.png" height="50" alt="Satchmo" />](https://github.com/rohenaz) |
+|:---:|:---:|
+| [MrZ](https://github.com/mrz1836) | [Satchmo](https://github.com/rohenaz) |
 
 ## Contributing
 
