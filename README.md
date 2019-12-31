@@ -1,4 +1,6 @@
-# go-tonicpow
+<img src="https://repository-images.githubusercontent.com/215606155/bf4a1180-2b4d-11ea-96a0-3b4020e72e35" height="100" alt="TonicPow & Go">
+
+
 **go-tonicpow** is the official golang implementation for interacting with the [TonicPow API](https://docs.tonicpow.com)
 
 [![Go](https://img.shields.io/github/go-mod/go-version/tonicpow/go-tonicpow)](https://golang.org/)
