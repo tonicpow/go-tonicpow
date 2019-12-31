@@ -11,7 +11,9 @@ func (c *Campaign) permitFields() {
 	c.AdvertiserProfileID = 0
 	c.Balance = 0
 	c.BalanceSatoshis = 0
+	c.Clicks = 0
 	c.FundingAddress = ""
+	c.LinksCreated = 0
 	c.PublicGUID = ""
 }
 
@@ -69,6 +71,27 @@ func (c *Client) GetCampaign(campaignID uint64, userSessionToken string) (campai
 
 	// Convert model response
 	err = json.Unmarshal([]byte(response), &campaign)
+	return
+}
+
+// ListCampaigns will return a list of active campaigns
+//
+// For more information: https://docs.tonicpow.com/#c1b17be6-cb10-48b3-a519-4686961ff41c
+func (c *Client) ListCampaigns() (campaigns []*Campaign, err error) {
+
+	// Fire the request
+	var response string
+	if response, err = c.request(fmt.Sprintf("%s/list", modelCampaign), http.MethodGet, nil, ""); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	if err = c.error(http.StatusOK, response); err != nil {
+		return
+	}
+
+	// Convert model response
+	err = json.Unmarshal([]byte(response), &campaigns)
 	return
 }
 

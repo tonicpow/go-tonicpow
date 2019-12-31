@@ -280,4 +280,14 @@ func main() {
 	} else {
 		log.Printf("got link by id %d", goal.ID)
 	}
+
+	//
+	// Example: List active campaigns
+	//
+	var campaigns []*tonicpow.Campaign
+	if campaigns, err = TonicPowAPI.ListCampaigns(); err != nil {
+		log.Fatalf("list campaign failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
+	} else {
+		log.Printf("campaigns found: %d", len(campaigns))
+	}
 }

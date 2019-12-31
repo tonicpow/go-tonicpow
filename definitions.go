@@ -98,19 +98,22 @@ type AdvertiserProfile struct {
 //
 // For more information: https://docs.tonicpow.com/#5aca2fc7-b3c8-445b-aa88-f62a681f8e0c
 type Campaign struct {
-	AdvertiserProfileID uint64  `json:"advertiser_profile_id,omitempty"`
-	Balance             float64 `json:"balance,omitempty"`
-	BalanceSatoshis     int64   `json:"balance_satoshis,omitempty"`
-	Currency            string  `json:"currency,omitempty"`
-	Description         string  `json:"description,omitempty"`
-	FundingAddress      string  `json:"funding_address,omitempty"`
-	Goals               []*Goal `json:"goals,omitempty"`
-	ID                  uint64  `json:"id,omitempty"`
-	ImageURL            string  `json:"image_url,omitempty"`
-	PayPerClickRate     float64 `json:"pay_per_click_rate,omitempty"`
-	PublicGUID          string  `json:"public_guid,omitempty"`
-	TargetURL           string  `json:"target_url,omitempty"`
-	Title               string  `json:"title,omitempty"`
+	AdvertiserProfile   *AdvertiserProfile `json:"advertiser_profile,omitempty"`
+	AdvertiserProfileID uint64             `json:"advertiser_profile_id,omitempty"`
+	Balance             float64            `json:"balance,omitempty"`
+	BalanceSatoshis     int64              `json:"balance_satoshis,omitempty"`
+	Clicks              uint64             `json:"clicks,omitempty"`
+	Currency            string             `json:"currency,omitempty"`
+	Description         string             `json:"description,omitempty"`
+	FundingAddress      string             `json:"funding_address,omitempty"`
+	Goals               []*Goal            `json:"goals,omitempty"`
+	ID                  uint64             `json:"id,omitempty"`
+	ImageURL            string             `json:"image_url,omitempty"`
+	LinksCreated        uint64             `json:"links_created,omitempty"`
+	PayPerClickRate     float64            `json:"pay_per_click_rate,omitempty"`
+	PublicGUID          string             `json:"public_guid,omitempty"`
+	TargetURL           string             `json:"target_url,omitempty"`
+	Title               string             `json:"title,omitempty"`
 }
 
 // Goal is the goal model (child of Campaign)
