@@ -290,4 +290,11 @@ func main() {
 	} else {
 		log.Printf("campaigns found: %d", len(campaigns))
 	}
+
+	//
+	// Example: Activate User
+	//
+	//if err = TonicPowAPI.ActivateUser(user.ID); err != nil {
+	//	log.Fatalf("activate user failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
+	//}
 }

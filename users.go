@@ -317,3 +317,28 @@ func (c *Client) CompletePhoneVerification(phone, code string) (err error) {
 	err = c.error(http.StatusOK, response)
 	return
 }
+
+// ActivateUser will activate a user (if all application criteria is met)
+//
+// For more information: https://docs.tonicpow.com/#aa499fdf-2492-43ee-99d4-fc9735676431
+func (c *Client) ActivateUser(userID uint64) (err error) {
+
+	// Basic requirements
+	if userID == 0 {
+		err = fmt.Errorf("missing required attribute: %s", fieldUserID)
+		return
+	}
+
+	// Start the post data
+	data := map[string]string{fieldUserID: fmt.Sprintf("%d", userID)}
+
+	// Fire the request
+	var response string
+	if response, err = c.request(fmt.Sprintf("%s/status/activate", modelUser), http.MethodPut, data, ""); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	err = c.error(http.StatusOK, response)
+	return
+}
