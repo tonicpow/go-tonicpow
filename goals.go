@@ -100,25 +100,61 @@ func (c *Client) UpdateGoal(goal *Goal, userSessionToken string) (updatedGoal *G
 	return
 }
 
-// ConvertGoal will fire a conversion for a given goal, if successful it will make a new Conversion
+// ConvertGoalWithVisitorSession will fire a conversion for a given goal, if successful it will make a new Conversion
 //
 // For more information: https://docs.tonicpow.com/#caeffdd5-eaad-4fc8-ac01-8288b50e8e27
-func (c *Client) ConvertGoal(goalName, visitorSessionID, additionalData, customUserID string) (conversion *Conversion, err error) {
+func (c *Client) ConvertGoalWithVisitorSession(goalID uint64, tncpwSession, additionalData string) (conversion *Conversion, err error) {
 
 	// Must have a name
-	if len(goalName) == 0 {
-		err = fmt.Errorf("missing field: %s", fieldName)
+	if goalID == 0 {
+		err = fmt.Errorf("missing field: %s", fieldID)
 		return
 	}
 
-	// Must have a session id
-	if len(visitorSessionID) == 0 {
-		err = fmt.Errorf("missing field: %s", fieldVisitorSessionID)
+	// Must have a session guid
+	if len(tncpwSession) == 0 {
+		err = fmt.Errorf("missing field: %s", fieldVisitorSessionGUID)
 		return
 	}
 
 	// Start the post data
-	data := map[string]string{fieldName: goalName, fieldVisitorSessionID: visitorSessionID, fieldAdditionalData: additionalData, fieldUserID: customUserID}
+	data := map[string]string{fieldID: fmt.Sprintf("%d", goalID), fieldVisitorSessionGUID: tncpwSession, fieldAdditionalData: additionalData}
+
+	// Fire the request
+	var response string
+	if response, err = c.request(fmt.Sprintf("%s/convert", modelGoal), http.MethodPost, data, ""); err != nil {
+		return
+	}
+
+	// Only a 201 is treated as a success
+	if err = c.error(http.StatusCreated, response); err != nil {
+		return
+	}
+
+	// Convert model response
+	err = json.Unmarshal([]byte(response), &conversion)
+	return
+}
+
+// ConvertGoalWithUserID will fire a conversion for a given goal, if successful it will make a new Conversion
+//
+// For more information: https://docs.tonicpow.com/#d724f762-329e-473d-bdc4-aebc19dd9ea8
+func (c *Client) ConvertGoalWithUserID(goalID uint64, userID uint64, additionalData string) (conversion *Conversion, err error) {
+
+	// Must have a name
+	if goalID == 0 {
+		err = fmt.Errorf("missing field: %s", fieldID)
+		return
+	}
+
+	// Must have a user id
+	if userID == 0 {
+		err = fmt.Errorf("missing field: %s", fieldUserID)
+		return
+	}
+
+	// Start the post data
+	data := map[string]string{fieldID: fmt.Sprintf("%d", goalID), fieldUserID: fmt.Sprintf("%d", userID), fieldAdditionalData: additionalData}
 
 	// Fire the request
 	var response string

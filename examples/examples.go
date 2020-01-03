@@ -63,7 +63,7 @@ func main() {
 	// Example: Create a user
 	//
 	user := &tonicpow.User{
-		Email:    fmt.Sprintf("Testing%d@TonicPow.com", rand.Intn(100000)),
+		Email:    fmt.Sprintf("Tes_ti-ng+%d@TonicPow.com", rand.Intn(100000)),
 		Password: testPassword,
 	}
 	if user, err = TonicPowAPI.CreateUser(user); err != nil {

@@ -20,7 +20,7 @@ const (
 	fieldShortCode           = "short_code"
 	fieldToken               = "token"
 	fieldUserID              = "user_id"
-	fieldVisitorSessionID    = "visitor_session_id"
+	fieldVisitorSessionGUID  = "tncpw_session"
 
 	// Model names (used for request endpoints)
 	modelAdvertiser = "advertisers"
