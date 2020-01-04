@@ -238,7 +238,7 @@ func TestClient_CreateUser(t *testing.T) {
 		Email:     fmt.Sprintf("Testing%d@TonicPow.com", rand.Intn(100000)),
 		FirstName: "Austin",
 	}
-	if user, err = client.CreateUser(user); err != nil {
+	if _, err = client.CreateUser(user); err != nil {
 		t.Fatalf("%s", err.Error())
 	}
 }
