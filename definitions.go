@@ -12,6 +12,7 @@ const (
 	fieldCampaignID          = "campaign_id"
 	fieldEmail               = "email"
 	fieldID                  = "id"
+	fieldLinkID              = "link_id"
 	fieldName                = "name"
 	fieldPassword            = "password"
 	fieldPasswordConfirm     = "password_confirm"
@@ -23,11 +24,13 @@ const (
 	fieldVisitorSessionGUID  = "tncpw_session"
 
 	// Model names (used for request endpoints)
-	modelAdvertiser = "advertisers"
-	modelCampaign   = "campaigns"
-	modelGoal       = "goals"
-	modelLink       = "links"
-	modelUser       = "users"
+	modelAdvertiser     = "advertisers"
+	modelCampaign       = "campaigns"
+	modelGoal           = "goals"
+	modelLink           = "links"
+	modelUser           = "users"
+	modelVisitors       = "visitors"
+	modelVisitorSession = "sessions"
 
 	// apiVersion current version for all endpoints
 	apiVersion = "v1"
@@ -152,4 +155,14 @@ type Link struct {
 	ShortCode       string `json:"short_code,omitempty"`
 	ShortCodeURL    string `json:"short_code_url,omitempty"`
 	UserID          uint64 `json:"user_id,omitempty"`
+}
+
+// VisitorSession is the session for any visitor or user (related to link and campaign)
+//
+// For more information: https://docs.tonicpow.com/#d0d9055a-0c92-4f55-a370-762d44acf801
+type VisitorSession struct {
+	AdditionalData string `json:"additional_data,omitempty"`
+	CampaignID     uint64 `json:"campaign_id,omitempty"`
+	LinkID         uint64 `json:"link_id,omitempty"`
+	TncpwSession   string `json:"tncpw_session,omitempty"`
 }
