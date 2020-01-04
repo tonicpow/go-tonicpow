@@ -100,10 +100,10 @@ func (c *Client) UpdateGoal(goal *Goal, userSessionToken string) (updatedGoal *G
 	return
 }
 
-// ConvertGoalByGoalID will fire a conversion for a given goal id, if successful it will make a new Conversion
+// ConvertGoalByID will fire a conversion for a given goal id, if successful it will make a new Conversion
 //
 // For more information: https://docs.tonicpow.com/#caeffdd5-eaad-4fc8-ac01-8288b50e8e27
-func (c *Client) ConvertGoalByGoalID(goalID uint64, tncpwSession, additionalData string) (conversion *Conversion, err error) {
+func (c *Client) ConvertGoalByID(goalID uint64, tncpwSession, additionalData string) (conversion *Conversion, err error) {
 
 	// Must have a name
 	if goalID == 0 {
@@ -136,10 +136,10 @@ func (c *Client) ConvertGoalByGoalID(goalID uint64, tncpwSession, additionalData
 	return
 }
 
-// ConvertGoalByGoalName will fire a conversion for a given goal name, if successful it will make a new Conversion
+// ConvertGoalByName will fire a conversion for a given goal name, if successful it will make a new Conversion
 //
 // For more information: https://docs.tonicpow.com/#d19c9850-3832-45b2-b880-3ef2f3b7dc37
-func (c *Client) ConvertGoalByGoalName(goalName string, tncpwSession, additionalData string) (conversion *Conversion, err error) {
+func (c *Client) ConvertGoalByName(goalName, tncpwSession, additionalData string) (conversion *Conversion, err error) {
 
 	// Must have a name
 	if len(goalName) == 0 {
@@ -175,7 +175,7 @@ func (c *Client) ConvertGoalByGoalName(goalName string, tncpwSession, additional
 // ConvertGoalByUserID will fire a conversion for a given goal and user id, if successful it will make a new Conversion
 //
 // For more information: https://docs.tonicpow.com/#d724f762-329e-473d-bdc4-aebc19dd9ea8
-func (c *Client) ConvertGoalByUserID(goalID uint64, userID uint64, additionalData string) (conversion *Conversion, err error) {
+func (c *Client) ConvertGoalByUserID(goalID, userID uint64, additionalData string) (conversion *Conversion, err error) {
 
 	// Must have a name
 	if goalID == 0 {
