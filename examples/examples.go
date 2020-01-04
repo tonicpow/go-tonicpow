@@ -127,19 +127,15 @@ func main() {
 		HomepageURL: "https://tonicpow.com",
 		IconURL:     "https://tonicpow.com/images/logos/apple-touch-icon.png",
 	}
-	if advertiser, err = TonicPowAPI.CreateAdvertiserProfile(advertiser, ""); err != nil {
-		log.Fatalf("create advertiser failed - api error: %s data: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
-	} else {
-		log.Printf("advertiser profile %s id %d created", advertiser.Name, advertiser.ID)
+	if advertiser, err = createAdvertiserProfile(advertiser, ""); err != nil {
+		os.Exit(1)
 	}
 
 	//
 	// Example: Get an advertiser profile
 	//
-	if advertiser, err = TonicPowAPI.GetAdvertiserProfile(advertiser.ID, ""); err != nil {
-		log.Fatalf("get advertiser profile failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
-	} else {
-		log.Printf("got advertiser profile by id %d", advertiser.ID)
+	if advertiser, err = getAdvertiserProfile(advertiser.ID, ""); err != nil {
+		os.Exit(1)
 	}
 
 	//
@@ -180,19 +176,15 @@ func main() {
 		HomepageURL: "https://tonicpow.com",
 		IconURL:     "https://tonicpow.com/images/logos/apple-touch-icon.png",
 	}
-	if advertiser, err = TonicPowAPI.CreateAdvertiserProfile(advertiser, userSessionToken); err != nil {
-		log.Fatalf("create advertiser failed - api error: %s data: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
-	} else {
-		log.Printf("advertiser profile %s id %d created", advertiser.Name, advertiser.ID)
+	if advertiser, err = createAdvertiserProfile(advertiser, userSessionToken); err != nil {
+		os.Exit(1)
 	}
 
 	//
 	// Example: Get Advertiser Profile
 	//
-	if advertiser, err = TonicPowAPI.GetAdvertiserProfile(advertiser.ID, userSessionToken); err != nil {
-		log.Fatalf("get advertiser profile failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
-	} else {
-		log.Printf("got advertiser profile by id %d", advertiser.ID)
+	if advertiser, err = getAdvertiserProfile(advertiser.ID, userSessionToken); err != nil {
+		os.Exit(1)
 	}
 
 	//
@@ -308,6 +300,24 @@ func main() {
 //
 // Example Functions
 //
+
+func createAdvertiserProfile(profile *tonicpow.AdvertiserProfile, userSessionToken string) (createdProfile *tonicpow.AdvertiserProfile, err error) {
+	if createdProfile, err = TonicPowAPI.CreateAdvertiserProfile(profile, userSessionToken); err != nil {
+		log.Fatalf("create advertiser failed - api error: %s data: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
+	} else {
+		log.Printf("advertiser profile %s id %d created", createdProfile.Name, createdProfile.ID)
+	}
+	return
+}
+
+func getAdvertiserProfile(advertiserProfileID uint64, userSessionToken string) (advertiserProfile *tonicpow.AdvertiserProfile, err error) {
+	if advertiserProfile, err = TonicPowAPI.GetAdvertiserProfile(advertiserProfileID, userSessionToken); err != nil {
+		log.Fatalf("get advertiser profile failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
+	} else {
+		log.Printf("got advertiser profile by id %d", advertiserProfile.ID)
+	}
+	return
+}
 
 func createCampaign(campaign *tonicpow.Campaign, userSessionToken string) (createdCampaign *tonicpow.Campaign, err error) {
 	if createdCampaign, err = TonicPowAPI.CreateCampaign(campaign, userSessionToken); err != nil {

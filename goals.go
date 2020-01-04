@@ -100,10 +100,10 @@ func (c *Client) UpdateGoal(goal *Goal, userSessionToken string) (updatedGoal *G
 	return
 }
 
-// ConvertGoalWithVisitorSession will fire a conversion for a given goal, if successful it will make a new Conversion
+// ConvertGoalByGoalID will fire a conversion for a given goal, if successful it will make a new Conversion
 //
 // For more information: https://docs.tonicpow.com/#caeffdd5-eaad-4fc8-ac01-8288b50e8e27
-func (c *Client) ConvertGoalWithVisitorSession(goalID uint64, tncpwSession, additionalData string) (conversion *Conversion, err error) {
+func (c *Client) ConvertGoalByGoalID(goalID uint64, tncpwSession, additionalData string) (conversion *Conversion, err error) {
 
 	// Must have a name
 	if goalID == 0 {
@@ -136,10 +136,46 @@ func (c *Client) ConvertGoalWithVisitorSession(goalID uint64, tncpwSession, addi
 	return
 }
 
-// ConvertGoalWithUserID will fire a conversion for a given goal, if successful it will make a new Conversion
+// ConvertGoalByGoalID will fire a conversion for a given goal, if successful it will make a new Conversion
+//
+// For more information: https://docs.tonicpow.com/#d19c9850-3832-45b2-b880-3ef2f3b7dc37
+func (c *Client) ConvertGoalByGoalName(goalName string, tncpwSession, additionalData string) (conversion *Conversion, err error) {
+
+	// Must have a name
+	if len(goalName) == 0 {
+		err = fmt.Errorf("missing field: %s", fieldName)
+		return
+	}
+
+	// Must have a session guid
+	if len(tncpwSession) == 0 {
+		err = fmt.Errorf("missing field: %s", fieldVisitorSessionGUID)
+		return
+	}
+
+	// Start the post data
+	data := map[string]string{fieldName: goalName, fieldVisitorSessionGUID: tncpwSession, fieldAdditionalData: additionalData}
+
+	// Fire the request
+	var response string
+	if response, err = c.request(fmt.Sprintf("%s/convert", modelGoal), http.MethodPost, data, ""); err != nil {
+		return
+	}
+
+	// Only a 201 is treated as a success
+	if err = c.error(http.StatusCreated, response); err != nil {
+		return
+	}
+
+	// Convert model response
+	err = json.Unmarshal([]byte(response), &conversion)
+	return
+}
+
+// ConvertGoalByUserID will fire a conversion for a given goal, if successful it will make a new Conversion
 //
 // For more information: https://docs.tonicpow.com/#d724f762-329e-473d-bdc4-aebc19dd9ea8
-func (c *Client) ConvertGoalWithUserID(goalID uint64, userID uint64, additionalData string) (conversion *Conversion, err error) {
+func (c *Client) ConvertGoalByUserID(goalID uint64, userID uint64, additionalData string) (conversion *Conversion, err error) {
 
 	// Must have a name
 	if goalID == 0 {
