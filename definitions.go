@@ -10,7 +10,9 @@ const (
 	fieldAdvertiserProfileID = "advertiser_profile_id"
 	fieldApiKey              = "api_key"
 	fieldCampaignID          = "campaign_id"
+	fieldDelayInMinutes      = "delay_in_minutes"
 	fieldEmail               = "email"
+	fieldGoalID              = "goal_id"
 	fieldID                  = "id"
 	fieldLinkID              = "link_id"
 	fieldName                = "name"
@@ -26,6 +28,7 @@ const (
 	// Model names (used for request endpoints)
 	modelAdvertiser     = "advertisers"
 	modelCampaign       = "campaigns"
+	modelConversion     = "conversions"
 	modelGoal           = "goals"
 	modelLink           = "links"
 	modelUser           = "users"
@@ -133,15 +136,18 @@ type Goal struct {
 	Title       string  `json:"title,omitempty"`
 }
 
-// Conversion is the result of goal.Convert()
+// Conversion is the response of getting a conversion
 //
-// For more information: https://docs.tonicpow.com/#caeffdd5-eaad-4fc8-ac01-8288b50e8e27
+// For more information: https://docs.tonicpow.com/#75c837d5-3336-4d87-a686-d80c6f8938b9
 type Conversion struct {
 	AdditionalData string `json:"additional_data,omitempty"`
-	ConversionTxID string `json:"conversion_tx_id,omitempty"`
+	Amount         uint64 `json:"amount,omitempty"`
 	GoalID         uint64 `json:"goal_id,omitempty"`
 	GoalName       string `json:"goal_name,omitempty"`
-	UserID         string `json:"user_id,omitempty"`
+	ID             uint64 `json:"ID,omitempty"`
+	PayoutAfter    string `json:"payout_after,omitempty"`
+	Status         string `json:"status,omitempty"`
+	TxID           string `json:"tx_id,omitempty"`
 }
 
 // Link is the link model (child of User) (relates Campaign to User)

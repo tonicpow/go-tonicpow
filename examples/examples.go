@@ -227,7 +227,7 @@ func main() {
 		CampaignID:  campaign.ID,
 		Description: "Bring leads and get paid!",
 		Name:        "new-lead-landing-page",
-		PayoutRate:  0.50,
+		PayoutRate:  0.02,
 		PayoutType:  "flat",
 		Title:       "Landing Page Leads",
 	}
@@ -295,6 +295,46 @@ func main() {
 	if visitorSession, err = getVisitorSession(visitorSession.TncpwSession); err != nil {
 		os.Exit(1)
 	}
+
+	log.Printf("visitor session found: %s", visitorSession.TncpwSession)
+
+	//
+	// Example: Fire a conversion on a goal (by user id)
+	//
+	var newConversion *tonicpow.Conversion
+	if newConversion, err = TonicPowAPI.CreateConversionByUserID(goal.ID, user.ID, "", 5); err != nil {
+		os.Exit(1)
+	}
+
+	log.Printf("successful conversion event: %d", newConversion.ID)
+
+	//
+	// Example: Fire a conversion on a goal (by visitor)
+	//
+	if newConversion, err = TonicPowAPI.CreateConversionByGoalID(goal.ID, visitorSession.TncpwSession, "", 10); err != nil {
+		os.Exit(1)
+	}
+
+	log.Printf("successful conversion event: %d payout after: %s", newConversion.ID, newConversion.PayoutAfter)
+
+	//
+	// Example: Get conversion
+	//
+	var conversion *tonicpow.Conversion
+	if conversion, err = TonicPowAPI.GetConversion(newConversion.ID); err != nil {
+		os.Exit(1)
+	}
+
+	log.Printf("got conversion: %d", conversion.ID)
+
+	/*if newConversion, err = TonicPowAPI.CreateConversionByUserID(1, 1, "", 0); err != nil {
+		os.Exit(1)
+	}*/
+
+	/*if newConversion, err = TonicPowAPI.CreateConversionByUserID(1, 1, "", 1); err != nil {
+		os.Exit(1)
+	}*/
+
 }
 
 //
