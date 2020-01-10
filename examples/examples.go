@@ -210,7 +210,7 @@ func main() {
 		PayPerClickRate:     0.01,
 		TargetURL:           "https://offers.tonicpow.com",
 		Title:               "TonicPow Offers",
-		ExpiresAt:           expiresAt.String(),
+		ExpiresAt:           expiresAt.Format(time.RFC3339),
 	}
 	if campaign, err = createCampaign(campaign, userSessionToken); err != nil {
 		os.Exit(1)
