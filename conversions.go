@@ -141,3 +141,33 @@ func (c *Client) GetConversion(conversionID uint64) (conversion *Conversion, err
 	err = json.Unmarshal([]byte(response), &conversion)
 	return
 }
+
+// CancelConversion will cancel an existing conversion (if delay was set and > 1 minute remaining)
+//
+// For more information: https://docs.tonicpow.com/#e650b083-bbb4-4ff7-9879-c14b1ab3f753
+func (c *Client) CancelConversion(conversionID uint64, cancelReason string) (conversion *Conversion, err error) {
+
+	// Must have an id
+	if conversionID == 0 {
+		err = fmt.Errorf("missing field: %s", fieldID)
+		return
+	}
+
+	// Start the post data
+	data := map[string]string{fieldID: fmt.Sprintf("%d", conversionID), fieldReason: cancelReason}
+
+	// Fire the request
+	var response string
+	if response, err = c.request(fmt.Sprintf("%s/cancel", modelConversion), http.MethodPut, data, ""); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	if err = c.error(http.StatusOK, response); err != nil {
+		return
+	}
+
+	// Convert model response
+	err = json.Unmarshal([]byte(response), &conversion)
+	return
+}

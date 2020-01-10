@@ -20,6 +20,7 @@ const (
 	fieldPasswordConfirm     = "password_confirm"
 	fieldPhone               = "phone"
 	fieldPhoneCode           = "phone_code"
+	fieldReason              = "reason"
 	fieldShortCode           = "short_code"
 	fieldToken               = "token"
 	fieldUserID              = "user_id"
@@ -149,6 +150,7 @@ type Conversion struct {
 	PayoutAfter    string `json:"payout_after,omitempty"`
 	Status         string `json:"status,omitempty"`
 	TxID           string `json:"tx_id,omitempty"`
+	UserID         uint64 `json:"user_id,omitempty"`
 }
 
 // Link is the link model (child of User) (relates Campaign to User)

@@ -76,6 +76,7 @@ func (c *Client) GetCampaign(campaignID uint64, userSessionToken string) (campai
 
 // ListCampaigns will return a list of active campaigns
 // Use the customSessionToken if making request on behalf of another user / advertiser
+// This will return an error if the campaign is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#c1b17be6-cb10-48b3-a519-4686961ff41c
 func (c *Client) ListCampaigns(customSessionToken string) (campaigns []*Campaign, err error) {
@@ -97,6 +98,7 @@ func (c *Client) ListCampaigns(customSessionToken string) (campaigns []*Campaign
 }
 
 // GetCampaignBalance will update the models's balance from the chain
+// This will return an error if the campaign is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#b6c60c63-8ac5-4c74-a4a2-cf3e858e5a8d
 func (c *Client) GetCampaignBalance(campaignID uint64) (campaign *Campaign, err error) {

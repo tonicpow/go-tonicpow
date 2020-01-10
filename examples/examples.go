@@ -330,6 +330,18 @@ func main() {
 
 	log.Printf("got conversion: %d", conversion.ID)
 
+	//
+	// Example: Cancel a Delayed Conversion
+	//
+	if conversion, err = TonicPowAPI.CancelConversion(conversion.ID, "not needed anymore"); err != nil {
+		os.Exit(1)
+	}
+
+	log.Printf("conversion status: %s", conversion.Status)
+
+	//
+	// Example: Create Conversion by User ID
+	//
 	if newConversion, err = TonicPowAPI.CreateConversionByUserID(1, 1, "", 0); err != nil {
 		os.Exit(1)
 	}
