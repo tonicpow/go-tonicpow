@@ -5,6 +5,7 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"time"
 
 	"github.com/tonicpow/go-tonicpow"
 )
@@ -200,6 +201,7 @@ func main() {
 	//
 	// Example: Create a campaign
 	//
+	expiresAt := time.Now().UTC().Add(500 * time.Hour) // Optional expiration date
 	campaign := &tonicpow.Campaign{
 		AdvertiserProfileID: advertiser.ID,
 		Currency:            "USD",
@@ -208,6 +210,7 @@ func main() {
 		PayPerClickRate:     0.01,
 		TargetURL:           "https://offers.tonicpow.com",
 		Title:               "TonicPow Offers",
+		ExpiresAt:           expiresAt.String(),
 	}
 	if campaign, err = createCampaign(campaign, userSessionToken); err != nil {
 		os.Exit(1)
@@ -327,14 +330,13 @@ func main() {
 
 	log.Printf("got conversion: %d", conversion.ID)
 
-	/*if newConversion, err = TonicPowAPI.CreateConversionByUserID(1, 1, "", 0); err != nil {
+	if newConversion, err = TonicPowAPI.CreateConversionByUserID(1, 1, "", 0); err != nil {
 		os.Exit(1)
-	}*/
+	}
 
-	/*if newConversion, err = TonicPowAPI.CreateConversionByUserID(1, 1, "", 1); err != nil {
-		os.Exit(1)
-	}*/
+	log.Printf("new conversion: %d", newConversion.ID)
 
+	log.Println("examples complete!")
 }
 
 //

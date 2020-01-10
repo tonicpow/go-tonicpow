@@ -111,6 +111,7 @@ type Campaign struct {
 	Clicks              uint64             `json:"clicks,omitempty"`
 	Currency            string             `json:"currency,omitempty"`
 	Description         string             `json:"description,omitempty"`
+	ExpiresAt           string             `json:"expires_at,omitempty"`
 	FundingAddress      string             `json:"funding_address,omitempty"`
 	Goals               []*Goal            `json:"goals,omitempty"`
 	ID                  uint64             `json:"id,omitempty"`
