@@ -282,6 +282,13 @@ func main() {
 	//}
 
 	//
+	// Example: Pause User
+	//
+	//if err = TonicPowAPI.PauseUser(user.ID,"reviewing account"); err != nil {
+	//	log.Fatalf("pause user failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
+	//}
+
+	//
 	// Example: Create a Visitor Session
 	//
 	visitorSession := &tonicpow.VisitorSession{

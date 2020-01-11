@@ -330,11 +330,36 @@ func (c *Client) ActivateUser(userID uint64) (err error) {
 	}
 
 	// Start the post data
-	data := map[string]string{fieldUserID: fmt.Sprintf("%d", userID)}
+	data := map[string]string{fieldID: fmt.Sprintf("%d", userID)}
 
 	// Fire the request
 	var response string
 	if response, err = c.request(fmt.Sprintf("%s/status/activate", modelUser), http.MethodPut, data, ""); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	err = c.error(http.StatusOK, response)
+	return
+}
+
+// PauseUser will pause a user account (all payouts go to internal address)
+//
+// For more information: https://docs.tonicpow.com/#3307310d-86a9-4a5c-84ff-c38c581c77e5
+func (c *Client) PauseUser(userID uint64, reason string) (err error) {
+
+	// Basic requirements
+	if userID == 0 || len(reason) == 0 {
+		err = fmt.Errorf("missing required attribute: %s", fieldUserID)
+		return
+	}
+
+	// Start the post data
+	data := map[string]string{fieldID: fmt.Sprintf("%d", userID), fieldReason: reason}
+
+	// Fire the request
+	var response string
+	if response, err = c.request(fmt.Sprintf("%s/status/pause", modelUser), http.MethodPut, data, ""); err != nil {
 		return
 	}
 
