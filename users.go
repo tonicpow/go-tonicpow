@@ -265,6 +265,31 @@ func (c *Client) ResetPassword(token, password, passwordConfirm string) (err err
 	return
 }
 
+// ResendEmailVerification will resend an email to the user
+//
+// For more information: https://docs.tonicpow.com/#a12a3eff-491b-4079-99f6-07497b9e4efe
+func (c *Client) ResendEmailVerification(userID uint64) (err error) {
+
+	// Basic requirements
+	if userID == 0 {
+		err = fmt.Errorf("missing required attribute: %s", fieldID)
+		return
+	}
+
+	// Start the post data
+	data := map[string]string{fieldID: fmt.Sprintf("%d", userID)}
+
+	// Fire the request
+	var response string
+	if response, err = c.request(fmt.Sprintf("%s/verify/%s/send", modelUser, fieldEmail), http.MethodPost, data, ""); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	err = c.error(http.StatusOK, response)
+	return
+}
+
 // CompleteEmailVerification will complete an email verification with a given token
 //
 // For more information: https://docs.tonicpow.com/#f5081800-a224-4f36-8014-94981f0bd55d
@@ -282,6 +307,31 @@ func (c *Client) CompleteEmailVerification(token string) (err error) {
 	// Fire the request
 	var response string
 	if response, err = c.request(fmt.Sprintf("%s/verify/%s", modelUser, fieldEmail), http.MethodPut, data, ""); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	err = c.error(http.StatusOK, response)
+	return
+}
+
+// ResendPhoneVerification will resend a phone verification code to the user
+//
+// For more information: https://docs.tonicpow.com/#fcc4fe4d-f298-45bd-b51e-a5c107834528
+func (c *Client) ResendPhoneVerification(userID uint64) (err error) {
+
+	// Basic requirements
+	if userID == 0 {
+		err = fmt.Errorf("missing required attribute: %s", fieldID)
+		return
+	}
+
+	// Start the post data
+	data := map[string]string{fieldID: fmt.Sprintf("%d", userID)}
+
+	// Fire the request
+	var response string
+	if response, err = c.request(fmt.Sprintf("%s/verify/%s/send", modelUser, fieldPhone), http.MethodPost, data, ""); err != nil {
 		return
 	}
 
