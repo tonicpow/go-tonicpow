@@ -254,7 +254,7 @@ func main() {
 		Description: "Get 10% of all action!",
 		//Name:        fmt.Sprintf("%s%d", "all-action", rand.Intn(100000)),
 		Name:       "all-action",
-		PayoutRate: 0.1, // 10% as a float
+		PayoutRate: 0.10, // 10% as a float
 		PayoutType: "percent",
 		Title:      "10% Commissions",
 	}
