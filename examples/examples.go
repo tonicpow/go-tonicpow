@@ -224,7 +224,7 @@ func main() {
 	}
 
 	//
-	// Example: Create a Goal
+	// Example: Create a Goal (flat payout)
 	//
 	goal := &tonicpow.Goal{
 		CampaignID:  campaign.ID,
@@ -242,6 +242,23 @@ func main() {
 	// Example: Get Goal
 	//
 	if goal, err = getGoal(goal.ID, userSessionToken); err != nil {
+		os.Exit(1)
+	}
+
+	//
+	// Example: Create a Goal (percent payout)
+	//
+	goalPercent := &tonicpow.Goal{
+		//CampaignID: 1,
+		CampaignID:  campaign.ID,
+		Description: "Get 10% of all action!",
+		//Name:        fmt.Sprintf("%s%d", "all-action", rand.Intn(100000)),
+		Name:       "all-action",
+		PayoutRate: 0.1, // 10% as a float
+		PayoutType: "percent",
+		Title:      "10% Commissions",
+	}
+	if goalPercent, err = createGoal(goalPercent, userSessionToken); err != nil {
 		os.Exit(1)
 	}
 
@@ -312,7 +329,7 @@ func main() {
 	// Example: Fire a conversion on a goal (by user id)
 	//
 	var newConversion *tonicpow.Conversion
-	if newConversion, err = TonicPowAPI.CreateConversionByUserID(goal.ID, user.ID, "", 5); err != nil {
+	if newConversion, err = TonicPowAPI.CreateConversionByUserID(goal.ID, user.ID, "", 0.00, 5); err != nil {
 		os.Exit(1)
 	}
 
@@ -321,7 +338,7 @@ func main() {
 	//
 	// Example: Fire a conversion on a goal (by visitor)
 	//
-	if newConversion, err = TonicPowAPI.CreateConversionByGoalID(goal.ID, visitorSession.TncpwSession, "", 10); err != nil {
+	if newConversion, err = TonicPowAPI.CreateConversionByGoalID(goal.ID, visitorSession.TncpwSession, "", 0.00, 10); err != nil {
 		os.Exit(1)
 	}
 
@@ -349,11 +366,17 @@ func main() {
 	//
 	// Example: Create Conversion by User ID
 	//
-	if newConversion, err = TonicPowAPI.CreateConversionByUserID(1, 1, "", 0); err != nil {
+	if newConversion, err = TonicPowAPI.CreateConversionByUserID(1, 2, "", 0.00, 0); err != nil {
 		os.Exit(1)
 	}
 
-	log.Printf("new conversion: %d", newConversion.ID)
+	//
+	// Example: Create Conversion by User ID (percent based conversion - using a purchase amount, or some tx of value)
+	//
+	//if newConversion, err = TonicPowAPI.CreateConversionByUserID(goalPercent.ID, 2, "", 5.00, 0); err != nil {
+	//	os.Exit(1)
+	//}
+	//log.Printf("new conversion: %d", newConversion.ID)
 
 	log.Println("examples complete!")
 }
