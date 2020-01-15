@@ -6,10 +6,10 @@ import (
 	"net/http"
 )
 
-// GetCurrentRate will get a current rate for the given currency
+// GetCurrentRate will get a current rate for the given currency (using default currency amount)
 //
 // For more information: https://docs.tonicpow.com/#71b8b7fc-317a-4e68-bd2a-5b0da012361c
-func (c *Client) GetCurrentRate(currency string) (rate *Rate, err error) {
+func (c *Client) GetCurrentRate(currency string, customAmount float64) (rate *Rate, err error) {
 
 	// Must have an currency
 	if len(currency) == 0 {
@@ -19,7 +19,7 @@ func (c *Client) GetCurrentRate(currency string) (rate *Rate, err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/%s", modelRates, currency), http.MethodGet, nil, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/%s?%s=%f", modelRates, currency, fieldAmount, customAmount), http.MethodGet, nil, ""); err != nil {
 		return
 	}
 

@@ -492,7 +492,7 @@ func getVisitorSession(tncpwSession string) (visitorSession *tonicpow.VisitorSes
 }
 
 func getCurrentRate(currency string) (rate *tonicpow.Rate, err error) {
-	if rate, err = TonicPowAPI.GetCurrentRate(currency); err != nil {
+	if rate, err = TonicPowAPI.GetCurrentRate(currency, 0); err != nil {
 		log.Fatalf("get rate failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
 	} else {
 		log.Printf("got rate by currency %s price in sats: %d", currency, rate.PriceInSatoshis)
