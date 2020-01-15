@@ -15,6 +15,7 @@ const (
 	fieldEmail               = "email"
 	fieldGoalID              = "goal_id"
 	fieldID                  = "id"
+	fieldLastBalance         = "last_balance"
 	fieldLinkID              = "link_id"
 	fieldName                = "name"
 	fieldPassword            = "password"

@@ -104,7 +104,7 @@ func main() {
 	//
 	// Example: Get new updated balance for user
 	//
-	if user, err = TonicPowAPI.GetUserBalance(user.ID); err != nil {
+	if user, err = TonicPowAPI.GetUserBalance(user.ID, 0); err != nil {
 		log.Fatalf("get user failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
 	} else {
 		log.Printf("user balance: %d", user.Balance)
@@ -230,7 +230,7 @@ func main() {
 		CampaignID:  campaign.ID,
 		Description: "Bring leads and get paid!",
 		Name:        "new-lead-landing-page",
-		PayoutRate:  0.02,
+		PayoutRate:  0.04,
 		PayoutType:  "flat",
 		Title:       "Landing Page Leads",
 	}

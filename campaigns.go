@@ -101,11 +101,11 @@ func (c *Client) ListCampaigns(customSessionToken string) (campaigns []*Campaign
 // This will return an error if the campaign is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#b6c60c63-8ac5-4c74-a4a2-cf3e858e5a8d
-func (c *Client) GetCampaignBalance(campaignID uint64) (campaign *Campaign, err error) {
+func (c *Client) GetCampaignBalance(campaignID uint64, lastBalance int64) (campaign *Campaign, err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/balance/%d", modelCampaign, campaignID), http.MethodGet, nil, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/balance/%d?%s=%d", modelCampaign, campaignID, fieldLastBalance, lastBalance), http.MethodGet, nil, ""); err != nil {
 		return
 	}
 

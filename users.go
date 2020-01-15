@@ -115,11 +115,11 @@ func (c *Client) GetUser(byID uint64, byEmail string) (user *User, err error) {
 // GetUserBalance will update a user's balance from the chain
 //
 // For more information: https://docs.tonicpow.com/#8478765b-95b8-47ad-8b86-2db5bce54924
-func (c *Client) GetUserBalance(userID uint64) (user *User, err error) {
+func (c *Client) GetUserBalance(userID uint64, lastBalance int64) (user *User, err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/balance/%d", modelUser, userID), http.MethodGet, nil, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/balance/%d?%s=%d", modelUser, userID, fieldLastBalance, lastBalance), http.MethodGet, nil, ""); err != nil {
 		return
 	}
 
