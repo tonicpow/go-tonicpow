@@ -180,10 +180,13 @@ type Link struct {
 type VisitorSession struct {
 	CampaignID       uint64 `json:"campaign_id,omitempty"`
 	CustomDimensions string `json:"custom_dimensions,omitempty"`
+	IPAddress        string `json:"ip_address,omitempty"`
 	LinkID           uint64 `json:"link_id,omitempty"`
 	LinkUserID       uint64 `json:"link_user_id,omitempty"`
 	Provider         string `json:"provider,omitempty"`
+	Referer          string `json:"referer,omitempty"`
 	TncpwSession     string `json:"tncpw_session,omitempty"`
+	UserAgent        string `json:"user_agent,omitempty"`
 }
 
 // Rate is the rate results

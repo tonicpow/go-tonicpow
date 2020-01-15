@@ -342,6 +342,20 @@ func main() {
 	log.Printf("visitor session found: %s", visitorSession.TncpwSession)
 
 	//
+	// Example: Create a Visitor Session (Full Anti-Bot Options)
+	//
+	visitorSession = &tonicpow.VisitorSession{
+		CustomDimensions: "my custom dimensions",
+		LinkID:           link.ID,
+		IPAddress:        "123.123.123.123",                               // Visitor's IP Address
+		Referer:          "https://somewebsite.com/page",                  // If there was a referer
+		UserAgent:        "Mozilla/5.0 Chrome/51.0.2704.64 Safari/537.36", // Visitor's user agent
+	}
+	if visitorSession, err = createVisitorSession(visitorSession); err != nil {
+		os.Exit(1)
+	}
+
+	//
 	// Example: Fire a conversion on a goal (by user id)
 	//
 	var newConversion *tonicpow.Conversion
