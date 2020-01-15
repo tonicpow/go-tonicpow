@@ -117,6 +117,7 @@ type Campaign struct {
 	AdvertiserProfileID uint64             `json:"advertiser_profile_id,omitempty"`
 	Balance             float64            `json:"balance,omitempty"`
 	BalanceSatoshis     int64              `json:"balance_satoshis,omitempty"`
+	BotProtection       bool               `json:"bot_protection,omitempty"`
 	Clicks              uint64             `json:"clicks,omitempty"`
 	Currency            string             `json:"currency,omitempty"`
 	Description         string             `json:"description,omitempty"`
