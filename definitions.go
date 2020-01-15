@@ -83,6 +83,7 @@ type User struct {
 	Balance            uint64 `json:"balance,omitempty"`
 	Earned             uint64 `json:"earned,omitempty"`
 	Email              string `json:"email,omitempty"`
+	EmailVerified      bool   `json:"email_verified,omitempty"`
 	FirstName          string `json:"first_name,omitempty"`
 	ID                 uint64 `json:"id,omitempty"`
 	InternalAddress    string `json:"internal_address,omitempty"`
@@ -93,6 +94,7 @@ type User struct {
 	Password           string `json:"password,omitempty"`
 	PayoutAddress      string `json:"payout_address,omitempty"`
 	Phone              string `json:"phone,omitempty"`
+	PhoneVerified      bool   `json:"phone_verified,omitempty"`
 	Status             string `json:"status,omitempty"`
 }
 
