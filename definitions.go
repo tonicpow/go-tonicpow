@@ -78,6 +78,7 @@ type Error struct {
 // For more information: https://docs.tonicpow.com/#50b3c130-7254-4a05-b312-b14647736e38
 type User struct {
 	Balance            uint64 `json:"balance,omitempty"`
+	Earned             uint64 `json:"earned,omitempty"`
 	Email              string `json:"email,omitempty"`
 	FirstName          string `json:"first_name,omitempty"`
 	ID                 uint64 `json:"id,omitempty"`
