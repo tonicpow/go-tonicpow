@@ -177,5 +177,7 @@ type VisitorSession struct {
 	CampaignID       uint64 `json:"campaign_id,omitempty"`
 	CustomDimensions string `json:"custom_dimensions,omitempty"`
 	LinkID           uint64 `json:"link_id,omitempty"`
+	LinkUserID       uint64 `json:"link_user_id,omitempty"`
+	Provider         string `json:"provider,omitempty"`
 	TncpwSession     string `json:"tncpw_session,omitempty"`
 }

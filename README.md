@@ -86,7 +86,7 @@ import (
 
 func main() {
     api, _ := tonicpow.NewClient(os.Getenv("TONICPOW_API_KEY"), tonicpow.LiveEnvironment, nil)
-    _, _ = api.ConvertGoalByGoalName("landing-page-lead", "visitor-tncpw-session-guid", "from: my blog")
+    _, _ = api.CreateConversionByGoalName("landing-page-lead", "visitor-tncpw-session-guid", "from: my blog", 0, 0)
 }
 ```
 
