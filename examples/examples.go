@@ -292,6 +292,15 @@ func main() {
 	}
 
 	//
+	// Example: Get campaigns by url
+	//
+	if campaigns, err = TonicPowAPI.GetCampaignsByURL(campaigns[0].TargetURL); err != nil {
+		log.Fatalf("get campaign by url failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
+	} else {
+		log.Printf("campaigns found: %d", len(campaigns))
+	}
+
+	//
 	// Example: Activate User
 	//
 	//if err = TonicPowAPI.ActivateUser(user.ID); err != nil {

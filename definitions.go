@@ -24,6 +24,7 @@ const (
 	fieldPhoneCode           = "phone_code"
 	fieldReason              = "reason"
 	fieldShortCode           = "short_code"
+	fieldTargetURL           = "target_url"
 	fieldToken               = "token"
 	fieldUserID              = "user_id"
 	fieldVisitorSessionGUID  = "tncpw_session"
