@@ -10,6 +10,7 @@ const (
 	fieldAmount              = "amount"
 	fieldApiKey              = "api_key"
 	fieldCampaignID          = "campaign_id"
+	fieldCurrency            = "currency"
 	fieldCustomDimensions    = "custom_dimensions"
 	fieldDelayInMinutes      = "delay_in_minutes"
 	fieldEmail               = "email"
@@ -35,6 +36,7 @@ const (
 	modelConversion     = "conversions"
 	modelGoal           = "goals"
 	modelLink           = "links"
+	modelRates          = "rates"
 	modelUser           = "users"
 	modelVisitors       = "visitors"
 	modelVisitorSession = "sessions"
@@ -180,4 +182,17 @@ type VisitorSession struct {
 	LinkUserID       uint64 `json:"link_user_id,omitempty"`
 	Provider         string `json:"provider,omitempty"`
 	TncpwSession     string `json:"tncpw_session,omitempty"`
+}
+
+// Rate is the rate results
+//
+// For more information: https://docs.tonicpow.com/#fb00736e-61b9-4ec9-acaf-e3f9bb046c89
+type Rate struct {
+	Currency            string  `json:"currency,omitempty"`
+	CurrencyAmount      float64 `json:"currency_amount,omitempty"`
+	CurrencyLastUpdated string  `json:"currency_last_updated,omitempty"`
+	CurrencyName        string  `json:"currency_name,omitempty"`
+	Price               float64 `json:"price,omitempty"`
+	PriceInSatoshis     int64   `json:"price_in_satoshis,omitempty"`
+	RateLastUpdated     string  `json:"rate_last_updated,omitempty"`
 }

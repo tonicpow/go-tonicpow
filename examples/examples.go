@@ -199,6 +199,13 @@ func main() {
 	}
 
 	//
+	// Example: Get a rate
+	//
+	if _, err = getCurrentRate("usd"); err != nil {
+		os.Exit(1)
+	}
+
+	//
 	// Example: Create a campaign
 	//
 	expiresAt := time.Now().UTC().Add(500 * time.Hour) // Optional expiration date
@@ -480,6 +487,15 @@ func getVisitorSession(tncpwSession string) (visitorSession *tonicpow.VisitorSes
 		log.Fatalf("get visitor session failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
 	} else {
 		log.Printf("got visitor session by %s", tncpwSession)
+	}
+	return
+}
+
+func getCurrentRate(currency string) (rate *tonicpow.Rate, err error) {
+	if rate, err = TonicPowAPI.GetCurrentRate(currency); err != nil {
+		log.Fatalf("get rate failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
+	} else {
+		log.Printf("got rate by currency %s price in sats: %d", currency, rate.PriceInSatoshis)
 	}
 	return
 }
