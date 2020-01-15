@@ -68,7 +68,7 @@ func main() {
 		Password: testPassword,
 	}
 	if user, err = TonicPowAPI.CreateUser(user); err != nil {
-		log.Fatalf("create user failed - api error: %s data: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
+		log.Fatalf("create user failed error %s - api error: %s data: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
 	} else {
 		log.Printf("user %d created", user.ID)
 	}
@@ -77,7 +77,7 @@ func main() {
 	// Example: Get a user (id)
 	//
 	if user, err = TonicPowAPI.GetUser(user.ID, ""); err != nil {
-		log.Fatalf("get user failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
+		log.Fatalf("get user failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
 	} else {
 		log.Printf("got user by id %d", user.ID)
 	}
@@ -86,7 +86,7 @@ func main() {
 	// Example: Get a user (email)
 	//
 	if user, err = TonicPowAPI.GetUser(0, user.Email); err != nil {
-		log.Fatalf("get user failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
+		log.Fatalf("get user failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
 	} else {
 		log.Printf("got user by email %s", user.Email)
 	}
@@ -96,7 +96,7 @@ func main() {
 	//
 	user.FirstName = "Austin"
 	if user, err = TonicPowAPI.UpdateUser(user, ""); err != nil {
-		log.Fatalf("update user failed - api error: %s data: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
+		log.Fatalf("update user failed error %s - api error: %s data: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
 	} else {
 		log.Printf("user %d updated - first_name: %s", user.ID, user.FirstName)
 	}
@@ -105,7 +105,7 @@ func main() {
 	// Example: Get new updated balance for user
 	//
 	if user, err = TonicPowAPI.GetUserBalance(user.ID, 0); err != nil {
-		log.Fatalf("get user failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
+		log.Fatalf("get user failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
 	} else {
 		log.Printf("user balance: %d", user.Balance)
 	}
@@ -114,7 +114,7 @@ func main() {
 	// Example: Forgot password
 	//
 	if err = TonicPowAPI.ForgotPassword(user.Email); err != nil {
-		log.Fatalf("forgot password failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
+		log.Fatalf("forgot password failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
 	} else {
 		log.Printf("sent forgot password: %s", user.Email)
 	}
@@ -145,7 +145,7 @@ func main() {
 	user.Password = testPassword
 	userSessionToken, err = TonicPowAPI.LoginUser(user)
 	if err != nil {
-		log.Fatalf("user login failed - api error: %s data: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
+		log.Fatalf("user login failed error %s - api error: %s data: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
 	} else {
 		log.Printf("user login: %s token: %s", user.Email, userSessionToken)
 	}
@@ -163,7 +163,7 @@ func main() {
 	//
 	user, err = TonicPowAPI.CurrentUser(userSessionToken)
 	if err != nil {
-		log.Fatalf("current user failed - api error: %s data: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
+		log.Fatalf("current user failed error %s - api error: %s data: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
 	} else {
 		log.Printf("current user: %s", user.Email)
 	}
@@ -193,7 +193,7 @@ func main() {
 	//
 	advertiser.Name = "Acme New User Advertising"
 	if advertiser, err = TonicPowAPI.UpdateAdvertiserProfile(advertiser, userSessionToken); err != nil {
-		log.Fatalf("update advertiser failed - api error: %s data: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
+		log.Fatalf("update advertiser failed error %s - api error: %s data: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
 	} else {
 		log.Printf("advertiser profile %s id %d updated", advertiser.Name, advertiser.ID)
 	}
@@ -293,7 +293,7 @@ func main() {
 	//
 	var campaigns []*tonicpow.Campaign
 	if campaigns, err = TonicPowAPI.ListCampaigns(""); err != nil {
-		log.Fatalf("list campaign failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
+		log.Fatalf("list campaign failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
 	} else {
 		log.Printf("campaigns found: %d", len(campaigns))
 	}
@@ -302,7 +302,7 @@ func main() {
 	// Example: Get campaigns by url
 	//
 	if campaigns, err = TonicPowAPI.GetCampaignsByURL(campaigns[0].TargetURL); err != nil {
-		log.Fatalf("get campaign by url failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
+		log.Fatalf("get campaign by url failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
 	} else {
 		log.Printf("campaigns found: %d", len(campaigns))
 	}
