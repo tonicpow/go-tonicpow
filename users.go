@@ -266,9 +266,10 @@ func (c *Client) ResetPassword(token, password, passwordConfirm string) (err err
 }
 
 // ResendEmailVerification will resend an email to the user
+// Use the userSessionToken if the current user is making the request
 //
 // For more information: https://docs.tonicpow.com/#a12a3eff-491b-4079-99f6-07497b9e4efe
-func (c *Client) ResendEmailVerification(userID uint64) (err error) {
+func (c *Client) ResendEmailVerification(userID uint64, userSessionToken string) (err error) {
 
 	// Basic requirements
 	if userID == 0 {
@@ -281,7 +282,7 @@ func (c *Client) ResendEmailVerification(userID uint64) (err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/verify/%s/send", modelUser, fieldEmail), http.MethodPost, data, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/verify/%s/send", modelUser, fieldEmail), http.MethodPost, data, userSessionToken); err != nil {
 		return
 	}
 
@@ -316,9 +317,10 @@ func (c *Client) CompleteEmailVerification(token string) (err error) {
 }
 
 // ResendPhoneVerification will resend a phone verification code to the user
+// Use the userSessionToken if the current user is making the request
 //
 // For more information: https://docs.tonicpow.com/#fcc4fe4d-f298-45bd-b51e-a5c107834528
-func (c *Client) ResendPhoneVerification(userID uint64) (err error) {
+func (c *Client) ResendPhoneVerification(userID uint64, userSessionToken string) (err error) {
 
 	// Basic requirements
 	if userID == 0 {
@@ -331,7 +333,7 @@ func (c *Client) ResendPhoneVerification(userID uint64) (err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/verify/%s/send", modelUser, fieldPhone), http.MethodPost, data, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/verify/%s/send", modelUser, fieldPhone), http.MethodPost, data, userSessionToken); err != nil {
 		return
 	}
 
