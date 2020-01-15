@@ -6,11 +6,11 @@ type APIEnvironment string
 const (
 
 	// Field key names for various model requests
-	fieldAdditionalData      = "additional_data"
 	fieldAdvertiserProfileID = "advertiser_profile_id"
 	fieldAmount              = "amount"
 	fieldApiKey              = "api_key"
 	fieldCampaignID          = "campaign_id"
+	fieldCustomDimensions    = "custom_dimensions"
 	fieldDelayInMinutes      = "delay_in_minutes"
 	fieldEmail               = "email"
 	fieldGoalID              = "goal_id"
@@ -146,15 +146,15 @@ type Goal struct {
 //
 // For more information: https://docs.tonicpow.com/#75c837d5-3336-4d87-a686-d80c6f8938b9
 type Conversion struct {
-	AdditionalData string `json:"additional_data,omitempty"`
-	Amount         uint64 `json:"amount,omitempty"`
-	GoalID         uint64 `json:"goal_id,omitempty"`
-	GoalName       string `json:"goal_name,omitempty"`
-	ID             uint64 `json:"ID,omitempty"`
-	PayoutAfter    string `json:"payout_after,omitempty"`
-	Status         string `json:"status,omitempty"`
-	TxID           string `json:"tx_id,omitempty"`
-	UserID         uint64 `json:"user_id,omitempty"`
+	Amount           uint64 `json:"amount,omitempty"`
+	CustomDimensions string `json:"custom_dimensions,omitempty"`
+	GoalID           uint64 `json:"goal_id,omitempty"`
+	GoalName         string `json:"goal_name,omitempty"`
+	ID               uint64 `json:"ID,omitempty"`
+	PayoutAfter      string `json:"payout_after,omitempty"`
+	Status           string `json:"status,omitempty"`
+	TxID             string `json:"tx_id,omitempty"`
+	UserID           uint64 `json:"user_id,omitempty"`
 }
 
 // Link is the link model (child of User) (relates Campaign to User)
@@ -174,8 +174,8 @@ type Link struct {
 //
 // For more information: https://docs.tonicpow.com/#d0d9055a-0c92-4f55-a370-762d44acf801
 type VisitorSession struct {
-	AdditionalData string `json:"additional_data,omitempty"`
-	CampaignID     uint64 `json:"campaign_id,omitempty"`
-	LinkID         uint64 `json:"link_id,omitempty"`
-	TncpwSession   string `json:"tncpw_session,omitempty"`
+	CampaignID       uint64 `json:"campaign_id,omitempty"`
+	CustomDimensions string `json:"custom_dimensions,omitempty"`
+	LinkID           uint64 `json:"link_id,omitempty"`
+	TncpwSession     string `json:"tncpw_session,omitempty"`
 }

@@ -318,8 +318,8 @@ func main() {
 	// Example: Create a Visitor Session
 	//
 	visitorSession := &tonicpow.VisitorSession{
-		AdditionalData: "my custom data",
-		LinkID:         link.ID,
+		CustomDimensions: "my custom dimensions",
+		LinkID:           link.ID,
 	}
 	if visitorSession, err = createVisitorSession(visitorSession); err != nil {
 		os.Exit(1)

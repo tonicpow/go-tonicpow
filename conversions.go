@@ -9,7 +9,7 @@ import (
 // CreateConversionByGoalID will fire a conversion for a given goal id, if successful it will make a new Conversion
 //
 // For more information: https://docs.tonicpow.com/#caeffdd5-eaad-4fc8-ac01-8288b50e8e27
-func (c *Client) CreateConversionByGoalID(goalID uint64, tncpwSession, optionalData string, optionalPurchaseAmount float64, delayInMinutes int64) (conversion *Conversion, err error) {
+func (c *Client) CreateConversionByGoalID(goalID uint64, tncpwSession, customDimensions string, optionalPurchaseAmount float64, delayInMinutes int64) (conversion *Conversion, err error) {
 
 	// Must have a name
 	if goalID == 0 {
@@ -24,7 +24,7 @@ func (c *Client) CreateConversionByGoalID(goalID uint64, tncpwSession, optionalD
 	}
 
 	// Start the post data
-	data := map[string]string{fieldGoalID: fmt.Sprintf("%d", goalID), fieldVisitorSessionGUID: tncpwSession, fieldAdditionalData: optionalData, fieldDelayInMinutes: fmt.Sprintf("%d", delayInMinutes), fieldAmount: fmt.Sprintf("%f", optionalPurchaseAmount)}
+	data := map[string]string{fieldGoalID: fmt.Sprintf("%d", goalID), fieldVisitorSessionGUID: tncpwSession, fieldCustomDimensions: customDimensions, fieldDelayInMinutes: fmt.Sprintf("%d", delayInMinutes), fieldAmount: fmt.Sprintf("%f", optionalPurchaseAmount)}
 
 	// Fire the request
 	var response string
@@ -45,7 +45,7 @@ func (c *Client) CreateConversionByGoalID(goalID uint64, tncpwSession, optionalD
 // CreateConversionByGoalName will fire a conversion for a given goal name, if successful it will make a new Conversion
 //
 // For more information: https://docs.tonicpow.com/#d19c9850-3832-45b2-b880-3ef2f3b7dc37
-func (c *Client) CreateConversionByGoalName(goalName, tncpwSession, optionalData string, optionalPurchaseAmount float64, delayInMinutes int64) (conversion *Conversion, err error) {
+func (c *Client) CreateConversionByGoalName(goalName, tncpwSession, customDimensions string, optionalPurchaseAmount float64, delayInMinutes int64) (conversion *Conversion, err error) {
 
 	// Must have a name
 	if len(goalName) == 0 {
@@ -60,7 +60,7 @@ func (c *Client) CreateConversionByGoalName(goalName, tncpwSession, optionalData
 	}
 
 	// Start the post data
-	data := map[string]string{fieldName: goalName, fieldVisitorSessionGUID: tncpwSession, fieldAdditionalData: optionalData, fieldDelayInMinutes: fmt.Sprintf("%d", delayInMinutes), fieldAmount: fmt.Sprintf("%f", optionalPurchaseAmount)}
+	data := map[string]string{fieldName: goalName, fieldVisitorSessionGUID: tncpwSession, fieldCustomDimensions: customDimensions, fieldDelayInMinutes: fmt.Sprintf("%d", delayInMinutes), fieldAmount: fmt.Sprintf("%f", optionalPurchaseAmount)}
 
 	// Fire the request
 	var response string
@@ -81,7 +81,7 @@ func (c *Client) CreateConversionByGoalName(goalName, tncpwSession, optionalData
 // CreateConversionByUserID will fire a conversion for a given goal and user id, if successful it will make a new Conversion
 //
 // For more information: https://docs.tonicpow.com/#d724f762-329e-473d-bdc4-aebc19dd9ea8
-func (c *Client) CreateConversionByUserID(goalID, userID uint64, optionalData string, optionalPurchaseAmount float64, delayInMinutes int64) (conversion *Conversion, err error) {
+func (c *Client) CreateConversionByUserID(goalID, userID uint64, customDimensions string, optionalPurchaseAmount float64, delayInMinutes int64) (conversion *Conversion, err error) {
 
 	// Must have a name
 	if goalID == 0 {
@@ -96,7 +96,7 @@ func (c *Client) CreateConversionByUserID(goalID, userID uint64, optionalData st
 	}
 
 	// Start the post data
-	data := map[string]string{fieldGoalID: fmt.Sprintf("%d", goalID), fieldUserID: fmt.Sprintf("%d", userID), fieldAdditionalData: optionalData, fieldDelayInMinutes: fmt.Sprintf("%d", delayInMinutes), fieldAmount: fmt.Sprintf("%f", optionalPurchaseAmount)}
+	data := map[string]string{fieldGoalID: fmt.Sprintf("%d", goalID), fieldUserID: fmt.Sprintf("%d", userID), fieldCustomDimensions: customDimensions, fieldDelayInMinutes: fmt.Sprintf("%d", delayInMinutes), fieldAmount: fmt.Sprintf("%f", optionalPurchaseAmount)}
 
 	// Fire the request
 	var response string
