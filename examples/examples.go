@@ -129,14 +129,14 @@ func main() {
 		IconURL:     "https://tonicpow.com/images/logos/apple-touch-icon.png",
 	}
 	if advertiser, err = createAdvertiserProfile(advertiser, ""); err != nil {
-		os.Exit(1)
+		log.Fatal(err.Error())
 	}
 
 	//
 	// Example: Get an advertiser profile
 	//
 	if advertiser, err = getAdvertiserProfile(advertiser.ID, ""); err != nil {
-		os.Exit(1)
+		log.Fatal(err.Error())
 	}
 
 	//
@@ -178,14 +178,14 @@ func main() {
 		IconURL:     "https://tonicpow.com/images/logos/apple-touch-icon.png",
 	}
 	if advertiser, err = createAdvertiserProfile(advertiser, userSessionToken); err != nil {
-		os.Exit(1)
+		log.Fatal(err.Error())
 	}
 
 	//
 	// Example: Get Advertiser Profile
 	//
 	if advertiser, err = getAdvertiserProfile(advertiser.ID, userSessionToken); err != nil {
-		os.Exit(1)
+		log.Fatal(err.Error())
 	}
 
 	//
@@ -202,7 +202,7 @@ func main() {
 	// Example: Get a rate
 	//
 	if _, err = getCurrentRate("usd"); err != nil {
-		os.Exit(1)
+		log.Fatal(err.Error())
 	}
 
 	//
@@ -220,14 +220,14 @@ func main() {
 		ExpiresAt:           expiresAt.Format(time.RFC3339),
 	}
 	if campaign, err = createCampaign(campaign, userSessionToken); err != nil {
-		os.Exit(1)
+		log.Fatal(err.Error())
 	}
 
 	//
 	// Example: Get Campaign
 	//
 	if campaign, err = getCampaign(campaign.ID, userSessionToken); err != nil {
-		os.Exit(1)
+		log.Fatal(err.Error())
 	}
 
 	//
@@ -242,14 +242,14 @@ func main() {
 		Title:       "Landing Page Leads",
 	}
 	if goal, err = createGoal(goal, userSessionToken); err != nil {
-		os.Exit(1)
+		log.Fatal(err.Error())
 	}
 
 	//
 	// Example: Get Goal
 	//
 	if goal, err = getGoal(goal.ID, userSessionToken); err != nil {
-		os.Exit(1)
+		log.Fatal(err.Error())
 	}
 
 	//
@@ -260,13 +260,15 @@ func main() {
 		CampaignID:  campaign.ID,
 		Description: "Get 10% of all action!",
 		//Name:        fmt.Sprintf("%s%d", "all-action", rand.Intn(100000)),
-		Name:       "all-action",
-		PayoutRate: 0.10, // 10% as a float
-		PayoutType: "percent",
-		Title:      "10% Commissions",
+		Name:           "all-action",
+		PayoutRate:     0.10, // 10% as a float
+		PayoutType:     "percent",
+		Title:          "10% Commissions",
+		MaxPerPromoter: 2,
+		MaxPerVisitor:  2,
 	}
 	if goalPercent, err = createGoal(goalPercent, userSessionToken); err != nil {
-		os.Exit(1)
+		log.Fatal(err.Error())
 	}
 
 	//
@@ -278,14 +280,14 @@ func main() {
 		CustomShortCode: fmt.Sprintf("%s%d", user.FirstName, rand.Intn(100000)),
 	}
 	if link, err = createLink(link, userSessionToken); err != nil {
-		os.Exit(1)
+		log.Fatal(err.Error())
 	}
 
 	//
 	// Example: Get Link
 	//
 	if link, err = getLink(link.ID, userSessionToken); err != nil {
-		os.Exit(1)
+		log.Fatal(err.Error())
 	}
 
 	//
@@ -329,14 +331,14 @@ func main() {
 		LinkID:           link.ID,
 	}
 	if visitorSession, err = createVisitorSession(visitorSession); err != nil {
-		os.Exit(1)
+		log.Fatal(err.Error())
 	}
 
 	//
 	// Example: Get Visitor Session
 	//
 	if visitorSession, err = getVisitorSession(visitorSession.TncpwSession); err != nil {
-		os.Exit(1)
+		log.Fatal(err.Error())
 	}
 
 	log.Printf("visitor session found: %s", visitorSession.TncpwSession)
@@ -352,7 +354,7 @@ func main() {
 		UserAgent:        "Mozilla/5.0 Chrome/51.0.2704.64 Safari/537.36", // Visitor's user agent
 	}
 	if visitorSession, err = createVisitorSession(visitorSession); err != nil {
-		os.Exit(1)
+		log.Fatal(err.Error())
 	}
 
 	//
@@ -360,7 +362,7 @@ func main() {
 	//
 	var newConversion *tonicpow.Conversion
 	if newConversion, err = TonicPowAPI.CreateConversionByUserID(goal.ID, user.ID, "", 0.00, 5); err != nil {
-		os.Exit(1)
+		log.Fatal(err.Error())
 	}
 
 	log.Printf("successful conversion event: %d", newConversion.ID)
@@ -369,7 +371,7 @@ func main() {
 	// Example: Fire a conversion on a goal (by visitor)
 	//
 	if newConversion, err = TonicPowAPI.CreateConversionByGoalID(goal.ID, visitorSession.TncpwSession, "", 0.00, 10); err != nil {
-		os.Exit(1)
+		log.Fatal(err.Error())
 	}
 
 	log.Printf("successful conversion event: %d payout after: %s", newConversion.ID, newConversion.PayoutAfter)
@@ -379,7 +381,7 @@ func main() {
 	//
 	var conversion *tonicpow.Conversion
 	if conversion, err = TonicPowAPI.GetConversion(newConversion.ID); err != nil {
-		os.Exit(1)
+		log.Fatal(err.Error())
 	}
 
 	log.Printf("got conversion: %d", conversion.ID)
@@ -388,7 +390,7 @@ func main() {
 	// Example: Cancel a Delayed Conversion
 	//
 	if conversion, err = TonicPowAPI.CancelConversion(conversion.ID, "not needed anymore"); err != nil {
-		os.Exit(1)
+		log.Fatal(err.Error())
 	}
 
 	log.Printf("conversion status: %s", conversion.Status)
@@ -397,7 +399,7 @@ func main() {
 	// Example: Create Conversion by User ID
 	//
 	if newConversion, err = TonicPowAPI.CreateConversionByUserID(1, 2, "", 0.00, 0); err != nil {
-		os.Exit(1)
+		log.Fatal(err.Error())
 	}
 
 	//
