@@ -137,14 +137,16 @@ type Campaign struct {
 //
 // For more information: https://docs.tonicpow.com/#316b77ab-4900-4f3d-96a7-e67c00af10ca
 type Goal struct {
-	CampaignID  uint64  `json:"campaign_id,omitempty"`
-	Description string  `json:"description,omitempty"`
-	ID          uint64  `json:"id,omitempty"`
-	Name        string  `json:"name,omitempty"`
-	PayoutRate  float64 `json:"payout_rate,omitempty"`
-	Payouts     int     `json:"payouts,omitempty"`
-	PayoutType  string  `json:"payout_type,omitempty"`
-	Title       string  `json:"title,omitempty"`
+	CampaignID     uint64  `json:"campaign_id,omitempty"`
+	Description    string  `json:"description,omitempty"`
+	ID             uint64  `json:"id,omitempty"`
+	MaxPerPromoter int16   `json:"max_per_promoter,omitempty"`
+	MaxPerVisitor  int16   `json:"max_per_visitor,omitempty"`
+	Name           string  `json:"name,omitempty"`
+	PayoutRate     float64 `json:"payout_rate,omitempty"`
+	Payouts        int     `json:"payouts,omitempty"`
+	PayoutType     string  `json:"payout_type,omitempty"`
+	Title          string  `json:"title,omitempty"`
 }
 
 // Conversion is the response of getting a conversion
