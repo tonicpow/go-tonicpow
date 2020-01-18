@@ -95,3 +95,32 @@ func (c *Client) CheckLink(shortCode string) (link *Link, err error) {
 	err = json.Unmarshal([]byte(response), &link)
 	return
 }
+
+// GetLinksByUserID will get links associated to the user id
+// This will return an error if the link(s) are not found (404)
+// Use the userSessionToken if making request on behalf of another user
+//
+// For more information: https://docs.tonicpow.com/#23d068f1-4f0e-476a-a802-50b7edccd0b2
+func (c *Client) GetLinksByUserID(userID uint64, userSessionToken string) (links []*Link, err error) {
+
+	// Must have an id
+	if userID == 0 {
+		err = fmt.Errorf("missing field: %s", fieldID)
+		return
+	}
+
+	// Fire the request
+	var response string
+	if response, err = c.request(fmt.Sprintf("%s/user/%d", modelLink, userID), http.MethodGet, nil, userSessionToken); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	if err = c.error(http.StatusOK, response); err != nil {
+		return
+	}
+
+	// Convert model response
+	err = json.Unmarshal([]byte(response), &links)
+	return
+}

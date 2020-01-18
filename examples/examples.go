@@ -272,12 +272,11 @@ func main() {
 	}
 
 	//
-	// Example: Create a Link (making a custom short code using the user's name)
+	// Example: Create a Link
 	//
 	link := &tonicpow.Link{
-		CampaignID:      campaign.ID,
-		UserID:          user.ID,
-		CustomShortCode: fmt.Sprintf("%s%d", user.FirstName, rand.Intn(100000)),
+		CampaignID: campaign.ID,
+		UserID:     user.ID,
 	}
 	if link, err = createLink(link, userSessionToken); err != nil {
 		log.Fatal(err.Error())
@@ -288,6 +287,41 @@ func main() {
 	//
 	if link, err = getLink(link.ID, userSessionToken); err != nil {
 		log.Fatal(err.Error())
+	}
+
+	//
+	// Example: Create a Link (making a custom short code using the user's name)
+	//
+	link = &tonicpow.Link{
+		CampaignID:      campaign.ID,
+		UserID:          user.ID,
+		CustomShortCode: fmt.Sprintf("%s%d", user.FirstName, rand.Intn(100000)),
+	}
+	if link, err = createLink(link, userSessionToken); err != nil {
+		log.Fatal(err.Error())
+	}
+
+	//
+	// Example: Create another custom link
+	//
+	link = &tonicpow.Link{
+		CampaignID:      campaign.ID,
+		UserID:          user.ID,
+		CustomShortCode: fmt.Sprintf("%s%d", user.FirstName+"zzz", rand.Intn(100000)),
+	}
+	if link, err = createLink(link, userSessionToken); err != nil {
+		log.Fatal(err.Error())
+	}
+
+	//
+	// Example: Get Link(s) by user
+	//
+	var links []*tonicpow.Link
+	if links, err = getLinks(link.ID, userSessionToken); err != nil {
+		log.Fatal(err.Error())
+	}
+	if len(links) > 0 {
+		log.Printf("found links %x", links)
 	}
 
 	//
@@ -375,6 +409,15 @@ func main() {
 	}
 
 	log.Printf("successful conversion event: %d payout after: %s", newConversion.ID, newConversion.PayoutAfter)
+
+	//
+	// Example: Fire a conversion on a goal (by name)
+	//
+	//if newConversion, err = TonicPowAPI.CreateConversionByGoalName(goal.Name, visitorSession.TncpwSession, "", 0.00, 10); err != nil {
+	//	log.Fatal(err.Error())
+	//}
+
+	//log.Printf("successful conversion event: %d payout after: %s", newConversion.ID, newConversion.PayoutAfter)
 
 	//
 	// Example: Get conversion
@@ -485,6 +528,15 @@ func getLink(linkID uint64, userSessionToken string) (link *tonicpow.Link, err e
 		log.Fatalf("get link failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
 	} else {
 		log.Printf("got link by id %d", link.ID)
+	}
+	return
+}
+
+func getLinks(userID uint64, userSessionToken string) (links []*tonicpow.Link, err error) {
+	if links, err = TonicPowAPI.GetLinksByUserID(userID, userSessionToken); err != nil {
+		log.Fatalf("get link failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
+	} else {
+		log.Printf("got link(s) %d", len(links))
 	}
 	return
 }
