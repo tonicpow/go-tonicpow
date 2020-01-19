@@ -419,3 +419,38 @@ func (c *Client) PauseUser(userID uint64, reason string) (err error) {
 	err = c.error(http.StatusOK, response)
 	return
 }
+
+// UserExists will check if a user exists by email address
+// This will return an error if the user is not found (404)
+//
+// For more information: https://docs.tonicpow.com/#2d8c37d4-c88b-4cec-83ad-fa72b0f41f17
+func (c *Client) UserExists(byEmail string) (exists bool, err error) {
+
+	// Must have email
+	if len(byEmail) == 0 {
+		err = fmt.Errorf("missing %s", fieldEmail)
+		return
+	}
+
+	// Set the values
+	params := url.Values{}
+	params.Add(fieldEmail, byEmail)
+
+	// Fire the request
+	var response string
+	if response, err = c.request(fmt.Sprintf("%s/exists", modelUser), http.MethodGet, params, ""); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success, 404 is false and no error
+	if c.LastRequest.StatusCode == http.StatusNotFound {
+		return
+	}
+	if err = c.error(http.StatusOK, response); err != nil {
+		return
+	}
+
+	// Exists
+	exists = true
+	return
+}

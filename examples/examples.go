@@ -169,6 +169,27 @@ func main() {
 	}
 
 	//
+	// Example: Does User Exist?
+	//
+	var exists bool
+	exists, err = TonicPowAPI.UserExists(user.Email)
+	if err != nil {
+		log.Fatalf("check user exists error %s - api error: %s data: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
+	} else if exists {
+		log.Printf("user exists!")
+	}
+
+	//
+	// Example: Does User Exist?  (does not exist example)
+	//
+	exists, err = TonicPowAPI.UserExists("user@doesnotexist.com")
+	if err != nil {
+		log.Fatalf("check user exists error %s - api error: %s data: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
+	} else if !exists {
+		log.Printf("user does not exist!")
+	}
+
+	//
 	// Example: Create an advertiser as a user
 	//
 	advertiser = &tonicpow.AdvertiserProfile{
@@ -440,6 +461,13 @@ func main() {
 
 	//
 	// Example: Create Conversion by User ID
+	//
+	if newConversion, err = TonicPowAPI.CreateConversionByUserID(1, 2, "", 0.00, 0); err != nil {
+		log.Fatal(err.Error())
+	}
+
+	//
+	// Example: Create Conversion by User ID (another!)
 	//
 	if newConversion, err = TonicPowAPI.CreateConversionByUserID(1, 2, "", 0.00, 0); err != nil {
 		log.Fatal(err.Error())
