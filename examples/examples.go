@@ -356,7 +356,7 @@ func main() {
 		log.Fatal(err.Error())
 	}
 	if len(links) > 0 {
-		log.Printf("found links %x", links)
+		log.Printf("found links %v", links)
 	}
 
 	//
