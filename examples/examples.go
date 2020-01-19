@@ -102,6 +102,20 @@ func main() {
 	}
 
 	//
+	// Example: Create a user  (referred by another user
+	//
+	refUser := &tonicpow.User{
+		Email:            fmt.Sprintf("Tes_ti-ng+%d@TonicPow.com", rand.Intn(100000)),
+		Password:         testPassword,
+		ReferredByUserID: user.ID,
+	}
+	if refUser, err = TonicPowAPI.CreateUser(refUser); err != nil {
+		log.Fatalf("create user failed error %s - api error: %s data: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
+	} else {
+		log.Printf("user %d created and referred by user %d", refUser.ID, refUser.ReferredByUserID)
+	}
+
+	//
 	// Example: Get new updated balance for user
 	//
 	if user, err = TonicPowAPI.GetUserBalance(user.ID, 0); err != nil {

@@ -95,6 +95,7 @@ type User struct {
 	PayoutAddress      string `json:"payout_address,omitempty"`
 	Phone              string `json:"phone,omitempty"`
 	PhoneVerified      bool   `json:"phone_verified,omitempty"`
+	ReferredByUserID   uint64 `json:"referred_by_user_id,omitempty"`
 	Status             string `json:"status,omitempty"`
 }
 
