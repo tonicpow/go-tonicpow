@@ -10,6 +10,7 @@ import (
 // permitFields will remove fields that cannot be used
 func (u *User) permitFields() {
 	u.Balance = 0
+	u.Earned = 0
 	u.InternalAddress = ""
 	u.Status = ""
 }
@@ -362,6 +363,31 @@ func (c *Client) CompletePhoneVerification(phone, code string) (err error) {
 	// Fire the request
 	var response string
 	if response, err = c.request(fmt.Sprintf("%s/verify/%s", modelUser, fieldPhone), http.MethodPut, data, ""); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	err = c.error(http.StatusOK, response)
+	return
+}
+
+// AcceptUser will accept a user (if approval is required for new users)
+//
+// For more information: https://docs.tonicpow.com/#65c3962d-c309-4ef4-b85f-7ec1f08f031b
+func (c *Client) AcceptUser(userID uint64) (err error) {
+
+	// Basic requirements
+	if userID == 0 {
+		err = fmt.Errorf("missing required attribute: %s", fieldUserID)
+		return
+	}
+
+	// Start the post data
+	data := map[string]string{fieldID: fmt.Sprintf("%d", userID)}
+
+	// Fire the request
+	var response string
+	if response, err = c.request(fmt.Sprintf("%s/status/accept", modelUser), http.MethodPut, data, ""); err != nil {
 		return
 	}
 
