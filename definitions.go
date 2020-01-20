@@ -97,6 +97,7 @@ type User struct {
 	PhoneVerified      bool   `json:"phone_verified,omitempty"`
 	ReferredByUserID   uint64 `json:"referred_by_user_id,omitempty"`
 	Status             string `json:"status,omitempty"`
+	TncpwSession       string `json:"tncpw_session,omitempty"`
 }
 
 // AdvertiserProfile is the advertiser_profile model (child of User)

@@ -102,12 +102,13 @@ func main() {
 	}
 
 	//
-	// Example: Create a user  (referred by another user
+	// Example: Create a user  (referred by another user) (alternate is a visitor tncpw_session)
 	//
 	refUser := &tonicpow.User{
 		Email:            fmt.Sprintf("Tes_ti-ng+%d@TonicPow.com", rand.Intn(100000)),
 		Password:         testPassword,
 		ReferredByUserID: user.ID,
+		//TncpwSession:     "1e74da42752127b60422bdcfe6741eeadc1a1c5dab22ca8f17ca9ee62dc21e26",
 	}
 	if refUser, err = TonicPowAPI.CreateUser(refUser); err != nil {
 		log.Fatalf("create user failed error %s - api error: %s data: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
