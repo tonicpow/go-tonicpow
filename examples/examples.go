@@ -195,12 +195,12 @@ func main() {
 	//
 	// Example: Does User Exist?
 	//
-	var exists bool
+	var exists *tonicpow.UserExists
 	exists, err = TonicPowAPI.UserExists(user.Email)
 	if err != nil {
 		log.Fatalf("check user exists error %s - api error: %s data: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
-	} else if exists {
-		log.Printf("user exists!")
+	} else if exists.ID > 0 {
+		log.Printf("user %d exists with status %s", exists.ID, exists.Status)
 	}
 
 	//
@@ -209,7 +209,7 @@ func main() {
 	exists, err = TonicPowAPI.UserExists("user@doesnotexist.com")
 	if err != nil {
 		log.Fatalf("check user exists error %s - api error: %s data: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
-	} else if !exists {
+	} else if exists == nil || exists.ID <= 0 {
 		log.Printf("user does not exist!")
 	}
 

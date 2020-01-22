@@ -450,7 +450,7 @@ func (c *Client) PauseUser(userID uint64, reason string) (err error) {
 // This will return an error if the user is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#2d8c37d4-c88b-4cec-83ad-fa72b0f41f17
-func (c *Client) UserExists(byEmail string) (exists bool, err error) {
+func (c *Client) UserExists(byEmail string) (existsResponse *UserExists, err error) {
 
 	// Must have email
 	if len(byEmail) == 0 {
@@ -476,7 +476,7 @@ func (c *Client) UserExists(byEmail string) (exists bool, err error) {
 		return
 	}
 
-	// Exists
-	exists = true
+	// Convert model response
+	err = json.Unmarshal([]byte(response), &existsResponse)
 	return
 }

@@ -206,3 +206,11 @@ type Rate struct {
 	PriceInSatoshis     int64   `json:"price_in_satoshis,omitempty"`
 	RateLastUpdated     string  `json:"rate_last_updated,omitempty"`
 }
+
+// UserExists is the user exists results
+//
+// For more information:
+type UserExists struct {
+	ID     uint64 `json:"id"`
+	Status string `json:"status"`
+}
