@@ -13,6 +13,8 @@ func (u *User) permitFields() {
 	u.Earned = 0
 	u.InternalAddress = ""
 	u.Status = ""
+	u.ReferralLinkID = 0
+	u.ReferralURL = ""
 }
 
 // CreateUser will make a new user
