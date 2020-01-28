@@ -99,15 +99,15 @@ func (c *Client) UpdateAdvertiserProfile(profile *AdvertiserProfile, userSession
 	return
 }
 
-// GetCampaignsByAdvertiserProfile will return a list of campaigns
+// ListCampaignsByAdvertiserProfile will return a list of campaigns
 // This will return an error if the campaign is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#98017e9a-37dd-4810-9483-b6c400572e0c
-func (c *Client) GetCampaignsByAdvertiserProfile(profileID uint64) (campaigns []*Campaign, err error) {
+func (c *Client) ListCampaignsByAdvertiserProfile(profileID uint64, page, resultsPerPage int) (results *CampaignResults, err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/campaigns/%d", modelAdvertiser, profileID), http.MethodGet, nil, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/campaigns/%d?%s=%d&%s=%d", modelAdvertiser, profileID, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage), http.MethodGet, nil, ""); err != nil {
 		return
 	}
 
@@ -117,6 +117,6 @@ func (c *Client) GetCampaignsByAdvertiserProfile(profileID uint64) (campaigns []
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &campaigns)
+	err = json.Unmarshal([]byte(response), &results)
 	return
 }

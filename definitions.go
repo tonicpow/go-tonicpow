@@ -11,6 +11,7 @@ const (
 	fieldApiKey              = "api_key"
 	fieldCampaignID          = "campaign_id"
 	fieldCurrency            = "currency"
+	fieldCurrentPage         = "current_page"
 	fieldCustomDimensions    = "custom_dimensions"
 	fieldDelayInMinutes      = "delay_in_minutes"
 	fieldEmail               = "email"
@@ -24,6 +25,7 @@ const (
 	fieldPhone               = "phone"
 	fieldPhoneCode           = "phone_code"
 	fieldReason              = "reason"
+	fieldResultsPerPage      = "results_per_page"
 	fieldShortCode           = "short_code"
 	fieldTargetURL           = "target_url"
 	fieldToken               = "token"
@@ -215,4 +217,12 @@ type Rate struct {
 type UserExists struct {
 	ID     uint64 `json:"id"`
 	Status string `json:"status"`
+}
+
+// CampaignResults is the page response for campaign results from listing
+type CampaignResults struct {
+	Campaigns      []*Campaign `json:"campaigns"`
+	CurrentPage    int         `json:"current_page"`
+	Results        int         `json:"results"`
+	ResultsPerPage int         `json:"results_per_page"`
 }

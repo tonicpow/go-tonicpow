@@ -74,57 +74,6 @@ func (c *Client) GetCampaign(campaignID uint64, userSessionToken string) (campai
 	return
 }
 
-// GetCampaignsByURL will return a list of active campaigns
-// This will return an error if the url is not found (404)
-//
-// For more information: https://docs.tonicpow.com/#30a15b69-7912-4e25-ba41-212529fba5ff
-func (c *Client) GetCampaignsByURL(targetURL string) (campaigns []*Campaign, err error) {
-
-	// Must have a value
-	if len(targetURL) == 0 {
-		err = fmt.Errorf("missing field: %s", fieldTargetURL)
-		return
-	}
-
-	// Fire the request
-	var response string
-	if response, err = c.request(fmt.Sprintf("%s/find?%s=%s", modelCampaign, fieldTargetURL, targetURL), http.MethodGet, nil, ""); err != nil {
-		return
-	}
-
-	// Only a 200 is treated as a success
-	if err = c.error(http.StatusOK, response); err != nil {
-		return
-	}
-
-	// Convert model response
-	err = json.Unmarshal([]byte(response), &campaigns)
-	return
-}
-
-// ListCampaigns will return a list of active campaigns
-// Use the customSessionToken if making request on behalf of another user / advertiser
-// This will return an error if the campaign is not found (404)
-//
-// For more information: https://docs.tonicpow.com/#c1b17be6-cb10-48b3-a519-4686961ff41c
-func (c *Client) ListCampaigns(customSessionToken string) (campaigns []*Campaign, err error) {
-
-	// Fire the request
-	var response string
-	if response, err = c.request(fmt.Sprintf("%s/list", modelCampaign), http.MethodGet, nil, customSessionToken); err != nil {
-		return
-	}
-
-	// Only a 200 is treated as a success
-	if err = c.error(http.StatusOK, response); err != nil {
-		return
-	}
-
-	// Convert model response
-	err = json.Unmarshal([]byte(response), &campaigns)
-	return
-}
-
 // GetCampaignBalance will update the models's balance from the chain
 // This will return an error if the campaign is not found (404)
 //
@@ -175,5 +124,56 @@ func (c *Client) UpdateCampaign(campaign *Campaign, userSessionToken string) (up
 
 	// Convert model response
 	err = json.Unmarshal([]byte(response), &updatedCampaign)
+	return
+}
+
+// ListCampaigns will return a list of active campaigns
+// Use the customSessionToken if making request on behalf of another user / advertiser
+// This will return an error if the campaign is not found (404)
+//
+// For more information: https://docs.tonicpow.com/#c1b17be6-cb10-48b3-a519-4686961ff41c
+func (c *Client) ListCampaigns(customSessionToken string, page, resultsPerPage int) (results *CampaignResults, err error) {
+
+	// Fire the request
+	var response string
+	if response, err = c.request(fmt.Sprintf("%s/list?%s=%d&%s=%d", modelCampaign, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage), http.MethodGet, nil, customSessionToken); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	if err = c.error(http.StatusOK, response); err != nil {
+		return
+	}
+
+	// Convert model response
+	err = json.Unmarshal([]byte(response), &results)
+	return
+}
+
+// ListCampaignsByURL will return a list of active campaigns
+// This will return an error if the url is not found (404)
+//
+// For more information: https://docs.tonicpow.com/#30a15b69-7912-4e25-ba41-212529fba5ff
+func (c *Client) ListCampaignsByURL(targetURL string, page, resultsPerPage int) (results *CampaignResults, err error) {
+
+	// Must have a value
+	if len(targetURL) == 0 {
+		err = fmt.Errorf("missing field: %s", fieldTargetURL)
+		return
+	}
+
+	// Fire the request
+	var response string
+	if response, err = c.request(fmt.Sprintf("%s/find?%s=%s&%s=%d&%s=%d", modelCampaign, fieldTargetURL, targetURL, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage), http.MethodGet, nil, ""); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	if err = c.error(http.StatusOK, response); err != nil {
+		return
+	}
+
+	// Convert model response
+	err = json.Unmarshal([]byte(response), &results)
 	return
 }
