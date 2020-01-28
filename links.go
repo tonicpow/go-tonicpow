@@ -101,7 +101,7 @@ func (c *Client) CheckLink(shortCode string) (link *Link, err error) {
 // Use the userSessionToken if making request on behalf of another user
 //
 // For more information: https://docs.tonicpow.com/#23d068f1-4f0e-476a-a802-50b7edccd0b2
-func (c *Client) ListLinksByUserID(userID uint64, userSessionToken string) (results *LinkResults, err error) {
+func (c *Client) ListLinksByUserID(userID uint64, userSessionToken string, page, resultsPerPage int) (results *LinkResults, err error) {
 
 	// Must have an id
 	if userID == 0 {
@@ -111,7 +111,7 @@ func (c *Client) ListLinksByUserID(userID uint64, userSessionToken string) (resu
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/user/%d", modelLink, userID), http.MethodGet, nil, userSessionToken); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/user/%d?%s=%d&%s=%d", modelLink, userID, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage), http.MethodGet, nil, userSessionToken); err != nil {
 		return
 	}
 

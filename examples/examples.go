@@ -595,7 +595,7 @@ func getLink(linkID uint64, userSessionToken string) (link *tonicpow.Link, err e
 }
 
 func getLinks(userID uint64, userSessionToken string) (results *tonicpow.LinkResults, err error) {
-	if results, err = TonicPowAPI.ListLinksByUserID(userID, userSessionToken); err != nil {
+	if results, err = TonicPowAPI.ListLinksByUserID(userID, userSessionToken, 1, 20); err != nil {
 		log.Fatalf("get link failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
 	} else {
 		log.Printf("got link(s) %d - page: %d", results.Results, results.CurrentPage)
