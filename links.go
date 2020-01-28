@@ -96,12 +96,12 @@ func (c *Client) CheckLink(shortCode string) (link *Link, err error) {
 	return
 }
 
-// GetLinksByUserID will get links associated to the user id
+// ListLinksByUserID will get links associated to the user id
 // This will return an error if the link(s) are not found (404)
 // Use the userSessionToken if making request on behalf of another user
 //
 // For more information: https://docs.tonicpow.com/#23d068f1-4f0e-476a-a802-50b7edccd0b2
-func (c *Client) GetLinksByUserID(userID uint64, userSessionToken string) (links []*Link, err error) {
+func (c *Client) ListLinksByUserID(userID uint64, userSessionToken string) (results *LinkResults, err error) {
 
 	// Must have an id
 	if userID == 0 {
@@ -121,6 +121,6 @@ func (c *Client) GetLinksByUserID(userID uint64, userSessionToken string) (links
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &links)
+	err = json.Unmarshal([]byte(response), &results)
 	return
 }

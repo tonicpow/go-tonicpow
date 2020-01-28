@@ -226,3 +226,11 @@ type CampaignResults struct {
 	Results        int         `json:"results"`
 	ResultsPerPage int         `json:"results_per_page"`
 }
+
+// LinkResults is the page response for link results from listing
+type LinkResults struct {
+	CurrentPage    int     `json:"current_page"`
+	Links          []*Link `json:"links"`
+	Results        int     `json:"results"`
+	ResultsPerPage int     `json:"results_per_page"`
+}

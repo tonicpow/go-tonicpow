@@ -361,12 +361,12 @@ func main() {
 	//
 	// Example: Get Link(s) by user
 	//
-	var links []*tonicpow.Link
-	if links, err = getLinks(link.ID, userSessionToken); err != nil {
+	var linkResults *tonicpow.LinkResults
+	if linkResults, err = getLinks(link.ID, userSessionToken); err != nil {
 		log.Fatal(err.Error())
 	}
-	if len(links) > 0 {
-		log.Printf("found links %v", links)
+	if len(linkResults.Links) > 0 {
+		log.Printf("found links %v", linkResults.Results)
 	}
 
 	//
@@ -594,11 +594,11 @@ func getLink(linkID uint64, userSessionToken string) (link *tonicpow.Link, err e
 	return
 }
 
-func getLinks(userID uint64, userSessionToken string) (links []*tonicpow.Link, err error) {
-	if links, err = TonicPowAPI.GetLinksByUserID(userID, userSessionToken); err != nil {
+func getLinks(userID uint64, userSessionToken string) (results *tonicpow.LinkResults, err error) {
+	if results, err = TonicPowAPI.ListLinksByUserID(userID, userSessionToken); err != nil {
 		log.Fatalf("get link failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
 	} else {
-		log.Printf("got link(s) %d", len(links))
+		log.Printf("got link(s) %d - page: %d", results.Results, results.CurrentPage)
 	}
 	return
 }
