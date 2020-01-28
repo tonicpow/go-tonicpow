@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 // permitFields will remove fields that cannot be used
@@ -103,11 +104,22 @@ func (c *Client) UpdateAdvertiserProfile(profile *AdvertiserProfile, userSession
 // This will return an error if the campaign is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#98017e9a-37dd-4810-9483-b6c400572e0c
-func (c *Client) ListCampaignsByAdvertiserProfile(profileID uint64, page, resultsPerPage int) (results *CampaignResults, err error) {
+func (c *Client) ListCampaignsByAdvertiserProfile(profileID uint64, page, resultsPerPage int, sortBy, sortOrder string) (results *CampaignResults, err error) {
+
+	// Do we know this field?
+	if len(sortBy) > 0 {
+		if !isInList(strings.ToLower(sortBy), campaignSortFields) {
+			err = fmt.Errorf("sort by %s is not valid", sortBy)
+			return
+		}
+	} else {
+		sortBy = SortByFieldCreatedAt
+		sortOrder = SortOrderDesc
+	}
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/campaigns/%d?%s=%d&%s=%d", modelAdvertiser, profileID, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage), http.MethodGet, nil, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/campaigns/%d?%s=%d&%s=%d&%s=%s&%s=%s", modelAdvertiser, profileID, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil, ""); err != nil {
 		return
 	}
 

@@ -27,6 +27,8 @@ const (
 	fieldReason              = "reason"
 	fieldResultsPerPage      = "results_per_page"
 	fieldShortCode           = "short_code"
+	fieldSortBy              = "sort_by"
+	fieldSortOrder           = "sort_order"
 	fieldTargetURL           = "target_url"
 	fieldToken               = "token"
 	fieldUserID              = "user_id"
@@ -42,6 +44,15 @@ const (
 	modelUser           = "users"
 	modelVisitors       = "visitors"
 	modelVisitorSession = "sessions"
+
+	// Model sorting
+	SortByFieldBalance      = "balance"
+	SortByFieldCreatedAt    = "created_at"
+	SortByFieldLinksCreated = "links_created"
+	SortByFieldPaidClicks   = "paid_clicks"
+	SortByFieldPayPerClick  = "pay_per_click_rate"
+	SortOrderAsc            = "asc"
+	SortOrderDesc           = "desc"
 
 	// apiVersion current version for all endpoints
 	apiVersion = "v1"
@@ -63,6 +74,18 @@ const (
 
 	// TestEnvironment is a test-only environment
 	//TestEnvironment APIEnvironment = "https://test.tonicpow.com/"+apiVersion+"/"
+)
+
+var (
+
+	// campaignSortFields is used for allowing specific fields for sorting
+	campaignSortFields = []string{
+		SortByFieldBalance,
+		SortByFieldCreatedAt,
+		SortByFieldLinksCreated,
+		SortByFieldPaidClicks,
+		SortByFieldPayPerClick,
+	}
 )
 
 // Error is the universal error response from the API

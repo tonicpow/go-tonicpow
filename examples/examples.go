@@ -373,7 +373,7 @@ func main() {
 	// Example: List active campaigns
 	//
 	var campaignResults *tonicpow.CampaignResults
-	if campaignResults, err = TonicPowAPI.ListCampaigns("", 1, 5); err != nil {
+	if campaignResults, err = TonicPowAPI.ListCampaigns("", 1, 5, tonicpow.SortByFieldCreatedAt, tonicpow.SortOrderDesc); err != nil {
 		log.Fatalf("list campaign failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
 	} else {
 		log.Printf("campaigns found: %d page: %d", campaignResults.Results, campaignResults.CurrentPage)
@@ -383,7 +383,7 @@ func main() {
 	// Example: List Campaigns  (by advertiser)
 	//
 
-	if campaignResults, err = TonicPowAPI.ListCampaignsByAdvertiserProfile(advertiser.ID, 1, 5); err != nil {
+	if campaignResults, err = TonicPowAPI.ListCampaignsByAdvertiserProfile(advertiser.ID, 1, 5, tonicpow.SortByFieldCreatedAt, tonicpow.SortOrderDesc); err != nil {
 		log.Fatalf("list campaign failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
 	} else {
 		log.Printf("campaigns by advertiser found: %d page: %d", campaignResults.Results, campaignResults.CurrentPage)
@@ -392,7 +392,7 @@ func main() {
 	//
 	// Example: Get campaigns by url
 	//
-	if campaignResults, err = TonicPowAPI.ListCampaignsByURL(campaignResults.Campaigns[0].TargetURL, 1, 5); err != nil {
+	if campaignResults, err = TonicPowAPI.ListCampaignsByURL(campaignResults.Campaigns[0].TargetURL, 1, 5, tonicpow.SortByFieldCreatedAt, tonicpow.SortOrderDesc); err != nil {
 		log.Fatalf("get campaign by url failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
 	} else {
 		log.Printf("campaigns found: %d", campaignResults.Results)

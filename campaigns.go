@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 // permitFields will remove fields that cannot be used
@@ -132,11 +133,22 @@ func (c *Client) UpdateCampaign(campaign *Campaign, userSessionToken string) (up
 // This will return an error if the campaign is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#c1b17be6-cb10-48b3-a519-4686961ff41c
-func (c *Client) ListCampaigns(customSessionToken string, page, resultsPerPage int) (results *CampaignResults, err error) {
+func (c *Client) ListCampaigns(customSessionToken string, page, resultsPerPage int, sortBy, sortOrder string) (results *CampaignResults, err error) {
+
+	// Do we know this field?
+	if len(sortBy) > 0 {
+		if !isInList(strings.ToLower(sortBy), campaignSortFields) {
+			err = fmt.Errorf("sort by %s is not valid", sortBy)
+			return
+		}
+	} else {
+		sortBy = SortByFieldCreatedAt
+		sortOrder = SortOrderDesc
+	}
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/list?%s=%d&%s=%d", modelCampaign, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage), http.MethodGet, nil, customSessionToken); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/list?%s=%d&%s=%d&%s=%s&%s=%s", modelCampaign, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil, customSessionToken); err != nil {
 		return
 	}
 
@@ -154,7 +166,7 @@ func (c *Client) ListCampaigns(customSessionToken string, page, resultsPerPage i
 // This will return an error if the url is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#30a15b69-7912-4e25-ba41-212529fba5ff
-func (c *Client) ListCampaignsByURL(targetURL string, page, resultsPerPage int) (results *CampaignResults, err error) {
+func (c *Client) ListCampaignsByURL(targetURL string, page, resultsPerPage int, sortBy, sortOrder string) (results *CampaignResults, err error) {
 
 	// Must have a value
 	if len(targetURL) == 0 {
@@ -162,9 +174,20 @@ func (c *Client) ListCampaignsByURL(targetURL string, page, resultsPerPage int) 
 		return
 	}
 
+	// Do we know this field?
+	if len(sortBy) > 0 {
+		if !isInList(strings.ToLower(sortBy), campaignSortFields) {
+			err = fmt.Errorf("sort by %s is not valid", sortBy)
+			return
+		}
+	} else {
+		sortBy = SortByFieldCreatedAt
+		sortOrder = SortOrderDesc
+	}
+
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/find?%s=%s&%s=%d&%s=%d", modelCampaign, fieldTargetURL, targetURL, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage), http.MethodGet, nil, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/find?%s=%s&%s=%d&%s=%d&%s=%s&%s=%s", modelCampaign, fieldTargetURL, targetURL, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil, ""); err != nil {
 		return
 	}
 
