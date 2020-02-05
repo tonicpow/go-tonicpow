@@ -119,7 +119,7 @@ func main() {
 	//
 	// Example: Accept/Approve the User (if required by application config)
 	//
-	if err = TonicPowAPI.AcceptUser(user.ID); err != nil {
+	if err = TonicPowAPI.AcceptUser(user.ID, ""); err != nil {
 		log.Fatalf("get user failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
 	} else {
 		log.Printf("user accepted: %d", user.ID)

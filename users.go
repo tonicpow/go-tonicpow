@@ -374,18 +374,22 @@ func (c *Client) CompletePhoneVerification(phone, code string) (err error) {
 }
 
 // AcceptUser will accept a user (if approval is required for new users)
+// ID or email address
 //
 // For more information: https://docs.tonicpow.com/#65c3962d-c309-4ef4-b85f-7ec1f08f031b
-func (c *Client) AcceptUser(userID uint64) (err error) {
+func (c *Client) AcceptUser(userID uint64, email string) (err error) {
+
+	var data map[string]string
 
 	// Basic requirements
-	if userID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldUserID)
+	if userID > 0 {
+		data = map[string]string{fieldID: fmt.Sprintf("%d", userID)}
+	} else if len(email) > 0 {
+		data = map[string]string{fieldEmail: email}
+	} else {
+		err = fmt.Errorf("missing required attribute: %s or %s", fieldUserID, fieldEmail)
 		return
 	}
-
-	// Start the post data
-	data := map[string]string{fieldID: fmt.Sprintf("%d", userID)}
 
 	// Fire the request
 	var response string
@@ -399,18 +403,22 @@ func (c *Client) AcceptUser(userID uint64) (err error) {
 }
 
 // ActivateUser will activate a user (if all application criteria is met)
+// ID or email address
 //
 // For more information: https://docs.tonicpow.com/#aa499fdf-2492-43ee-99d4-fc9735676431
-func (c *Client) ActivateUser(userID uint64) (err error) {
+func (c *Client) ActivateUser(userID uint64, email string) (err error) {
+
+	var data map[string]string
 
 	// Basic requirements
-	if userID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldUserID)
+	if userID > 0 {
+		data = map[string]string{fieldID: fmt.Sprintf("%d", userID)}
+	} else if len(email) > 0 {
+		data = map[string]string{fieldEmail: email}
+	} else {
+		err = fmt.Errorf("missing required attribute: %s or %s", fieldUserID, fieldEmail)
 		return
 	}
-
-	// Start the post data
-	data := map[string]string{fieldID: fmt.Sprintf("%d", userID)}
 
 	// Fire the request
 	var response string
@@ -424,18 +432,22 @@ func (c *Client) ActivateUser(userID uint64) (err error) {
 }
 
 // PauseUser will pause a user account (all payouts go to internal address)
+// ID or email address
 //
 // For more information: https://docs.tonicpow.com/#3307310d-86a9-4a5c-84ff-c38c581c77e5
-func (c *Client) PauseUser(userID uint64, reason string) (err error) {
+func (c *Client) PauseUser(userID uint64, email string, reason string) (err error) {
+
+	var data map[string]string
 
 	// Basic requirements
-	if userID == 0 || len(reason) == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldUserID)
+	if userID > 0 {
+		data = map[string]string{fieldID: fmt.Sprintf("%d", userID), fieldReason: reason}
+	} else if len(email) > 0 {
+		data = map[string]string{fieldEmail: email, fieldReason: reason}
+	} else {
+		err = fmt.Errorf("missing required attribute: %s or %s", fieldUserID, fieldEmail)
 		return
 	}
-
-	// Start the post data
-	data := map[string]string{fieldID: fmt.Sprintf("%d", userID), fieldReason: reason}
 
 	// Fire the request
 	var response string
