@@ -121,6 +121,8 @@ type User struct {
 	Phone              string `json:"phone,omitempty"`
 	PhoneVerified      bool   `json:"phone_verified,omitempty"`
 	ReferralLinkID     uint64 `json:"referral_link_id,omitempty"`
+	Referrals          uint   `json:"referrals,omitempty"`
+	ReferralsAccepted  uint   `json:"referrals_accepted,omitempty"`
 	ReferralURL        string `json:"referral_url,omitempty"`
 	ReferredByUserID   uint64 `json:"referred_by_user_id,omitempty"`
 	Status             string `json:"status,omitempty"`
