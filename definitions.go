@@ -15,6 +15,7 @@ const (
 	fieldCustomDimensions    = "custom_dimensions"
 	fieldDelayInMinutes      = "delay_in_minutes"
 	fieldEmail               = "email"
+	fieldFeedType            = "feed_type"
 	fieldGoalID              = "goal_id"
 	fieldID                  = "id"
 	fieldLastBalance         = "last_balance"
@@ -53,6 +54,11 @@ const (
 	SortByFieldPayPerClick  = "pay_per_click_rate"
 	SortOrderAsc            = "asc"
 	SortOrderDesc           = "desc"
+
+	// Feeds
+	FeedTypeAtom = "atom"
+	FeedTypeJSON = "json"
+	FeedTypeRSS  = "rss"
 
 	// apiVersion current version for all endpoints
 	apiVersion = "v1"

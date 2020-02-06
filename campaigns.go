@@ -200,3 +200,27 @@ func (c *Client) ListCampaignsByURL(targetURL string, page, resultsPerPage int, 
 	err = json.Unmarshal([]byte(response), &results)
 	return
 }
+
+// CampaignsFeed will return a feed of active campaigns
+// This will return an error if no campaigns are found (404)
+//
+// For more information: https://docs.tonicpow.com/#b3fe69d3-24ba-4c2a-a485-affbb0a738de
+func (c *Client) CampaignsFeed(feedType string) (feed string, err error) {
+
+	// Must have a value (force to rss if invalid)
+	feedType = strings.ToLower(strings.TrimSpace(feedType))
+	if len(feedType) == 0 || (feedType != FeedTypeRSS && feedType != FeedTypeAtom && feedType != FeedTypeJSON) {
+		// Default feed type
+		feedType = FeedTypeRSS
+	}
+
+	// Fire the request
+	if feed, err = c.request(fmt.Sprintf("%s/feed?%s=%s", modelCampaign, fieldFeedType, feedType), http.MethodGet, nil, ""); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	err = c.error(http.StatusOK, feed)
+
+	return
+}

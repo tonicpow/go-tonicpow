@@ -399,6 +399,16 @@ func main() {
 	}
 
 	//
+	// Example: Campaigns Feed in XML
+	//
+	xmlResults, _ := TonicPowAPI.CampaignsFeed(tonicpow.FeedTypeRSS)
+	if len(xmlResults) > 0 {
+		log.Printf("campaigns feed found - length: %d", len(xmlResults))
+	} else {
+		log.Fatalf("failed to get campaigns feed: %s", TonicPowAPI.LastRequest.Error.Message)
+	}
+
+	//
 	// Example: Activate User
 	//
 	//if err = TonicPowAPI.ActivateUser(user.ID); err != nil {
