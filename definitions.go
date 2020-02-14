@@ -190,15 +190,15 @@ type Goal struct {
 //
 // For more information: https://docs.tonicpow.com/#75c837d5-3336-4d87-a686-d80c6f8938b9
 type Conversion struct {
-	Amount           uint64 `json:"amount,omitempty"`
-	CustomDimensions string `json:"custom_dimensions,omitempty"`
-	GoalID           uint64 `json:"goal_id,omitempty"`
-	GoalName         string `json:"goal_name,omitempty"`
-	ID               uint64 `json:"ID,omitempty"`
-	PayoutAfter      string `json:"payout_after,omitempty"`
-	Status           string `json:"status,omitempty"`
-	TxID             string `json:"tx_id,omitempty"`
-	UserID           uint64 `json:"user_id,omitempty"`
+	Amount           float64 `json:"amount,omitempty"`
+	CustomDimensions string  `json:"custom_dimensions,omitempty"`
+	GoalID           uint64  `json:"goal_id,omitempty"`
+	GoalName         string  `json:"goal_name,omitempty"`
+	ID               uint64  `json:"ID,omitempty"`
+	PayoutAfter      string  `json:"payout_after,omitempty"`
+	Status           string  `json:"status,omitempty"`
+	TxID             string  `json:"tx_id,omitempty"`
+	UserID           uint64  `json:"user_id,omitempty"`
 }
 
 // Link is the link model (child of User) (relates Campaign to User)
