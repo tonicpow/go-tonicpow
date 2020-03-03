@@ -79,7 +79,7 @@ const (
 	sessionCookie = "session_token"
 
 	// TestEnvironment is a test-only environment
-	//TestEnvironment APIEnvironment = "https://test.tonicpow.com/"+apiVersion+"/"
+	// TestEnvironment APIEnvironment = "https://test.tonicpow.com/"+apiVersion+"/"
 )
 
 var (

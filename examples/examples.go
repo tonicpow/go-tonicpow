@@ -108,7 +108,7 @@ func main() {
 		Email:            fmt.Sprintf("Tes_ti-ng+%d@TonicPow.com", rand.Intn(100000)),
 		Password:         testPassword,
 		ReferredByUserID: user.ID,
-		//TncpwSession:     "1e74da42752127b60422bdcfe6741eeadc1a1c5dab22ca8f17ca9ee62dc21e26",
+		// TncpwSession:     "1e74da42752127b60422bdcfe6741eeadc1a1c5dab22ca8f17ca9ee62dc21e26",
 	}
 	if refUser, err = TonicPowAPI.CreateUser(refUser); err != nil {
 		log.Fatalf("create user failed error %s - api error: %s data: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
@@ -301,10 +301,10 @@ func main() {
 	// Example: Create a Goal (percent payout)
 	//
 	goalPercent := &tonicpow.Goal{
-		//CampaignID: 1,
+		// CampaignID: 1,
 		CampaignID:  campaign.ID,
 		Description: "Get 10% of all action!",
-		//Name:        fmt.Sprintf("%s%d", "all-action", rand.Intn(100000)),
+		// Name:        fmt.Sprintf("%s%d", "all-action", rand.Intn(100000)),
 		Name:           "all-action",
 		PayoutRate:     0.10, // 10% as a float
 		PayoutType:     "percent",
@@ -411,16 +411,16 @@ func main() {
 	//
 	// Example: Activate User
 	//
-	//if err = TonicPowAPI.ActivateUser(user.ID); err != nil {
+	// if err = TonicPowAPI.ActivateUser(user.ID); err != nil {
 	//	log.Fatalf("activate user failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
-	//}
+	// }
 
 	//
 	// Example: Pause User
 	//
-	//if err = TonicPowAPI.PauseUser(user.ID,"reviewing account"); err != nil {
+	// if err = TonicPowAPI.PauseUser(user.ID,"reviewing account"); err != nil {
 	//	log.Fatalf("pause user failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
-	//}
+	// }
 
 	//
 	// Example: Create a Visitor Session
@@ -478,11 +478,11 @@ func main() {
 	//
 	// Example: Fire a conversion on a goal (by name)
 	//
-	//if newConversion, err = TonicPowAPI.CreateConversionByGoalName(goal.Name, visitorSession.TncpwSession, "", 0.00, 10); err != nil {
+	// if newConversion, err = TonicPowAPI.CreateConversionByGoalName(goal.Name, visitorSession.TncpwSession, "", 0.00, 10); err != nil {
 	//	log.Fatal(err.Error())
-	//}
+	// }
 
-	//log.Printf("successful conversion event: %d payout after: %s", newConversion.ID, newConversion.PayoutAfter)
+	// log.Printf("successful conversion event: %d payout after: %s", newConversion.ID, newConversion.PayoutAfter)
 
 	//
 	// Example: Get conversion
@@ -520,10 +520,10 @@ func main() {
 	//
 	// Example: Create Conversion by User ID (percent based conversion - using a purchase amount, or some tx of value)
 	//
-	//if newConversion, err = TonicPowAPI.CreateConversionByUserID(goalPercent.ID, 2, "", 5.00, 0); err != nil {
+	// if newConversion, err = TonicPowAPI.CreateConversionByUserID(goalPercent.ID, 2, "", 5.00, 0); err != nil {
 	//	os.Exit(1)
-	//}
-	//log.Printf("new conversion: %d", newConversion.ID)
+	// }
+	// log.Printf("new conversion: %d", newConversion.ID)
 
 	log.Println("examples complete!")
 }
