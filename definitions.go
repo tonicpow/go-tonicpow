@@ -98,13 +98,13 @@ var (
 //
 // For more information: https://docs.tonicpow.com/#d7fe13a3-2b6d-4399-8d0f-1d6b8ad6ebd9
 type Error struct {
-	Code        int    `json:"code"`
-	Data        string `json:"data"`
-	IPAddress   string `json:"ip_address"`
-	Method      string `json:"method"`
-	Message     string `json:"message"`
-	RequestGUID string `json:"request_guid"`
-	URL         string `json:"url"`
+	Code        int         `json:"code"`
+	Data        interface{} `json:"data"`
+	IPAddress   string      `json:"ip_address"`
+	Method      string      `json:"method"`
+	Message     string      `json:"message"`
+	RequestGUID string      `json:"request_guid"`
+	URL         string      `json:"url"`
 }
 
 // User is the user model
@@ -211,6 +211,7 @@ type Link struct {
 	ID              uint64 `json:"id,omitempty"`
 	ShortCode       string `json:"short_code,omitempty"`
 	ShortCodeURL    string `json:"short_code_url,omitempty"`
+	TargetURL       string `json:"target_url,omitempty"`
 	UserID          uint64 `json:"user_id,omitempty"`
 }
 

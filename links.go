@@ -39,6 +39,42 @@ func (c *Client) CreateLink(link *Link, userSessionToken string) (createdLink *L
 	return
 }
 
+// CreateLinkByURL will make a new link
+// Use the userSessionToken if making request on behalf of another user
+//
+// For more information: https://docs.tonicpow.com/#d5a22343-c580-43cc-8e27-dd131896ea3b
+func (c *Client) CreateLinkByURL(link *Link, userSessionToken string) (createdLink *Link, err error) {
+
+	// Basic requirements
+	if len(link.TargetURL) == 0 {
+		err = fmt.Errorf("missing required attribute: %s", fieldTargetURL)
+		return
+	}
+
+	if link.UserID == 0 {
+		err = fmt.Errorf("missing required attribute: %s", fieldUserID)
+		return
+	}
+
+	// Force campaign ID to zero
+	link.CampaignID = 0
+
+	// Fire the request
+	var response string
+	if response, err = c.request(modelLink, http.MethodPost, link, userSessionToken); err != nil {
+		return
+	}
+
+	// Only a 201 is treated as a success
+	if err = c.error(http.StatusCreated, response); err != nil {
+		return
+	}
+
+	// Convert model response
+	err = json.Unmarshal([]byte(response), &createdLink)
+	return
+}
+
 // GetLink will get an existing link
 // This will return an error if the link is not found (404)
 // Use the userSessionToken if making request on behalf of another user
