@@ -246,8 +246,9 @@ type Rate struct {
 //
 // For more information:
 type UserExists struct {
-	ID     uint64 `json:"id"`
-	Status string `json:"status"`
+	ID          uint64 `json:"id"`
+	ReferralURL string `json:"referral_url,omitempty"`
+	Status      string `json:"status"`
 }
 
 // CampaignResults is the page response for campaign results from listing
