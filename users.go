@@ -375,17 +375,18 @@ func (c *Client) CompletePhoneVerification(phone, code string) (err error) {
 
 // AcceptUser will accept a user (if approval is required for new users)
 // ID or email address
+// Reason field is optional
 //
 // For more information: https://docs.tonicpow.com/#65c3962d-c309-4ef4-b85f-7ec1f08f031b
-func (c *Client) AcceptUser(userID uint64, email string) (err error) {
+func (c *Client) AcceptUser(userID uint64, email string, reason string) (err error) {
 
 	var data map[string]string
 
 	// Basic requirements
 	if userID > 0 {
-		data = map[string]string{fieldID: fmt.Sprintf("%d", userID)}
+		data = map[string]string{fieldID: fmt.Sprintf("%d", userID), fieldReason: reason}
 	} else if len(email) > 0 {
-		data = map[string]string{fieldEmail: email}
+		data = map[string]string{fieldEmail: email, fieldReason: reason}
 	} else {
 		err = fmt.Errorf("missing required attribute: %s or %s", fieldUserID, fieldEmail)
 		return
