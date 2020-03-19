@@ -260,6 +260,15 @@ type CampaignResults struct {
 	ResultsPerPage int         `json:"results_per_page"`
 }
 
+// CampaignStatistics is what we cache for redis for basic stats
+type CampaignStatistics struct {
+	Active          uint64  `json:"active"`
+	Balance         float64 `json:"balance"`
+	BalanceSatoshis uint64  `json:"balance_satoshis"`
+	Currency        string  `json:"currency"`
+	Total           uint64  `json:"total"`
+}
+
 // LinkResults is the page response for link results from listing
 type LinkResults struct {
 	CurrentPage    int     `json:"current_page"`

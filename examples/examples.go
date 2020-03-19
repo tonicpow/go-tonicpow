@@ -420,6 +420,17 @@ func main() {
 	}
 
 	//
+	// Example: Campaign Statistics
+	//
+	var statistics *tonicpow.CampaignStatistics
+	statistics, err = TonicPowAPI.CampaignStatistics()
+	if err != nil {
+		log.Fatalf("get campaign statistics failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
+	} else {
+		log.Printf("statistics found: active %d", statistics.Active)
+	}
+
+	//
 	// Example: Activate User
 	//
 	// if err = TonicPowAPI.ActivateUser(user.ID); err != nil {

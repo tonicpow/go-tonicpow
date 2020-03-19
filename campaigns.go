@@ -224,3 +224,24 @@ func (c *Client) CampaignsFeed(feedType string) (feed string, err error) {
 
 	return
 }
+
+// CampaignStatistics will get basic statistics on all campaigns
+//
+// For more information: https://docs.tonicpow.com/#d3108b14-486e-4e27-8176-57ec63cd49f2
+func (c *Client) CampaignStatistics() (statistics *CampaignStatistics, err error) {
+
+	// Fire the request
+	var response string
+	if response, err = c.request(fmt.Sprintf("%s/statistics", modelCampaign), http.MethodGet, nil, ""); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	if err = c.error(http.StatusOK, response); err != nil {
+		return
+	}
+
+	// Convert model response
+	err = json.Unmarshal([]byte(response), &statistics)
+	return
+}
