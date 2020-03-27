@@ -95,6 +95,7 @@ func main() {
 	// Example: Update a user
 	//
 	user.FirstName = "Austin"
+	user.PayoutAddress = "mrz@moneybutton.com"
 	if user, err = TonicPowAPI.UpdateUser(user, ""); err != nil {
 		log.Fatalf("update user failed error %s - api error: %s data: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
 	} else {
@@ -120,7 +121,7 @@ func main() {
 	// Example: Accept/Approve the User (if required by application config)
 	//
 	if err = TonicPowAPI.AcceptUser(user.ID, "", "awesome person"); err != nil {
-		log.Fatalf("get user failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
+		log.Fatalf("accept user failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
 	} else {
 		log.Printf("user accepted: %d", user.ID)
 	}
@@ -129,9 +130,18 @@ func main() {
 	// Example: Get new updated balance for user
 	//
 	if user, err = TonicPowAPI.GetUserBalance(user.ID, 0); err != nil {
-		log.Fatalf("get user failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
+		log.Fatalf("get user balance failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
 	} else {
 		log.Printf("user balance: %d", user.Balance)
+	}
+
+	//
+	// Example: Release internal balance to user's payout_address
+	//
+	if err = TonicPowAPI.ReleaseBalance(user.ID); err != nil {
+		log.Fatalf("release balance failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
+	} else {
+		log.Println("release balance was successful")
 	}
 
 	//

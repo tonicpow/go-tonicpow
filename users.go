@@ -495,3 +495,29 @@ func (c *Client) UserExists(byEmail string) (existsResponse *UserExists, err err
 	err = json.Unmarshal([]byte(response), &existsResponse)
 	return
 }
+
+// ReleaseBalance will send the internal balance to the user's payout_address
+//
+// For more information: https://docs.tonicpow.com/#be82b6cb-7fe8-4f03-9b0c-dbade8f2d40f
+func (c *Client) ReleaseBalance(userID uint64) (err error) {
+
+	var data map[string]string
+
+	// Basic requirements
+	if userID > 0 {
+		data = map[string]string{fieldID: fmt.Sprintf("%d", userID)}
+	} else {
+		err = fmt.Errorf("missing required attribute: %s", fieldUserID)
+		return
+	}
+
+	// Fire the request
+	var response string
+	if response, err = c.request(fmt.Sprintf("%s/wallet/release", modelUser), http.MethodPut, data, ""); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	err = c.error(http.StatusOK, response)
+	return
+}
