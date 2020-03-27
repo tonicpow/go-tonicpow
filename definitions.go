@@ -46,19 +46,35 @@ const (
 	modelVisitors       = "visitors"
 	modelVisitorSession = "sessions"
 
-	// Model sorting
-	SortByFieldBalance      = "balance"
-	SortByFieldCreatedAt    = "created_at"
-	SortByFieldLinksCreated = "links_created"
-	SortByFieldPaidClicks   = "paid_clicks"
-	SortByFieldPayPerClick  = "pay_per_click_rate"
-	SortOrderAsc            = "asc"
-	SortOrderDesc           = "desc"
+	// SortByFieldBalance is for sorting results by field: balance
+	SortByFieldBalance = "balance"
 
-	// Feeds
+	// SortByFieldCreatedAt is for sorting results by field: created_at
+	SortByFieldCreatedAt = "created_at"
+
+	// SortByFieldLinksCreated is for sorting results by field: links_created
+	SortByFieldLinksCreated = "links_created"
+
+	// SortByFieldPaidClicks is for sorting results by field: paid_clicks
+	SortByFieldPaidClicks = "paid_clicks"
+
+	// SortByFieldPayPerClick is for sorting results by field: pay_per_click_rate
+	SortByFieldPayPerClick = "pay_per_click_rate"
+
+	// SortOrderAsc is for returning the results in ascending order
+	SortOrderAsc = "asc"
+
+	// SortOrderDesc is for returning the results in descending order
+	SortOrderDesc = "desc"
+
+	// FeedTypeAtom is for using the feed type: Atom
 	FeedTypeAtom = "atom"
+
+	// FeedTypeJSON is for using the feed type: JSON
 	FeedTypeJSON = "json"
-	FeedTypeRSS  = "rss"
+
+	// FeedTypeRSS is for using the feed type: RSS
+	FeedTypeRSS = "rss"
 
 	// apiVersion current version for all endpoints
 	apiVersion = "v1"
