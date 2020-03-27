@@ -496,16 +496,17 @@ func (c *Client) UserExists(byEmail string) (existsResponse *UserExists, err err
 	return
 }
 
-// ReleaseBalance will send the internal balance to the user's payout_address
+// ReleaseUserBalance will send the internal balance to the user's payout_address
+// Reason field is optional
 //
 // For more information: https://docs.tonicpow.com/#be82b6cb-7fe8-4f03-9b0c-dbade8f2d40f
-func (c *Client) ReleaseBalance(userID uint64) (err error) {
+func (c *Client) ReleaseUserBalance(userID uint64, reason string) (err error) {
 
 	var data map[string]string
 
 	// Basic requirements
 	if userID > 0 {
-		data = map[string]string{fieldID: fmt.Sprintf("%d", userID)}
+		data = map[string]string{fieldID: fmt.Sprintf("%d", userID), fieldReason: reason}
 	} else {
 		err = fmt.Errorf("missing required attribute: %s", fieldUserID)
 		return
@@ -514,6 +515,33 @@ func (c *Client) ReleaseBalance(userID uint64) (err error) {
 	// Fire the request
 	var response string
 	if response, err = c.request(fmt.Sprintf("%s/wallet/release", modelUser), http.MethodPut, data, ""); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	err = c.error(http.StatusOK, response)
+	return
+}
+
+// RefundUserBalance will send the internal balance back to the corresponding campaigns
+// Reason field is required
+//
+// For more information: https://docs.tonicpow.com/#c373c7ed-189d-4aa6-88da-c4a58955fd28
+func (c *Client) RefundUserBalance(userID uint64, reason string) (err error) {
+
+	var data map[string]string
+
+	// Basic requirements
+	if userID > 0 {
+		data = map[string]string{fieldID: fmt.Sprintf("%d", userID), fieldReason: reason}
+	} else {
+		err = fmt.Errorf("missing required attribute: %s", fieldUserID)
+		return
+	}
+
+	// Fire the request
+	var response string
+	if response, err = c.request(fmt.Sprintf("%s/wallet/refund", modelUser), http.MethodPut, data, ""); err != nil {
 		return
 	}
 
