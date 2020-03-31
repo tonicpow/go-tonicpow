@@ -549,3 +549,39 @@ func (c *Client) RefundUserBalance(userID uint64, reason string) (err error) {
 	err = c.error(http.StatusOK, response)
 	return
 }
+
+// GetUserReferrals will return all the related referrals to the given user
+// Use either an ID or email to get an existing user
+//
+// For more information: https://docs.tonicpow.com/#fa7ee5a6-c87d-4e01-8ad3-ef6bda39533b
+func (c *Client) GetUserReferrals(byID uint64, byEmail string) (referrals []*UserReferral, err error) {
+
+	// Must have either an ID or email
+	if byID == 0 && len(byEmail) == 0 {
+		err = fmt.Errorf("missing either %s or %s", fieldID, fieldEmail)
+		return
+	}
+
+	// Set the values
+	params := url.Values{}
+	if byID > 0 {
+		params.Add(fieldID, fmt.Sprintf("%d", byID))
+	} else {
+		params.Add(fieldEmail, byEmail)
+	}
+
+	// Fire the request
+	var response string
+	if response, err = c.request(fmt.Sprintf("%s/referred", modelUser), http.MethodGet, params, ""); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	if err = c.error(http.StatusOK, response); err != nil {
+		return
+	}
+
+	// Convert model response
+	err = json.Unmarshal([]byte(response), &referrals)
+	return
+}

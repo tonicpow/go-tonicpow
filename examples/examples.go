@@ -26,12 +26,23 @@ func init() {
 		log.Fatalf("api key is required: %s", "TONICPOW_API_KEY")
 	}
 
+	// Set the environment
+	environmentString := os.Getenv("TONICPOW_ENVIRONMENT")
+	var environment tonicpow.APIEnvironment
+	if environmentString == "staging" {
+		environment = tonicpow.StagingEnvironment
+	} else if environmentString == "live" {
+		environment = tonicpow.LiveEnvironment
+	} else {
+		environment = tonicpow.LocalEnvironment
+	}
+
 	//
 	// Load the api client (creates a new session)
 	// You can also set the environment or client options
 	//
 	var err error
-	TonicPowAPI, err = tonicpow.NewClient(apiKey, tonicpow.LocalEnvironment, nil)
+	TonicPowAPI, err = tonicpow.NewClient(apiKey, environment, nil)
 	if err != nil {
 		log.Fatalf("error in NewClient: %s", err.Error())
 	}
@@ -162,6 +173,16 @@ func main() {
 		log.Fatalf("forgot password failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
 	} else {
 		log.Printf("sent forgot password: %s", user.Email)
+	}
+
+	//
+	// Example: Get all referrals from a user
+	//
+	var referrals []*tonicpow.UserReferral
+	if referrals, err = TonicPowAPI.GetUserReferrals(user.ID, ""); err != nil {
+		log.Fatalf("get user referrals failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
+	} else {
+		log.Printf("got %d referrals", len(referrals))
 	}
 
 	//
@@ -415,7 +436,7 @@ func main() {
 	// Example: List Campaigns  (by advertiser)
 	//
 
-	if campaignResults, err = TonicPowAPI.ListCampaignsByAdvertiserProfile(advertiser.ID, 1, 5, tonicpow.SortByFieldCreatedAt, tonicpow.SortOrderDesc); err != nil {
+	if campaignResults, err = TonicPowAPI.ListCampaignsByAdvertiserProfile(advertiser.ID, 1, 5, tonicpow.SortByFieldCreatedAt, tonicpow.SortOrderAsc); err != nil {
 		log.Fatalf("list campaign failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
 	} else {
 		log.Printf("campaigns by advertiser found: %d page: %d", campaignResults.Results, campaignResults.CurrentPage)

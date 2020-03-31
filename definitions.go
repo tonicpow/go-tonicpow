@@ -93,9 +93,6 @@ const (
 
 	// sessionCookie is the cookie name for session tokens
 	sessionCookie = "session_token"
-
-	// TestEnvironment is a test-only environment
-	// TestEnvironment APIEnvironment = "https://test.tonicpow.com/"+apiVersion+"/"
 )
 
 var (
@@ -259,13 +256,23 @@ type Rate struct {
 	RateLastUpdated     string  `json:"rate_last_updated,omitempty"`
 }
 
-// UserExists is the user exists results
+// UserExists is a slim record of the User model
 //
-// For more information:
+// For more information: https://docs.tonicpow.com/#50b3c130-7254-4a05-b312-b14647736e38
 type UserExists struct {
 	ID          uint64 `json:"id"`
 	ReferralURL string `json:"referral_url,omitempty"`
 	Status      string `json:"status"`
+}
+
+// UserReferral is a slim record of the User model
+//
+// For more information: https://docs.tonicpow.com/#50b3c130-7254-4a05-b312-b14647736e38
+type UserReferral struct {
+	Email            string `json:"email,omitempty"`
+	ID               uint64 `json:"id"`
+	ReferredByUserID uint64 `json:"referred_by_user_id"`
+	Status           string `json:"status"`
 }
 
 // CampaignResults is the page response for campaign results from listing
