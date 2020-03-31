@@ -271,6 +271,7 @@ type UserExists struct {
 type UserReferral struct {
 	Email            string `json:"email,omitempty"`
 	ID               uint64 `json:"id"`
+	PayoutAddress    string `json:"payout_address,omitempty"`
 	ReferredByUserID uint64 `json:"referred_by_user_id"`
 	Status           string `json:"status"`
 }
