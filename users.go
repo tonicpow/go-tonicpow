@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 // permitFields will remove fields that cannot be used
@@ -122,7 +123,8 @@ func (c *Client) GetUserBalance(userID uint64, lastBalance int64) (user *User, e
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/balance/%d?%s=%d", modelUser, userID, fieldLastBalance, lastBalance), http.MethodGet, nil, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/balance/%d?%s=%d", modelUser, userID, fieldLastBalance, lastBalance),
+		http.MethodGet, nil, ""); err != nil {
 		return
 	}
 
@@ -583,5 +585,39 @@ func (c *Client) GetUserReferrals(byID uint64, byEmail string) (referrals []*Use
 
 	// Convert model response
 	err = json.Unmarshal([]byte(response), &referrals)
+	return
+}
+
+// ListUserReferrals will return a list of active users that have referrals
+// This will return an error if no users are found (404)
+//
+// For more information: https://docs.tonicpow.com/#3fd8e647-abfa-422f-90af-952cccd3be7c
+func (c *Client) ListUserReferrals(page, resultsPerPage int, sortBy, sortOrder string) (results *ReferralResults, err error) {
+
+	// Do we know this field?
+	if len(sortBy) > 0 {
+		if !isInList(strings.ToLower(sortBy), referralSortFields) {
+			err = fmt.Errorf("sort by %s is not valid", sortBy)
+			return
+		}
+	} else {
+		sortBy = SortByFieldCreatedAt
+		sortOrder = SortOrderDesc
+	}
+
+	// Fire the request
+	var response string
+	if response, err = c.request(fmt.Sprintf("%s/referrals?%s=%d&%s=%d&%s=%s&%s=%s", modelUser, fieldCurrentPage,
+		page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil, ""); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	if err = c.error(http.StatusOK, response); err != nil {
+		return
+	}
+
+	// Convert model response
+	err = json.Unmarshal([]byte(response), &results)
 	return
 }

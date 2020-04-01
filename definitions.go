@@ -52,6 +52,9 @@ const (
 	// SortByFieldCreatedAt is for sorting results by field: created_at
 	SortByFieldCreatedAt = "created_at"
 
+	// SortByFieldEarned is for sorting results by field: earned
+	SortByFieldEarned = "earned"
+
 	// SortByFieldLinksCreated is for sorting results by field: links_created
 	SortByFieldLinksCreated = "links_created"
 
@@ -60,6 +63,9 @@ const (
 
 	// SortByFieldPayPerClick is for sorting results by field: pay_per_click_rate
 	SortByFieldPayPerClick = "pay_per_click_rate"
+
+	// SortByFieldReferrals is for sorting results by field: referrals
+	SortByFieldReferrals = "referrals"
 
 	// SortOrderAsc is for returning the results in ascending order
 	SortOrderAsc = "asc"
@@ -104,6 +110,13 @@ var (
 		SortByFieldLinksCreated,
 		SortByFieldPaidClicks,
 		SortByFieldPayPerClick,
+	}
+
+	// referralSortFields is used for allowing specific fields for sorting
+	referralSortFields = []string{
+		SortByFieldCreatedAt,
+		SortByFieldEarned,
+		SortByFieldReferrals,
 	}
 )
 
@@ -272,8 +285,17 @@ type UserReferral struct {
 	Email            string `json:"email,omitempty"`
 	ID               uint64 `json:"id"`
 	PayoutAddress    string `json:"payout_address,omitempty"`
+	Referrals        uint   `json:"referrals,omitempty"`
 	ReferredByUserID uint64 `json:"referred_by_user_id"`
 	Status           string `json:"status"`
+}
+
+// ReferralResults is the page response for referral results from listing
+type ReferralResults struct {
+	CurrentPage    int             `json:"current_page"`
+	Referrals      []*UserReferral `json:"referrals"`
+	Results        int             `json:"results"`
+	ResultsPerPage int             `json:"results_per_page"`
 }
 
 // CampaignResults is the page response for campaign results from listing

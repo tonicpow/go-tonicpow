@@ -186,6 +186,16 @@ func main() {
 	}
 
 	//
+	// Example: List all referrals
+	//
+	var referralResults *tonicpow.ReferralResults
+	if referralResults, err = TonicPowAPI.ListUserReferrals(1, 5, tonicpow.SortByFieldReferrals, tonicpow.SortOrderDesc); err != nil {
+		log.Fatalf("list referrals failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
+	} else {
+		log.Printf("referrals found: %d page: %d", referralResults.Results, referralResults.CurrentPage)
+	}
+
+	//
 	// Example: Create an advertiser
 	//
 	advertiser := &tonicpow.AdvertiserProfile{
