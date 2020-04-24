@@ -1,6 +1,6 @@
 <img src=".github/IMAGES/go-tonicpow.png" alt="TonicPow & Go">
 
-**go-tonicpow** is the official golang implementation for interacting with the [TonicPow API](https://docs.tonicpow.com)
+> **go-tonicpow** is the official golang implementation for interacting with the [TonicPow API](https://docs.tonicpow.com)
 
 [![Go](https://img.shields.io/github/go-mod/go-version/tonicpow/go-tonicpow)](https://golang.org/)
 [![Build Status](https://travis-ci.com/tonicpow/go-tonicpow.svg?branch=master)](https://travis-ci.com/tonicpow/go-tonicpow)
@@ -65,7 +65,6 @@ $ make help
 
 List of all current commands:
 ```text
-all                            Runs test, install, clean, docs
 bench                          Run all benchmarks in the Go application
 clean                          Remove previous builds and any test cache data
 clean-mods                     Remove all the Go mod cache
@@ -76,6 +75,7 @@ lint                           Run the Go lint application
 release                        Full production release (creates release in Github)
 release-test                   Full production test release (everything except deploy)
 release-snap                   Test the full release (build binaries)
+run-examples                   Runs all the examples
 tag                            Generate a new tag and push (IE: make tag version=0.0.0)
 tag-remove                     Remove a tag if found (IE: make tag-remove version=0.0.0)
 tag-update                     Update an existing tag to current commit (IE: make tag-update version=0.0.0)
@@ -144,7 +144,7 @@ View the [contributing guidelines](CONTRIBUTING.md) and follow the [code of cond
 
 Support the development of this project 🙏
 
-[![Donate](https://img.shields.io/badge/donate-bitcoin-brightgreen.svg)](https://tonicpow.com/?af=go-tonicpow)
+[![Donate](https://img.shields.io/badge/donate-bitcoin-brightgreen.svg)](https://tonicpow.com/?af=go-tonicpow) [![Twetch](https://img.shields.io/badge/share-twitter-00ACEE.svg)](https://twitter.com/intent/tweet?text=TonicPow%20integration%20with%20Go%20rocks!%20Check%20it%20out:%20https%3A%2F%2Ftncpw.co%2F7ca46e94) [![Twitter](https://img.shields.io/badge/share-twetch-085AF6.svg)](https://twetch.app/compose?description=TonicPow%20integration%20with%20Go%20rocks!%20Check%20it%20out:%20https%3A%2F%2Ftncpw.co%2F7ca46e94)
 
 ## License
 
