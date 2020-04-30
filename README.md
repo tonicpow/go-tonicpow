@@ -1,6 +1,6 @@
 <img src=".github/IMAGES/go-tonicpow.png" alt="TonicPow & Go">
 
-> **go-tonicpow** is the official golang implementation for interacting with the [TonicPow API](https://docs.tonicpow.com)
+> The official Go implementation for interacting with the [TonicPow API](https://docs.tonicpow.com)
 
 [![Go](https://img.shields.io/github/go-mod/go-version/tonicpow/go-tonicpow)](https://golang.org/)
 [![Build Status](https://travis-ci.com/tonicpow/go-tonicpow.svg?branch=master)](https://travis-ci.com/tonicpow/go-tonicpow)
@@ -24,8 +24,8 @@
 ## Installation
 
 **go-tonicpow** requires a [supported release of Go](https://golang.org/doc/devel/release.html#policy).
-```bash
-$ go get -u github.com/tonicpow/go-tonicpow
+```shell script
+go get -u github.com/tonicpow/go-tonicpow
 ```
 
 ## Documentation
@@ -59,8 +59,8 @@ Use `make release-snap` to create a snapshot version of the release, and finally
 <summary><strong><code>Makefile Commands</code></strong></summary>
 
 View all `makefile` commands
-```bash
-$ make help
+```shell script
+make help
 ```
 
 List of all current commands:
@@ -93,19 +93,19 @@ All unit tests and [examples](tonicpow_test.go) run via [Travis CI](https://trav
 View a [full example application](examples/examples.go).
 
 Run all tests (including integration tests)
-```bash
-$ make test
+```shell script
+make test
 ```
 
 Run tests (excluding integration tests)
-```bash
-$ make test-short
+```shell script
+make test-short
 ```
 
 ## Benchmarks
 Run the Go [benchmarks](tonicpow_test.go):
-```bash
-$ make bench
+```shell script
+make bench
 ```
 
 ## Code Standards
