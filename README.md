@@ -9,6 +9,7 @@
 [![Slack](https://img.shields.io/badge/slack-tonicpow-orange.svg?style=flat)](https://atlantistic.slack.com/app_redirect?channel=tonicpow)
 [![GoDoc](https://godoc.org/github.com/tonicpow/go-tonicpow?status.svg&style=flat)](https://pkg.go.dev/github.com/tonicpow/go-tonicpow)
 
+<br/>
 
 ## Table of Contents
 - [Installation](#installation)
@@ -21,12 +22,16 @@
 - [Contributing](#contributing)
 - [License](#license)
 
+<br/>
+
 ## Installation
 
 **go-tonicpow** requires a [supported release of Go](https://golang.org/doc/devel/release.html#policy).
 ```shell script
 go get -u github.com/tonicpow/go-tonicpow
 ```
+
+<br/>
 
 ## Documentation
 You can view the generated [documentation here](https://pkg.go.dev/github.com/tonicpow/go-tonicpow).
@@ -47,6 +52,7 @@ You can view the generated [documentation here](https://pkg.go.dev/github.com/to
 
 <details>
 <summary><strong><code>Library Deployment</code></strong></summary>
+<br/>
 
 [goreleaser](https://github.com/goreleaser/goreleaser) for easy binary or library deployment to Github and can be installed via: `brew install goreleaser`.
 
@@ -57,6 +63,7 @@ Use `make release-snap` to create a snapshot version of the release, and finally
 
 <details>
 <summary><strong><code>Makefile Commands</code></strong></summary>
+<br/>
 
 View all `makefile` commands
 ```shell script
@@ -65,28 +72,34 @@ make help
 
 List of all current commands:
 ```text
-all                            Runs lint, test-short and vet
-bench                          Run all benchmarks in the Go application
-clean                          Remove previous builds and any test cache data
-clean-mods                     Remove all the Go mod cache
-coverage                       Shows the test coverage
-godocs                         Sync the latest tag with GoDocs
-help                           Show all make commands available
-lint                           Run the Go lint application
-release                        Full production release (creates release in Github)
-release-test                   Full production test release (everything except deploy)
-release-snap                   Test the full release (build binaries)
-run-examples                   Runs all the examples
-tag                            Generate a new tag and push (IE: tag version=0.0.0)
-tag-remove                     Remove a tag if found (IE: tag-remove version=0.0.0)
-tag-update                     Update an existing tag to current commit (IE: tag-update version=0.0.0)
-test                           Runs vet, lint and ALL tests
-test-short                     Runs vet, lint and tests (excludes integration tests)
-update                         Update all project dependencies
-update-releaser                Update the goreleaser application
-vet                            Run the Go vet application
+all                    Runs multiple commands
+clean                  Remove previous builds and any test cache data
+clean-mods             Remove all the Go mod cache
+coverage               Shows the test coverage
+godocs                 Sync the latest tag with GoDocs
+help                   Show this help message
+install                Install the application
+install-go             Install the application (Using Native Go)
+lint                   Run the Go lint application
+release                Full production release (creates release in Github)
+release                Runs common.release then runs godocs
+release-snap           Test the full release (build binaries)
+release-test           Full production test release (everything except deploy)
+replace-version        Replaces the version in HTML/JS (pre-deploy)
+run-examples           Runs all the examples
+tag                    Generate a new tag and push (tag version=0.0.0)
+tag-remove             Remove a tag if found (tag-remove version=0.0.0)
+tag-update             Update an existing tag to current commit (tag-update version=0.0.0)
+test                   Runs vet, lint and ALL tests
+test-short             Runs vet, lint and tests (excludes integration tests)
+test-travis            Runs all tests via Travis (also exports coverage)
+test-travis-short      Runs unit tests via Travis (also exports coverage)
+uninstall              Uninstall the application (and remove files)
+vet                    Run the Go vet application
 ```
 </details>
+
+<br/>
 
 ## Examples & Tests
 All unit tests and [examples](tonicpow_test.go) run via [Travis CI](https://travis-ci.org/tonicpow/go-tonicpow) and uses [Go version 1.14.x](https://golang.org/doc/go1.14). View the [deployment configuration file](.travis.yml).
@@ -103,14 +116,20 @@ Run tests (excluding integration tests)
 make test-short
 ```
 
+<br/>
+
 ## Benchmarks
 Run the Go [benchmarks](tonicpow_test.go):
 ```shell script
 make bench
 ```
 
+<br/>
+
 ## Code Standards
 Read more about this Go project's [code standards](CODE_STANDARDS.md).
+
+<br/>
 
 ## Usage
 View the [examples & benchmarks](tonicpow_test.go)
@@ -131,14 +150,16 @@ func main() {
 }
 ```
 
-## Maintainers
+<br/>
 
+## Maintainers
 | [<img src="https://github.com/mrz1836.png" height="50" alt="MrZ" />](https://github.com/mrz1836) | [<img src="https://github.com/rohenaz.png" height="50" alt="Satchmo" />](https://github.com/rohenaz) |
 |:---:|:---:|
 | [MrZ](https://github.com/mrz1836) | [Satchmo](https://github.com/rohenaz) |
 
-## Contributing
+<br/>
 
+## Contributing
 If you're looking for a library using JavaScript, checkout [tonicpow-js](https://github.com/tonicpow/tonicpow-js)
 
 View the [contributing guidelines](CONTRIBUTING.md) and follow the [code of conduct](CODE_OF_CONDUCT.md).
@@ -146,6 +167,8 @@ View the [contributing guidelines](CONTRIBUTING.md) and follow the [code of cond
 Support the development of this project 🙏
 
 [![Donate](https://img.shields.io/badge/donate-bitcoin-brightgreen.svg)](https://tonicpow.com/?af=go-tonicpow) [![Twetch](https://img.shields.io/badge/share-twitter-00ACEE.svg)](https://twitter.com/intent/tweet?text=TonicPow%20integration%20with%20Go%20rocks!%20Check%20it%20out:%20https%3A%2F%2Ftncpw.co%2F7ca46e94) [![Twitter](https://img.shields.io/badge/share-twetch-085AF6.svg)](https://twetch.app/compose?description=TonicPow%20integration%20with%20Go%20rocks!%20Check%20it%20out:%20https%3A%2F%2Ftncpw.co%2F7ca46e94)
+
+<br/>
 
 ## License
 
