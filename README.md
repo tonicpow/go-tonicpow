@@ -2,11 +2,11 @@
 
 > The official Go implementation for interacting with the [TonicPow API](https://docs.tonicpow.com)
 
-[![Go](https://img.shields.io/github/go-mod/go-version/tonicpow/go-tonicpow)](https://golang.org/)
+[![Release](https://img.shields.io/github/release-pre/tonicpow/go-tonicpow.svg?logo=github&style=flat)](https://github.com/tonicpow/go-tonicpow/releases)
 [![Build Status](https://travis-ci.com/tonicpow/go-tonicpow.svg?branch=master)](https://travis-ci.com/tonicpow/go-tonicpow)
 [![Report](https://goreportcard.com/badge/github.com/tonicpow/go-tonicpow?style=flat)](https://goreportcard.com/report/github.com/tonicpow/go-tonicpow)
-[![Release](https://img.shields.io/github/release-pre/tonicpow/go-tonicpow.svg?style=flat)](https://github.com/tonicpow/go-tonicpow/releases)
-[![Slack](https://img.shields.io/badge/slack-tonicpow-orange.svg?style=flat)](https://atlantistic.slack.com/app_redirect?channel=tonicpow)
+[![Go](https://img.shields.io/github/go-mod/go-version/tonicpow/go-tonicpow)](https://golang.org/)
+[![Slack](https://img.shields.io/badge/slack-tonicpow-orange.svg?logo=slack&style=flat)](https://atlantistic.slack.com/app_redirect?channel=tonicpow)
 [![GoDoc](https://godoc.org/github.com/tonicpow/go-tonicpow?status.svg&style=flat)](https://pkg.go.dev/github.com/tonicpow/go-tonicpow)
 
 <br/>
