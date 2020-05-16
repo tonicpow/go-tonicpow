@@ -15,7 +15,7 @@ func NewClient(apiKey string, environment APIEnvironment, clientOptions *Options
 
 	// apiKey is required
 	if len(apiKey) == 0 {
-		err = fmt.Errorf("parameter %s cannot be empty", fieldApiKey)
+		err = fmt.Errorf("parameter %s cannot be empty", fieldAPIKey)
 		return
 	}
 

@@ -8,7 +8,7 @@ const (
 	// Field key names for various model requests
 	fieldAdvertiserProfileID = "advertiser_profile_id"
 	fieldAmount              = "amount"
-	fieldApiKey              = "api_key"
+	fieldAPIKey              = "api_key"
 	fieldCampaignID          = "campaign_id"
 	fieldCurrency            = "currency"
 	fieldCurrentPage         = "current_page"

@@ -10,12 +10,18 @@ import (
 )
 
 var (
-	// testAPIKey is the test api key for most tests (set in your env)
-	testAPIKey = os.Getenv("TONICPOW_API_KEY")
+	// keyFromOS is the test api key for most tests (set in your env)
+	keyFromOS = os.Getenv("TONICPOW_API_KEY")
 
-	// testAPIKeyHardCoded is for examples
-	testAPIKeyHardCoded = "3ez9d6z7a6549c3f5gf9g2cc8911achz"
+	// testAPIKey is for examples
+	testAPIKey = "3ez9d6z7a6549c3f5gf9g2cc8911achz"
 )
+
+func init() {
+	if len(keyFromOS) > 0 {
+		testAPIKey = keyFromOS
+	}
+}
 
 // TestNewClient test new client
 func TestNewClient(t *testing.T) {
@@ -57,14 +63,14 @@ func TestNewClient(t *testing.T) {
 		t.Fatalf("expected value to be set, was empty/nil")
 	}
 
-	if client.LastRequest.PostData != fmt.Sprintf(`{"%s":"%s"}`, fieldApiKey, testAPIKey) {
+	if client.LastRequest.PostData != fmt.Sprintf(`{"%s":"%s"}`, fieldAPIKey, testAPIKey) {
 		t.Fatalf("expected value wrong,got %s", client.LastRequest.PostData)
 	}
 }
 
 // ExampleNewClient example using NewClient()
 func ExampleNewClient() {
-	client, _ := NewClient(testAPIKeyHardCoded, LocalEnvironment, nil)
+	client, _ := NewClient(testAPIKey, LocalEnvironment, nil)
 	fmt.Println(client.Parameters.apiKey)
 	// Output:3ez9d6z7a6549c3f5gf9g2cc8911achz
 }
