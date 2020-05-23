@@ -95,7 +95,7 @@ const (
 	LocalEnvironment APIEnvironment = "http://localhost:3000/" + apiVersion + "/"
 
 	// StagingEnvironment is used for production-like testing
-	StagingEnvironment APIEnvironment = "https://apistaging.tonicpow.com/" + apiVersion + "/"
+	StagingEnvironment APIEnvironment = "https://api.staging.tonicpow.com/" + apiVersion + "/"
 
 	// sessionCookie is the cookie name for session tokens
 	sessionCookie = "session_token"
