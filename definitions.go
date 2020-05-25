@@ -192,6 +192,7 @@ type Campaign struct {
 	LinksCreated        uint64             `json:"links_created,omitempty"`
 	PayPerClickRate     float64            `json:"pay_per_click_rate,omitempty"`
 	PublicGUID          string             `json:"public_guid,omitempty"`
+	Slug                string             `json:"slug,omitempty"`
 	TargetURL           string             `json:"target_url,omitempty"`
 	Title               string             `json:"title,omitempty"`
 }
