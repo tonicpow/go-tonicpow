@@ -190,6 +190,7 @@ type Campaign struct {
 	ID                  uint64             `json:"id,omitempty"`
 	ImageURL            string             `json:"image_url,omitempty"`
 	LinksCreated        uint64             `json:"links_created,omitempty"`
+	MatchDomain         bool               `json:"match_domain,omitempty"`
 	PayPerClickRate     float64            `json:"pay_per_click_rate,omitempty"`
 	PublicGUID          string             `json:"public_guid,omitempty"`
 	Slug                string             `json:"slug,omitempty"`
