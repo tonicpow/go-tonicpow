@@ -79,7 +79,7 @@ func (c *Client) GetCampaign(campaignID uint64, userSessionToken string) (campai
 // This will return an error if the campaign is not found (404)
 // Use the userSessionToken if making request on behalf of another user
 //
-// For more information:
+// For more information: https://docs.tonicpow.com/#8451b92f-ea74-47aa-8ac1-c96647e2dbfd
 func (c *Client) GetCampaignByShortCode(shortCode string, userSessionToken string) (campaign *Campaign, err error) {
 
 	// Must have a short code
