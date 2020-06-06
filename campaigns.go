@@ -75,6 +75,35 @@ func (c *Client) GetCampaign(campaignID uint64, userSessionToken string) (campai
 	return
 }
 
+// GetCampaignByShortCode will get an existing campaign via a short code (short link)
+// This will return an error if the campaign is not found (404)
+// Use the userSessionToken if making request on behalf of another user
+//
+// For more information:
+func (c *Client) GetCampaignByShortCode(shortCode string, userSessionToken string) (campaign *Campaign, err error) {
+
+	// Must have a short code
+	if len(shortCode) == 0 {
+		err = fmt.Errorf("missing field: %s", fieldShortCode)
+		return
+	}
+
+	// Fire the request
+	var response string
+	if response, err = c.request(fmt.Sprintf("%s/link/%s", modelCampaign, shortCode), http.MethodGet, nil, userSessionToken); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	if err = c.error(http.StatusOK, response); err != nil {
+		return
+	}
+
+	// Convert model response
+	err = json.Unmarshal([]byte(response), &campaign)
+	return
+}
+
 // GetCampaignBalance will update the models's balance from the chain
 // This will return an error if the campaign is not found (404)
 //

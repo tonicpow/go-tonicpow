@@ -411,6 +411,15 @@ func main() {
 	}
 
 	//
+	// Example: Get a campaign by link
+	//
+	if campaign, err = TonicPowAPI.GetCampaignByShortCode(link.ShortCode, userSessionToken); err != nil {
+		log.Fatalf("get campaign failed - api error: %s data: %s - local error: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data, err.Error())
+	} else {
+		log.Printf("got campaign by short code %s", link.ShortCode)
+	}
+
+	//
 	// Example: Create a link by url
 	//
 	linkByURL := &tonicpow.Link{
