@@ -182,7 +182,7 @@ func (c *Client) LoginUser(user *User) (userSessionToken string, err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/login", modelUser), http.MethodPost, user, c.Parameters.apiSessionCookie.Value); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/login", modelUser), http.MethodPost, user, c.Parameters.APISessionCookie.Value); err != nil {
 		return
 	}
 
@@ -192,7 +192,7 @@ func (c *Client) LoginUser(user *User) (userSessionToken string, err error) {
 	}
 
 	// Convert model response
-	userSessionToken = c.Parameters.userSessionCookie.Value
+	userSessionToken = c.Parameters.UserSessionCookie.Value
 	return
 }
 

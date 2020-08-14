@@ -39,7 +39,7 @@ func TestNewClient(t *testing.T) {
 		t.Fatalf("expected value to be %s", testAPIKey)
 	}
 
-	if client.Parameters.apiSessionCookie == nil {
+	if client.Parameters.APISessionCookie == nil {
 		t.Fatalf("expected value to be set, was empty/nil")
 	}
 
@@ -217,7 +217,7 @@ func TestClient_ProlongSession(t *testing.T) {
 	}
 
 	// Using a custom token approach
-	token := client.Parameters.apiSessionCookie.Value
+	token := client.Parameters.APISessionCookie.Value
 
 	// Prolong should success
 	err = client.ProlongSession(token)

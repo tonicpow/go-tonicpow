@@ -50,10 +50,10 @@ type LastRequest struct {
 // Parameters are application specific values for requests
 type Parameters struct {
 	apiKey            string         // is the given api key for the user
-	apiSessionCookie  *http.Cookie   // is the current session cookie for the api key
+	APISessionCookie  *http.Cookie   // is the current session cookie for the api key
 	environment       APIEnvironment // is the current api environment to use
 	UserAgent         string         // (optional for changing user agents)
-	userSessionCookie *http.Cookie   // is the current session cookie for a user (on behalf)
+	UserSessionCookie *http.Cookie   // is the current session cookie for a user (on behalf)
 }
 
 // ClientDefaultOptions will return an Options struct with the default settings
@@ -191,8 +191,8 @@ func (c *Client) request(endpoint string, method string, payload interface{}, cu
 			MaxAge:   60 * 60 * 24,
 			HttpOnly: true,
 		})
-	} else if c.Parameters.apiSessionCookie != nil {
-		request.AddCookie(c.Parameters.apiSessionCookie)
+	} else if c.Parameters.APISessionCookie != nil {
+		request.AddCookie(c.Parameters.APISessionCookie)
 	}
 
 	// Fire the http request
@@ -222,9 +222,9 @@ func (c *Client) request(endpoint string, method string, payload interface{}, cu
 				cookie = nil
 			}
 			if len(customSessionToken) > 0 {
-				c.Parameters.userSessionCookie = cookie
+				c.Parameters.UserSessionCookie = cookie
 			} else {
-				c.Parameters.apiSessionCookie = cookie
+				c.Parameters.APISessionCookie = cookie
 			}
 			break
 		}
