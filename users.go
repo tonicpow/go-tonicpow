@@ -251,8 +251,14 @@ func (c *Client) ResetPassword(token, password, passwordConfirm string) (err err
 	if len(token) == 0 {
 		err = fmt.Errorf("missing required attribute: %s", fieldToken)
 		return
+	} else if len(token) <= 10 {
+		err = fmt.Errorf("invalid token: %s", token)
+		return
 	} else if len(password) == 0 || len(passwordConfirm) == 0 {
 		err = fmt.Errorf("missing required attribute: %s or %s", fieldPassword, fieldPasswordConfirm)
+		return
+	} else if password != passwordConfirm {
+		err = fmt.Errorf("given passwords don't match")
 		return
 	}
 
