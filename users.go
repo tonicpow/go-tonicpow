@@ -627,3 +627,19 @@ func (c *Client) ListUserReferrals(page, resultsPerPage int, sortBy, sortOrder s
 	err = json.Unmarshal([]byte(response), &results)
 	return
 }
+
+// RequestActivation will send a request for activation (as the current user)
+//
+// For more information: https://docs.tonicpow.com/#c3d2f569-dc5e-4885-9701-a58522cb92cf
+func (c *Client) RequestActivation(userSessionToken string) (err error) {
+
+	// Fire the request
+	var response string
+	if response, err = c.request(fmt.Sprintf("%s/status/request", modelUser), http.MethodPut, nil, userSessionToken); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	err = c.error(http.StatusOK, response)
+	return
+}
