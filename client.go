@@ -240,6 +240,9 @@ func (c *Client) request(endpoint string, method string, payload interface{}, cu
 		}
 	}
 
+	// Clear headers
+	c.Parameters.CustomHeaders = make(map[string][]string)
+
 	// Parse the response
 	response = string(body)
 	return
