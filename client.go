@@ -49,11 +49,12 @@ type LastRequest struct {
 
 // Parameters are application specific values for requests
 type Parameters struct {
-	apiKey            string         // is the given api key for the user
-	APISessionCookie  *http.Cookie   // is the current session cookie for the api key
-	environment       APIEnvironment // is the current api environment to use
-	UserAgent         string         // (optional for changing user agents)
-	UserSessionCookie *http.Cookie   // is the current session cookie for a user (on behalf)
+	apiKey            string              // is the given api key for the user
+	APISessionCookie  *http.Cookie        // is the current session cookie for the api key
+	CustomHeaders     map[string][]string // is used for setting custom header values on requests
+	environment       APIEnvironment      // is the current api environment to use
+	UserAgent         string              // (optional for changing user agents)
+	UserSessionCookie *http.Cookie        // is the current session cookie for a user (on behalf)
 }
 
 // ClientDefaultOptions will return an Options struct with the default settings
@@ -177,6 +178,15 @@ func (c *Client) request(endpoint string, method string, payload interface{}, cu
 
 	// Change the user agent
 	request.Header.Set("User-Agent", c.Parameters.UserAgent)
+
+	// Custom headers?
+	if len(c.Parameters.CustomHeaders) > 0 {
+		for key, headers := range c.Parameters.CustomHeaders {
+			for _, value := range headers {
+				request.Header.Set(key, value)
+			}
+		}
+	}
 
 	// Set the content type
 	if method == http.MethodPost || method == http.MethodPut {

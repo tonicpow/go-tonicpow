@@ -607,6 +607,17 @@ func main() {
 	}
 
 	//
+	// Example: custom headers
+	//
+	TonicPowAPI.Parameters.CustomHeaders = make(map[string][]string)
+	TonicPowAPI.Parameters.CustomHeaders["X-Key"] = []string{"some-value"}
+	if err = TonicPowAPI.ProlongSession(""); err != nil {
+		log.Fatalf("ProlongSession: %s", err.Error())
+	} else {
+		log.Println("session created and prolonged...")
+	}
+
+	//
 	// Example: Create Conversion by User ID (percent based conversion - using a purchase amount, or some tx of value)
 	//
 	/*
