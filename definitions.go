@@ -165,11 +165,11 @@ type User struct {
 //
 // For more information: https://docs.tonicpow.com/#2f9ec542-0f88-4671-b47c-d0ee390af5ea
 type AdvertiserProfile struct {
-	HomepageURL string `json:"homepage_url,omitempty"`
-	IconURL     string `json:"icon_url,omitempty"`
+	HomepageURL string `json:"homepage_url"`
+	IconURL     string `json:"icon_url"`
 	ID          uint64 `json:"id,omitempty"`
-	Name        string `json:"name,omitempty"`
-	UserID      uint64 `json:"user_id,omitempty"`
+	Name        string `json:"name"`
+	UserID      uint64 `json:"user_id"`
 }
 
 // Campaign is the campaign model (child of AdvertiserProfile)
@@ -179,40 +179,42 @@ type Campaign struct {
 	AdvertiserProfile   *AdvertiserProfile `json:"advertiser_profile,omitempty"`
 	AdvertiserProfileID uint64             `json:"advertiser_profile_id,omitempty"`
 	Balance             float64            `json:"balance"`
-	BalanceSatoshis     int64              `json:"balance_satoshis"`
-	BotProtection       bool               `json:"bot_protection,omitempty"`
-	Clicks              uint64             `json:"clicks"`
+	BalanceSatoshis     uint64             `json:"balance_satoshis"`
+	BotProtection       bool               `json:"bot_protection"`
+	ContributeEnabled   bool               `json:"contribute_enabled"`
+	CreatedAt           string             `json:"created_at"`
 	Currency            string             `json:"currency"`
 	Description         string             `json:"description"`
-	ExpiresAt           string             `json:"expires_at,omitempty"` // time.RFC3339
+	ExpiresAt           string             `json:"expires_at"`
 	FundingAddress      string             `json:"funding_address"`
 	Goals               []*Goal            `json:"goals,omitempty"`
 	ID                  uint64             `json:"id,omitempty"`
 	ImageURL            string             `json:"image_url"`
 	LinksCreated        uint64             `json:"links_created"`
-	MatchDomain         bool               `json:"match_domain,omitempty"`
+	MatchDomain         bool               `json:"match_domain"`
 	PaidClicks          uint64             `json:"paid_clicks"`
 	PayPerClickRate     float64            `json:"pay_per_click_rate"`
 	PublicGUID          string             `json:"public_guid"`
 	Slug                string             `json:"slug"`
 	TargetURL           string             `json:"target_url"`
 	Title               string             `json:"title"`
+	TXID                string             `json:"-"`
 }
 
 // Goal is the goal model (child of Campaign)
 //
 // For more information: https://docs.tonicpow.com/#316b77ab-4900-4f3d-96a7-e67c00af10ca
 type Goal struct {
-	CampaignID     uint64  `json:"campaign_id,omitempty"`
-	Description    string  `json:"description,omitempty"`
+	CampaignID     uint64  `json:"campaign_id"`
+	Description    string  `json:"description"`
 	ID             uint64  `json:"id,omitempty"`
-	MaxPerPromoter int16   `json:"max_per_promoter,omitempty"`
-	MaxPerVisitor  int16   `json:"max_per_visitor,omitempty"`
-	Name           string  `json:"name,omitempty"`
-	PayoutRate     float64 `json:"payout_rate,omitempty"`
-	Payouts        int     `json:"payouts,omitempty"`
-	PayoutType     string  `json:"payout_type,omitempty"`
-	Title          string  `json:"title,omitempty"`
+	MaxPerPromoter int16   `json:"max_per_promoter"`
+	MaxPerVisitor  int16   `json:"max_per_visitor"`
+	Name           string  `json:"name"`
+	PayoutRate     float64 `json:"payout_rate"`
+	Payouts        int     `json:"payouts"`
+	PayoutType     string  `json:"payout_type"`
+	Title          string  `json:"title"`
 }
 
 // Conversion is the response of getting a conversion
@@ -235,13 +237,13 @@ type Conversion struct {
 //
 // For more information: https://docs.tonicpow.com/#ee74c3ce-b4df-4d57-abf2-ccf3a80e4e1e
 type Link struct {
-	CampaignID      uint64 `json:"campaign_id,omitempty"`
-	CustomShortCode string `json:"custom_short_code,omitempty"`
+	CampaignID      uint64 `json:"campaign_id"`
+	CustomShortCode string `json:"custom_short_code"`
 	ID              uint64 `json:"id,omitempty"`
-	ShortCode       string `json:"short_code,omitempty"`
-	ShortCodeURL    string `json:"short_code_url,omitempty"`
-	TargetURL       string `json:"target_url,omitempty"`
-	UserID          uint64 `json:"user_id,omitempty"`
+	ShortCode       string `json:"short_code"`
+	ShortCodeURL    string `json:"short_code_url"`
+	TargetURL       string `json:"target_url"`
+	UserID          uint64 `json:"user_id"`
 }
 
 // VisitorSession is the session for any visitor or user (related to link and campaign)
