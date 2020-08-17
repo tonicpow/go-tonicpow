@@ -86,7 +86,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.3.0"
+	defaultUserAgent string = "go-tonicpow: v0.3.1"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -137,27 +137,27 @@ type Error struct {
 //
 // For more information: https://docs.tonicpow.com/#50b3c130-7254-4a05-b312-b14647736e38
 type User struct {
-	Balance            uint64 `json:"balance,omitempty"`
-	Earned             uint64 `json:"earned,omitempty"`
-	Email              string `json:"email,omitempty"`
-	EmailVerified      bool   `json:"email_verified,omitempty"`
-	FirstName          string `json:"first_name,omitempty"`
+	Balance            uint64 `json:"balance"`
+	Earned             uint64 `json:"earned"`
+	Email              string `json:"email"`
+	EmailVerified      bool   `json:"email_verified"`
+	FirstName          string `json:"first_name"`
 	ID                 uint64 `json:"id,omitempty"`
-	InternalAddress    string `json:"internal_address,omitempty"`
-	LastName           string `json:"last_name,omitempty"`
-	MiddleName         string `json:"middle_name,omitempty"`
+	InternalAddress    string `json:"internal_address"`
+	LastName           string `json:"last_name"`
+	MiddleName         string `json:"middle_name"`
 	NewPassword        string `json:"new_password,omitempty"`
 	NewPasswordConfirm string `json:"new_password_confirm,omitempty"`
 	Password           string `json:"password,omitempty"`
-	PayoutAddress      string `json:"payout_address,omitempty"`
-	Phone              string `json:"phone,omitempty"`
-	PhoneVerified      bool   `json:"phone_verified,omitempty"`
-	ReferralLinkID     uint64 `json:"referral_link_id,omitempty"`
-	Referrals          uint   `json:"referrals,omitempty"`
-	ReferralsAccepted  uint   `json:"referrals_accepted,omitempty"`
-	ReferralURL        string `json:"referral_url,omitempty"`
-	ReferredByUserID   uint64 `json:"referred_by_user_id,omitempty"`
-	Status             string `json:"status,omitempty"`
+	PayoutAddress      string `json:"payout_address"`
+	Phone              string `json:"phone"`
+	PhoneVerified      bool   `json:"phone_verified"`
+	ReferralLinkID     uint64 `json:"referral_link_id"`
+	Referrals          uint   `json:"referrals"`
+	ReferralsAccepted  uint   `json:"referrals_accepted"`
+	ReferralURL        string `json:"referral_url"`
+	ReferredByUserID   uint64 `json:"referred_by_user_id"`
+	Status             string `json:"status"`
 	TncpwSession       string `json:"tncpw_session,omitempty"`
 }
 
@@ -221,15 +221,15 @@ type Goal struct {
 //
 // For more information: https://docs.tonicpow.com/#75c837d5-3336-4d87-a686-d80c6f8938b9
 type Conversion struct {
-	Amount           float64 `json:"amount,omitempty"`
-	CustomDimensions string  `json:"custom_dimensions,omitempty"`
-	GoalID           uint64  `json:"goal_id,omitempty"`
-	GoalName         string  `json:"goal_name,omitempty"`
+	Amount           float64 `json:"amount"`
+	CustomDimensions string  `json:"custom_dimensions"`
+	GoalID           uint64  `json:"goal_id"`
+	GoalName         string  `json:"goal_name"`
 	ID               uint64  `json:"ID,omitempty"`
-	PayoutAfter      string  `json:"payout_after,omitempty"`
-	Status           string  `json:"status,omitempty"`
-	TxID             string  `json:"tx_id,omitempty"`
-	UserID           uint64  `json:"user_id,omitempty"`
+	PayoutAfter      string  `json:"payout_after"`
+	Status           string  `json:"status"`
+	TxID             string  `json:"tx_id"`
+	UserID           uint64  `json:"user_id"`
 }
 
 // Link is the link model (child of User) (relates Campaign to User)
@@ -265,12 +265,12 @@ type VisitorSession struct {
 //
 // For more information: https://docs.tonicpow.com/#fb00736e-61b9-4ec9-acaf-e3f9bb046c89
 type Rate struct {
-	Currency            string  `json:"currency,omitempty"`
-	CurrencyAmount      float64 `json:"currency_amount,omitempty"`
+	Currency            string  `json:"currency"`
+	CurrencyAmount      float64 `json:"currency_amount"`
 	CurrencyLastUpdated string  `json:"currency_last_updated,omitempty"`
 	CurrencyName        string  `json:"currency_name,omitempty"`
-	Price               float64 `json:"price,omitempty"`
-	PriceInSatoshis     int64   `json:"price_in_satoshis,omitempty"`
+	Price               float64 `json:"price"`
+	PriceInSatoshis     int64   `json:"price_in_satoshis"`
 	RateLastUpdated     string  `json:"rate_last_updated,omitempty"`
 }
 
@@ -279,7 +279,7 @@ type Rate struct {
 // For more information: https://docs.tonicpow.com/#50b3c130-7254-4a05-b312-b14647736e38
 type UserExists struct {
 	ID          uint64 `json:"id"`
-	ReferralURL string `json:"referral_url,omitempty"`
+	ReferralURL string `json:"referral_url"`
 	Status      string `json:"status"`
 }
 
@@ -287,10 +287,10 @@ type UserExists struct {
 //
 // For more information: https://docs.tonicpow.com/#50b3c130-7254-4a05-b312-b14647736e38
 type UserReferral struct {
-	Email            string `json:"email,omitempty"`
+	Email            string `json:"email"`
 	ID               uint64 `json:"id"`
-	PayoutAddress    string `json:"payout_address,omitempty"`
-	Referrals        uint   `json:"referrals,omitempty"`
+	PayoutAddress    string `json:"payout_address"`
+	Referrals        uint   `json:"referrals"`
 	ReferredByUserID uint64 `json:"referred_by_user_id"`
 	Status           string `json:"status"`
 }
