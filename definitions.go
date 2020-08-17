@@ -178,24 +178,25 @@ type AdvertiserProfile struct {
 type Campaign struct {
 	AdvertiserProfile   *AdvertiserProfile `json:"advertiser_profile,omitempty"`
 	AdvertiserProfileID uint64             `json:"advertiser_profile_id,omitempty"`
-	Balance             float64            `json:"balance,omitempty"`
-	BalanceSatoshis     int64              `json:"balance_satoshis,omitempty"`
+	Balance             float64            `json:"balance"`
+	BalanceSatoshis     int64              `json:"balance_satoshis"`
 	BotProtection       bool               `json:"bot_protection,omitempty"`
-	Clicks              uint64             `json:"clicks,omitempty"`
-	Currency            string             `json:"currency,omitempty"`
-	Description         string             `json:"description,omitempty"`
+	Clicks              uint64             `json:"clicks"`
+	Currency            string             `json:"currency"`
+	Description         string             `json:"description"`
 	ExpiresAt           string             `json:"expires_at,omitempty"` // time.RFC3339
-	FundingAddress      string             `json:"funding_address,omitempty"`
+	FundingAddress      string             `json:"funding_address"`
 	Goals               []*Goal            `json:"goals,omitempty"`
 	ID                  uint64             `json:"id,omitempty"`
-	ImageURL            string             `json:"image_url,omitempty"`
-	LinksCreated        uint64             `json:"links_created,omitempty"`
+	ImageURL            string             `json:"image_url"`
+	LinksCreated        uint64             `json:"links_created"`
 	MatchDomain         bool               `json:"match_domain,omitempty"`
-	PayPerClickRate     float64            `json:"pay_per_click_rate,omitempty"`
-	PublicGUID          string             `json:"public_guid,omitempty"`
-	Slug                string             `json:"slug,omitempty"`
-	TargetURL           string             `json:"target_url,omitempty"`
-	Title               string             `json:"title,omitempty"`
+	PaidClicks          uint64             `json:"paid_clicks"`
+	PayPerClickRate     float64            `json:"pay_per_click_rate"`
+	PublicGUID          string             `json:"public_guid"`
+	Slug                string             `json:"slug"`
+	TargetURL           string             `json:"target_url"`
+	Title               string             `json:"title"`
 }
 
 // Goal is the goal model (child of Campaign)
