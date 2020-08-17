@@ -86,7 +86,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.3.1"
+	defaultUserAgent string = "go-tonicpow: v0.3.2"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -176,8 +176,8 @@ type AdvertiserProfile struct {
 //
 // For more information: https://docs.tonicpow.com/#5aca2fc7-b3c8-445b-aa88-f62a681f8e0c
 type Campaign struct {
-	AdvertiserProfile   *AdvertiserProfile `json:"advertiser_profile,omitempty"`
-	AdvertiserProfileID uint64             `json:"advertiser_profile_id,omitempty"`
+	AdvertiserProfile   *AdvertiserProfile `json:"advertiser_profile"`
+	AdvertiserProfileID uint64             `json:"advertiser_profile_id"`
 	Balance             float64            `json:"balance"`
 	BalanceSatoshis     uint64             `json:"balance_satoshis"`
 	BotProtection       bool               `json:"bot_protection"`
@@ -187,7 +187,7 @@ type Campaign struct {
 	Description         string             `json:"description"`
 	ExpiresAt           string             `json:"expires_at"`
 	FundingAddress      string             `json:"funding_address"`
-	Goals               []*Goal            `json:"goals,omitempty"`
+	Goals               []*Goal            `json:"goals"`
 	ID                  uint64             `json:"id,omitempty"`
 	ImageURL            string             `json:"image_url"`
 	LinksCreated        uint64             `json:"links_created"`
@@ -250,15 +250,15 @@ type Link struct {
 //
 // For more information: https://docs.tonicpow.com/#d0d9055a-0c92-4f55-a370-762d44acf801
 type VisitorSession struct {
-	CampaignID       uint64 `json:"campaign_id,omitempty"`
-	CustomDimensions string `json:"custom_dimensions,omitempty"`
-	IPAddress        string `json:"ip_address,omitempty"`
-	LinkID           uint64 `json:"link_id,omitempty"`
-	LinkUserID       uint64 `json:"link_user_id,omitempty"`
-	Provider         string `json:"provider,omitempty"`
-	Referer          string `json:"referer,omitempty"`
+	CampaignID       uint64 `json:"campaign_id"`
+	CustomDimensions string `json:"custom_dimensions"`
+	IPAddress        string `json:"ip_address"`
+	LinkID           uint64 `json:"link_id"`
+	LinkUserID       uint64 `json:"link_user_id"`
+	Provider         string `json:"provider"`
+	Referer          string `json:"referer"`
 	TncpwSession     string `json:"tncpw_session,omitempty"`
-	UserAgent        string `json:"user_agent,omitempty"`
+	UserAgent        string `json:"user_agent"`
 }
 
 // Rate is the rate results
