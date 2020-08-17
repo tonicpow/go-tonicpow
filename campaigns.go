@@ -12,7 +12,7 @@ func (c *Campaign) permitFields() {
 	c.AdvertiserProfileID = 0
 	c.Balance = 0
 	c.BalanceSatoshis = 0
-	c.Clicks = 0
+	c.PaidClicks = 0
 	c.FundingAddress = ""
 	c.LinksCreated = 0
 	c.PublicGUID = ""
