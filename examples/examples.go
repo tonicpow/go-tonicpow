@@ -86,10 +86,20 @@ func main() {
 	}
 
 	//
+	// Example: Authenticate user
+	//
+	user.Password = testPassword
+	if user, err = TonicPowAPI.LoginUser(user.Email, user.Password); err != nil {
+		log.Fatalf("authenticate user failed error %s - api error: %s data: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
+	} else {
+		log.Printf("user %d authenticated", user.ID)
+	}
+
+	//
 	// Example: Update a user
 	//
 	user.FirstName = "Austin"
-	user.PayoutAddress = "12345@moneybutton.com"
+	user.PayoutAddress = "mrz@moneybutton.com"
 	if user, err = TonicPowAPI.UpdateUser(user); err != nil {
 		log.Fatalf("update user failed error %s - api error: %s data: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
 	} else {

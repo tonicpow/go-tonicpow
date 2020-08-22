@@ -144,7 +144,6 @@ func (c *Client) GetUserBalance(userID uint64, lastBalance int64) (user *User, e
 }
 
 // CurrentUser will the current user based on token
-// Required: LoginUser()
 //
 // For more information: https://docs.tonicpow.com/#7f6e9b5d-8c7f-4afc-8e07-7aafdd891521
 func (c *Client) CurrentUser(userID uint64) (user *User, err error) {
@@ -157,7 +156,7 @@ func (c *Client) CurrentUser(userID uint64) (user *User, err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/account?user_id=%d", modelUser, userID), http.MethodGet, nil); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/account?id=%d", modelUser, userID), http.MethodGet, nil); err != nil {
 		return
 	}
 
@@ -171,18 +170,24 @@ func (c *Client) CurrentUser(userID uint64) (user *User, err error) {
 	return
 }
 
-// LoginUser will login for a given user
+// LoginUser will authenticate a given user
 //
 // For more information: https://docs.tonicpow.com/#5cad3e9a-5931-44bf-b110-4c4b74c7a070
-func (c *Client) LoginUser(user *User) (err error) {
+func (c *Client) LoginUser(email, password string) (user *User, err error) {
 
 	// Basic requirements
-	if len(user.Email) == 0 {
+	if len(email) == 0 {
 		err = fmt.Errorf("missing required attribute: %s", fieldEmail)
 		return
-	} else if len(user.Password) == 0 {
+	} else if len(password) == 0 {
 		err = fmt.Errorf("missing required attribute: %s", fieldPassword)
 		return
+	}
+
+	// Set the fields
+	user = &User{
+		Email:    email,
+		Password: password,
 	}
 
 	// Fire the request
@@ -196,6 +201,8 @@ func (c *Client) LoginUser(user *User) (err error) {
 		return
 	}
 
+	// Convert model response
+	err = json.Unmarshal([]byte(response), &user)
 	return
 }
 
@@ -621,7 +628,7 @@ func (c *Client) RequestActivation(userID uint64) (err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/status/request?user_id=%d", modelUser, userID), http.MethodPut, nil); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/status/request?id=%d", modelUser, userID), http.MethodPut, nil); err != nil {
 		return
 	}
 
