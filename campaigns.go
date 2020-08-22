@@ -19,10 +19,9 @@ func (c *Campaign) permitFields() {
 }
 
 // CreateCampaign will make a new campaign
-// Use the userSessionToken if making request on behalf of another user
 //
 // For more information: https://docs.tonicpow.com/#b67e92bf-a481-44f6-a31d-26e6e0c521b1
-func (c *Client) CreateCampaign(campaign *Campaign, userSessionToken string) (createdCampaign *Campaign, err error) {
+func (c *Client) CreateCampaign(campaign *Campaign) (createdCampaign *Campaign, err error) {
 
 	// Basic requirements
 	if campaign.AdvertiserProfileID == 0 {
@@ -32,7 +31,7 @@ func (c *Client) CreateCampaign(campaign *Campaign, userSessionToken string) (cr
 
 	// Fire the request
 	var response string
-	if response, err = c.request(modelCampaign, http.MethodPost, campaign, userSessionToken); err != nil {
+	if response, err = c.request(modelCampaign, http.MethodPost, campaign); err != nil {
 		return
 	}
 
@@ -48,10 +47,9 @@ func (c *Client) CreateCampaign(campaign *Campaign, userSessionToken string) (cr
 
 // GetCampaign will get an existing campaign
 // This will return an error if the campaign is not found (404)
-// Use the userSessionToken if making request on behalf of another user
 //
 // For more information: https://docs.tonicpow.com/#b827446b-be34-4678-b347-33c4f63dbf9e
-func (c *Client) GetCampaign(campaignID uint64, userSessionToken string) (campaign *Campaign, err error) {
+func (c *Client) GetCampaign(campaignID uint64) (campaign *Campaign, err error) {
 
 	// Must have an id
 	if campaignID == 0 {
@@ -61,7 +59,7 @@ func (c *Client) GetCampaign(campaignID uint64, userSessionToken string) (campai
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/details/%d", modelCampaign, campaignID), http.MethodGet, nil, userSessionToken); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/details/%d", modelCampaign, campaignID), http.MethodGet, nil); err != nil {
 		return
 	}
 
@@ -77,10 +75,9 @@ func (c *Client) GetCampaign(campaignID uint64, userSessionToken string) (campai
 
 // GetCampaignByShortCode will get an existing campaign via a short code (short link)
 // This will return an error if the campaign is not found (404)
-// Use the userSessionToken if making request on behalf of another user
 //
 // For more information: https://docs.tonicpow.com/#8451b92f-ea74-47aa-8ac1-c96647e2dbfd
-func (c *Client) GetCampaignByShortCode(shortCode string, userSessionToken string) (campaign *Campaign, err error) {
+func (c *Client) GetCampaignByShortCode(shortCode string) (campaign *Campaign, err error) {
 
 	// Must have a short code
 	if len(shortCode) == 0 {
@@ -90,7 +87,7 @@ func (c *Client) GetCampaignByShortCode(shortCode string, userSessionToken strin
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/link/%s", modelCampaign, shortCode), http.MethodGet, nil, userSessionToken); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/link/%s", modelCampaign, shortCode), http.MethodGet, nil); err != nil {
 		return
 	}
 
@@ -104,15 +101,21 @@ func (c *Client) GetCampaignByShortCode(shortCode string, userSessionToken strin
 	return
 }
 
-// GetCampaignBalance will update the models's balance from the chain
+// GetCampaignBalance will update the model's balance from the chain
 // This will return an error if the campaign is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#b6c60c63-8ac5-4c74-a4a2-cf3e858e5a8d
 func (c *Client) GetCampaignBalance(campaignID uint64, lastBalance int64) (campaign *Campaign, err error) {
 
+	// Must have an id
+	if campaignID == 0 {
+		err = fmt.Errorf("missing field: %s", fieldID)
+		return
+	}
+
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/balance/%d?%s=%d", modelCampaign, campaignID, fieldLastBalance, lastBalance), http.MethodGet, nil, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/balance/%d?%s=%d", modelCampaign, campaignID, fieldLastBalance, lastBalance), http.MethodGet, nil); err != nil {
 		return
 	}
 
@@ -127,10 +130,9 @@ func (c *Client) GetCampaignBalance(campaignID uint64, lastBalance int64) (campa
 }
 
 // UpdateCampaign will update an existing campaign
-// Use the userSessionToken if making request on behalf of another user
 //
 // For more information: https://docs.tonicpow.com/#665eefd6-da42-4ca9-853c-fd8ca1bf66b2
-func (c *Client) UpdateCampaign(campaign *Campaign, userSessionToken string) (updatedCampaign *Campaign, err error) {
+func (c *Client) UpdateCampaign(campaign *Campaign) (updatedCampaign *Campaign, err error) {
 
 	// Basic requirements
 	if campaign.ID == 0 {
@@ -143,7 +145,7 @@ func (c *Client) UpdateCampaign(campaign *Campaign, userSessionToken string) (up
 
 	// Fire the request
 	var response string
-	if response, err = c.request(modelCampaign, http.MethodPut, campaign, userSessionToken); err != nil {
+	if response, err = c.request(modelCampaign, http.MethodPut, campaign); err != nil {
 		return
 	}
 
@@ -158,11 +160,10 @@ func (c *Client) UpdateCampaign(campaign *Campaign, userSessionToken string) (up
 }
 
 // ListCampaigns will return a list of active campaigns
-// Use the customSessionToken if making request on behalf of another user / advertiser
 // This will return an error if the campaign is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#c1b17be6-cb10-48b3-a519-4686961ff41c
-func (c *Client) ListCampaigns(customSessionToken string, page, resultsPerPage int, sortBy, sortOrder string) (results *CampaignResults, err error) {
+func (c *Client) ListCampaigns(page, resultsPerPage int, sortBy, sortOrder string) (results *CampaignResults, err error) {
 
 	// Do we know this field?
 	if len(sortBy) > 0 {
@@ -177,7 +178,7 @@ func (c *Client) ListCampaigns(customSessionToken string, page, resultsPerPage i
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/list?%s=%d&%s=%d&%s=%s&%s=%s", modelCampaign, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil, customSessionToken); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/list?%s=%d&%s=%d&%s=%s&%s=%s", modelCampaign, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil); err != nil {
 		return
 	}
 
@@ -216,7 +217,7 @@ func (c *Client) ListCampaignsByURL(targetURL string, page, resultsPerPage int, 
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/find?%s=%s&%s=%d&%s=%d&%s=%s&%s=%s", modelCampaign, fieldTargetURL, targetURL, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/find?%s=%s&%s=%d&%s=%d&%s=%s&%s=%s", modelCampaign, fieldTargetURL, targetURL, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil); err != nil {
 		return
 	}
 
@@ -244,7 +245,7 @@ func (c *Client) CampaignsFeed(feedType string) (feed string, err error) {
 	}
 
 	// Fire the request
-	if feed, err = c.request(fmt.Sprintf("%s/feed?%s=%s", modelCampaign, fieldFeedType, feedType), http.MethodGet, nil, ""); err != nil {
+	if feed, err = c.request(fmt.Sprintf("%s/feed?%s=%s", modelCampaign, fieldFeedType, feedType), http.MethodGet, nil); err != nil {
 		return
 	}
 
@@ -261,7 +262,7 @@ func (c *Client) CampaignStatistics() (statistics *CampaignStatistics, err error
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/statistics", modelCampaign), http.MethodGet, nil, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/statistics", modelCampaign), http.MethodGet, nil); err != nil {
 		return
 	}
 

@@ -13,10 +13,9 @@ func (g *Goal) permitFields() {
 }
 
 // CreateGoal will make a new goal
-// Use the userSessionToken if making request on behalf of another user
 //
 // For more information: https://docs.tonicpow.com/#29a93e9b-9726-474c-b25e-92586200a803
-func (c *Client) CreateGoal(goal *Goal, userSessionToken string) (createdGoal *Goal, err error) {
+func (c *Client) CreateGoal(goal *Goal) (createdGoal *Goal, err error) {
 
 	// Basic requirements
 	if goal.CampaignID == 0 {
@@ -26,7 +25,7 @@ func (c *Client) CreateGoal(goal *Goal, userSessionToken string) (createdGoal *G
 
 	// Fire the request
 	var response string
-	if response, err = c.request(modelGoal, http.MethodPost, goal, userSessionToken); err != nil {
+	if response, err = c.request(modelGoal, http.MethodPost, goal); err != nil {
 		return
 	}
 
@@ -42,10 +41,9 @@ func (c *Client) CreateGoal(goal *Goal, userSessionToken string) (createdGoal *G
 
 // GetGoal will get an existing goal
 // This will return an error if the goal is not found (404)
-// Use the userSessionToken if making request on behalf of another user
 //
 // For more information: https://docs.tonicpow.com/#48d7bbc8-5d7b-4078-87b7-25f545c3deaf
-func (c *Client) GetGoal(goalID uint64, userSessionToken string) (goal *Goal, err error) {
+func (c *Client) GetGoal(goalID uint64) (goal *Goal, err error) {
 
 	// Must have an id
 	if goalID == 0 {
@@ -55,7 +53,7 @@ func (c *Client) GetGoal(goalID uint64, userSessionToken string) (goal *Goal, er
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/details/%d", modelGoal, goalID), http.MethodGet, nil, userSessionToken); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/details/%d", modelGoal, goalID), http.MethodGet, nil); err != nil {
 		return
 	}
 
@@ -70,10 +68,9 @@ func (c *Client) GetGoal(goalID uint64, userSessionToken string) (goal *Goal, er
 }
 
 // UpdateGoal will update an existing goal
-// Use the userSessionToken if making request on behalf of another user
 //
 // For more information: https://docs.tonicpow.com/#395f5b7d-6a5d-49c8-b1ae-abf7f90b42a2
-func (c *Client) UpdateGoal(goal *Goal, userSessionToken string) (updatedGoal *Goal, err error) {
+func (c *Client) UpdateGoal(goal *Goal) (updatedGoal *Goal, err error) {
 
 	// Basic requirements
 	if goal.ID == 0 {
@@ -86,7 +83,7 @@ func (c *Client) UpdateGoal(goal *Goal, userSessionToken string) (updatedGoal *G
 
 	// Fire the request
 	var response string
-	if response, err = c.request(modelGoal, http.MethodPut, goal, userSessionToken); err != nil {
+	if response, err = c.request(modelGoal, http.MethodPut, goal); err != nil {
 		return
 	}
 

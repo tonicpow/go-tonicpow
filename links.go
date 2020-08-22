@@ -7,10 +7,9 @@ import (
 )
 
 // CreateLink will make a new link
-// Use the userSessionToken if making request on behalf of another user
 //
 // For more information: https://docs.tonicpow.com/#154bf9e1-6047-452f-a289-d21f507b0f1d
-func (c *Client) CreateLink(link *Link, userSessionToken string) (createdLink *Link, err error) {
+func (c *Client) CreateLink(link *Link) (createdLink *Link, err error) {
 
 	// Basic requirements
 	if link.CampaignID == 0 {
@@ -25,7 +24,7 @@ func (c *Client) CreateLink(link *Link, userSessionToken string) (createdLink *L
 
 	// Fire the request
 	var response string
-	if response, err = c.request(modelLink, http.MethodPost, link, userSessionToken); err != nil {
+	if response, err = c.request(modelLink, http.MethodPost, link); err != nil {
 		return
 	}
 
@@ -40,10 +39,9 @@ func (c *Client) CreateLink(link *Link, userSessionToken string) (createdLink *L
 }
 
 // CreateLinkByURL will make a new link
-// Use the userSessionToken if making request on behalf of another user
 //
 // For more information: https://docs.tonicpow.com/#d5a22343-c580-43cc-8e27-dd131896ea3b
-func (c *Client) CreateLinkByURL(link *Link, userSessionToken string) (createdLink *Link, err error) {
+func (c *Client) CreateLinkByURL(link *Link) (createdLink *Link, err error) {
 
 	// Basic requirements
 	if len(link.TargetURL) == 0 {
@@ -61,7 +59,7 @@ func (c *Client) CreateLinkByURL(link *Link, userSessionToken string) (createdLi
 
 	// Fire the request
 	var response string
-	if response, err = c.request(modelLink, http.MethodPost, link, userSessionToken); err != nil {
+	if response, err = c.request(modelLink, http.MethodPost, link); err != nil {
 		return
 	}
 
@@ -77,10 +75,9 @@ func (c *Client) CreateLinkByURL(link *Link, userSessionToken string) (createdLi
 
 // GetLink will get an existing link
 // This will return an error if the link is not found (404)
-// Use the userSessionToken if making request on behalf of another user
 //
 // For more information: https://docs.tonicpow.com/#c53add03-303e-4f72-8847-2adfdb992eb3
-func (c *Client) GetLink(linkID uint64, userSessionToken string) (link *Link, err error) {
+func (c *Client) GetLink(linkID uint64) (link *Link, err error) {
 
 	// Must have an id
 	if linkID == 0 {
@@ -90,7 +87,7 @@ func (c *Client) GetLink(linkID uint64, userSessionToken string) (link *Link, er
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/details/%d", modelLink, linkID), http.MethodGet, nil, userSessionToken); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/details/%d", modelLink, linkID), http.MethodGet, nil); err != nil {
 		return
 	}
 
@@ -118,7 +115,7 @@ func (c *Client) CheckLink(shortCode string) (link *Link, err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/check/%s", modelLink, shortCode), http.MethodGet, nil, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/check/%s", modelLink, shortCode), http.MethodGet, nil); err != nil {
 		return
 	}
 
@@ -134,10 +131,9 @@ func (c *Client) CheckLink(shortCode string) (link *Link, err error) {
 
 // ListLinksByUserID will get links associated to the user id
 // This will return an error if the link(s) are not found (404)
-// Use the userSessionToken if making request on behalf of another user
 //
 // For more information: https://docs.tonicpow.com/#23d068f1-4f0e-476a-a802-50b7edccd0b2
-func (c *Client) ListLinksByUserID(userID uint64, userSessionToken string, page, resultsPerPage int) (results *LinkResults, err error) {
+func (c *Client) ListLinksByUserID(userID uint64, page, resultsPerPage int) (results *LinkResults, err error) {
 
 	// Must have an id
 	if userID == 0 {
@@ -147,7 +143,7 @@ func (c *Client) ListLinksByUserID(userID uint64, userSessionToken string, page,
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/user/%d?%s=%d&%s=%d", modelLink, userID, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage), http.MethodGet, nil, userSessionToken); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/user/%d?%s=%d&%s=%d", modelLink, userID, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage), http.MethodGet, nil); err != nil {
 		return
 	}
 

@@ -34,7 +34,7 @@ func (c *Client) CreateUser(user *User) (createdUser *User, err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request(modelUser, http.MethodPost, user, ""); err != nil {
+	if response, err = c.request(modelUser, http.MethodPost, user); err != nil {
 		return
 	}
 
@@ -49,10 +49,9 @@ func (c *Client) CreateUser(user *User) (createdUser *User, err error) {
 }
 
 // UpdateUser will update an existing user model
-// Use the userSessionToken if the current user is editing their own user model
 //
 // For more information: https://docs.tonicpow.com/#7c3c3c3a-f636-469f-a884-449cf6fb35fe
-func (c *Client) UpdateUser(user *User, userSessionToken string) (updatedUser *User, err error) {
+func (c *Client) UpdateUser(user *User) (updatedUser *User, err error) {
 
 	// Basic requirements
 	if user.ID == 0 {
@@ -65,7 +64,7 @@ func (c *Client) UpdateUser(user *User, userSessionToken string) (updatedUser *U
 
 	// Fire the request
 	var response string
-	if response, err = c.request(modelUser, http.MethodPut, user, userSessionToken); err != nil {
+	if response, err = c.request(modelUser, http.MethodPut, user); err != nil {
 		return
 	}
 
@@ -102,7 +101,7 @@ func (c *Client) GetUser(byID uint64, byEmail string) (user *User, err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/details", modelUser), http.MethodGet, params, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/details", modelUser), http.MethodGet, params); err != nil {
 		return
 	}
 
@@ -121,10 +120,16 @@ func (c *Client) GetUser(byID uint64, byEmail string) (user *User, err error) {
 // For more information: https://docs.tonicpow.com/#8478765b-95b8-47ad-8b86-2db5bce54924
 func (c *Client) GetUserBalance(userID uint64, lastBalance int64) (user *User, err error) {
 
+	// Basic requirements
+	if userID == 0 {
+		err = fmt.Errorf("missing required attribute: %s", fieldID)
+		return
+	}
+
 	// Fire the request
 	var response string
 	if response, err = c.request(fmt.Sprintf("%s/balance/%d?%s=%d", modelUser, userID, fieldLastBalance, lastBalance),
-		http.MethodGet, nil, ""); err != nil {
+		http.MethodGet, nil); err != nil {
 		return
 	}
 
@@ -142,17 +147,17 @@ func (c *Client) GetUserBalance(userID uint64, lastBalance int64) (user *User, e
 // Required: LoginUser()
 //
 // For more information: https://docs.tonicpow.com/#7f6e9b5d-8c7f-4afc-8e07-7aafdd891521
-func (c *Client) CurrentUser(userSessionToken string) (user *User, err error) {
+func (c *Client) CurrentUser(userID uint64) (user *User, err error) {
 
 	// No current user
-	if len(userSessionToken) == 0 {
-		err = fmt.Errorf("missing user session token")
+	if userID == 0 {
+		err = fmt.Errorf("missing user id")
 		return
 	}
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/account", modelUser), http.MethodGet, nil, userSessionToken); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/account?user_id=%d", modelUser, userID), http.MethodGet, nil); err != nil {
 		return
 	}
 
@@ -169,7 +174,7 @@ func (c *Client) CurrentUser(userSessionToken string) (user *User, err error) {
 // LoginUser will login for a given user
 //
 // For more information: https://docs.tonicpow.com/#5cad3e9a-5931-44bf-b110-4c4b74c7a070
-func (c *Client) LoginUser(user *User) (userSessionToken string, err error) {
+func (c *Client) LoginUser(user *User) (err error) {
 
 	// Basic requirements
 	if len(user.Email) == 0 {
@@ -182,7 +187,7 @@ func (c *Client) LoginUser(user *User) (userSessionToken string, err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/login", modelUser), http.MethodPost, user, c.Parameters.APISessionCookie.Value); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/login", modelUser), http.MethodPost, user); err != nil {
 		return
 	}
 
@@ -191,29 +196,6 @@ func (c *Client) LoginUser(user *User) (userSessionToken string, err error) {
 		return
 	}
 
-	// Convert model response
-	userSessionToken = c.Parameters.UserSessionCookie.Value
-	return
-}
-
-// LogoutUser will logout a given session token
-//
-// For more information: https://docs.tonicpow.com/#39d65294-376a-4366-8f71-a02b08f9abdf
-func (c *Client) LogoutUser(userSessionToken string) (err error) {
-
-	// Basic requirements
-	if len(userSessionToken) == 0 {
-		err = fmt.Errorf("missing required attribute: %s", sessionCookie)
-		return
-	}
-
-	// Fire the request
-	var response string
-	if response, err = c.request(fmt.Sprintf("%s/logout", modelUser), http.MethodDelete, nil, userSessionToken); err != nil {
-		return
-	}
-	// Only a 200 is treated as a success
-	err = c.error(http.StatusOK, response)
 	return
 }
 
@@ -233,7 +215,7 @@ func (c *Client) ForgotPassword(emailAddress string) (err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/password/forgot", modelUser), http.MethodPost, data, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/password/forgot", modelUser), http.MethodPost, data); err != nil {
 		return
 	}
 
@@ -267,7 +249,7 @@ func (c *Client) ResetPassword(token, password, passwordConfirm string) (err err
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/password/reset", modelUser), http.MethodPut, data, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/password/reset", modelUser), http.MethodPut, data); err != nil {
 		return
 	}
 
@@ -277,10 +259,9 @@ func (c *Client) ResetPassword(token, password, passwordConfirm string) (err err
 }
 
 // ResendEmailVerification will resend an email to the user
-// Use the userSessionToken if the current user is making the request
 //
 // For more information: https://docs.tonicpow.com/#a12a3eff-491b-4079-99f6-07497b9e4efe
-func (c *Client) ResendEmailVerification(userID uint64, userSessionToken string) (err error) {
+func (c *Client) ResendEmailVerification(userID uint64) (err error) {
 
 	// Basic requirements
 	if userID == 0 {
@@ -293,7 +274,7 @@ func (c *Client) ResendEmailVerification(userID uint64, userSessionToken string)
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/verify/%s/send", modelUser, fieldEmail), http.MethodPost, data, userSessionToken); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/verify/%s/send", modelUser, fieldEmail), http.MethodPost, data); err != nil {
 		return
 	}
 
@@ -318,7 +299,7 @@ func (c *Client) CompleteEmailVerification(token string) (err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/verify/%s", modelUser, fieldEmail), http.MethodPut, data, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/verify/%s", modelUser, fieldEmail), http.MethodPut, data); err != nil {
 		return
 	}
 
@@ -328,10 +309,9 @@ func (c *Client) CompleteEmailVerification(token string) (err error) {
 }
 
 // ResendPhoneVerification will resend a phone verification code to the user
-// Use the userSessionToken if the current user is making the request
 //
 // For more information: https://docs.tonicpow.com/#fcc4fe4d-f298-45bd-b51e-a5c107834528
-func (c *Client) ResendPhoneVerification(userID uint64, userSessionToken string) (err error) {
+func (c *Client) ResendPhoneVerification(userID uint64) (err error) {
 
 	// Basic requirements
 	if userID == 0 {
@@ -344,7 +324,7 @@ func (c *Client) ResendPhoneVerification(userID uint64, userSessionToken string)
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/verify/%s/send", modelUser, fieldPhone), http.MethodPost, data, userSessionToken); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/verify/%s/send", modelUser, fieldPhone), http.MethodPost, data); err != nil {
 		return
 	}
 
@@ -372,7 +352,7 @@ func (c *Client) CompletePhoneVerification(phone, code string) (err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/verify/%s", modelUser, fieldPhone), http.MethodPut, data, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/verify/%s", modelUser, fieldPhone), http.MethodPut, data); err != nil {
 		return
 	}
 
@@ -402,7 +382,7 @@ func (c *Client) AcceptUser(userID uint64, email string, reason string) (err err
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/status/accept", modelUser), http.MethodPut, data, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/status/accept", modelUser), http.MethodPut, data); err != nil {
 		return
 	}
 
@@ -431,7 +411,7 @@ func (c *Client) ActivateUser(userID uint64, email string) (err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/status/activate", modelUser), http.MethodPut, data, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/status/activate", modelUser), http.MethodPut, data); err != nil {
 		return
 	}
 
@@ -460,7 +440,7 @@ func (c *Client) PauseUser(userID uint64, email string, reason string) (err erro
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/status/pause", modelUser), http.MethodPut, data, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/status/pause", modelUser), http.MethodPut, data); err != nil {
 		return
 	}
 
@@ -487,7 +467,7 @@ func (c *Client) UserExists(byEmail string) (existsResponse *UserExists, err err
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/exists", modelUser), http.MethodGet, params, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/exists", modelUser), http.MethodGet, params); err != nil {
 		return
 	}
 
@@ -522,7 +502,7 @@ func (c *Client) ReleaseUserBalance(userID uint64, reason string) (err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/wallet/release", modelUser), http.MethodPut, data, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/wallet/release", modelUser), http.MethodPut, data); err != nil {
 		return
 	}
 
@@ -549,7 +529,7 @@ func (c *Client) RefundUserBalance(userID uint64, reason string) (err error) {
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/wallet/refund", modelUser), http.MethodPut, data, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/wallet/refund", modelUser), http.MethodPut, data); err != nil {
 		return
 	}
 
@@ -580,7 +560,7 @@ func (c *Client) GetUserReferrals(byID uint64, byEmail string) (referrals []*Use
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/referred", modelUser), http.MethodGet, params, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/referred", modelUser), http.MethodGet, params); err != nil {
 		return
 	}
 
@@ -614,7 +594,7 @@ func (c *Client) ListUserReferrals(page, resultsPerPage int, sortBy, sortOrder s
 	// Fire the request
 	var response string
 	if response, err = c.request(fmt.Sprintf("%s/referrals?%s=%d&%s=%d&%s=%s&%s=%s", modelUser, fieldCurrentPage,
-		page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil, ""); err != nil {
+		page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil); err != nil {
 		return
 	}
 
@@ -628,14 +608,20 @@ func (c *Client) ListUserReferrals(page, resultsPerPage int, sortBy, sortOrder s
 	return
 }
 
-// RequestActivation will send a request for activation (as the current user)
+// RequestActivation will send a request for activation
 //
 // For more information: https://docs.tonicpow.com/#c3d2f569-dc5e-4885-9701-a58522cb92cf
-func (c *Client) RequestActivation(userSessionToken string) (err error) {
+func (c *Client) RequestActivation(userID uint64) (err error) {
+
+	// Basic requirements
+	if userID == 0 {
+		err = fmt.Errorf("missing required attribute: %s", fieldID)
+		return
+	}
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/status/request", modelUser), http.MethodPut, nil, userSessionToken); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/status/request?user_id=%d", modelUser, userID), http.MethodPut, nil); err != nil {
 		return
 	}
 

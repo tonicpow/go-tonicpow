@@ -13,10 +13,9 @@ func (a *AdvertiserProfile) permitFields() {
 }
 
 // CreateAdvertiserProfile will make a new advertiser profile
-// Use the userSessionToken if making request on behalf of another user
 //
 // For more information: https://docs.tonicpow.com/#153c0b65-2d4c-4972-9aab-f791db05b37b
-func (c *Client) CreateAdvertiserProfile(profile *AdvertiserProfile, userSessionToken string) (createdProfile *AdvertiserProfile, err error) {
+func (c *Client) CreateAdvertiserProfile(profile *AdvertiserProfile) (createdProfile *AdvertiserProfile, err error) {
 
 	// Basic requirements
 	if profile.UserID == 0 {
@@ -26,7 +25,7 @@ func (c *Client) CreateAdvertiserProfile(profile *AdvertiserProfile, userSession
 
 	// Fire the request
 	var response string
-	if response, err = c.request(modelAdvertiser, http.MethodPost, profile, userSessionToken); err != nil {
+	if response, err = c.request(modelAdvertiser, http.MethodPost, profile); err != nil {
 		return
 	}
 
@@ -42,10 +41,9 @@ func (c *Client) CreateAdvertiserProfile(profile *AdvertiserProfile, userSession
 
 // GetAdvertiserProfile will get an existing advertiser profile
 // This will return an error if the profile is not found (404)
-// Use the userSessionToken if making request on behalf of another user
 //
 // For more information: https://docs.tonicpow.com/#b3a62d35-7778-4314-9321-01f5266c3b51
-func (c *Client) GetAdvertiserProfile(profileID uint64, userSessionToken string) (profile *AdvertiserProfile, err error) {
+func (c *Client) GetAdvertiserProfile(profileID uint64) (profile *AdvertiserProfile, err error) {
 
 	// Must have an id
 	if profileID == 0 {
@@ -55,7 +53,7 @@ func (c *Client) GetAdvertiserProfile(profileID uint64, userSessionToken string)
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/details/%d", modelAdvertiser, profileID), http.MethodGet, nil, userSessionToken); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/details/%d", modelAdvertiser, profileID), http.MethodGet, nil); err != nil {
 		return
 	}
 
@@ -70,10 +68,9 @@ func (c *Client) GetAdvertiserProfile(profileID uint64, userSessionToken string)
 }
 
 // UpdateAdvertiserProfile will update an existing profile
-// Use the userSessionToken if making request on behalf of another user
 //
 // For more information: https://docs.tonicpow.com/#0cebd1ff-b1ce-4111-aff6-9d586f632a84
-func (c *Client) UpdateAdvertiserProfile(profile *AdvertiserProfile, userSessionToken string) (updatedProfile *AdvertiserProfile, err error) {
+func (c *Client) UpdateAdvertiserProfile(profile *AdvertiserProfile) (updatedProfile *AdvertiserProfile, err error) {
 
 	// Basic requirements
 	if profile.ID == 0 {
@@ -86,7 +83,7 @@ func (c *Client) UpdateAdvertiserProfile(profile *AdvertiserProfile, userSession
 
 	// Fire the request
 	var response string
-	if response, err = c.request(modelAdvertiser, http.MethodPut, profile, userSessionToken); err != nil {
+	if response, err = c.request(modelAdvertiser, http.MethodPut, profile); err != nil {
 		return
 	}
 
@@ -106,6 +103,12 @@ func (c *Client) UpdateAdvertiserProfile(profile *AdvertiserProfile, userSession
 // For more information: https://docs.tonicpow.com/#98017e9a-37dd-4810-9483-b6c400572e0c
 func (c *Client) ListCampaignsByAdvertiserProfile(profileID uint64, page, resultsPerPage int, sortBy, sortOrder string) (results *CampaignResults, err error) {
 
+	// Basic requirements
+	if profileID == 0 {
+		err = fmt.Errorf("missing required attribute: %s", fieldAdvertiserProfileID)
+		return
+	}
+
 	// Do we know this field?
 	if len(sortBy) > 0 {
 		if !isInList(strings.ToLower(sortBy), campaignSortFields) {
@@ -119,7 +122,7 @@ func (c *Client) ListCampaignsByAdvertiserProfile(profileID uint64, page, result
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/campaigns/%d?%s=%d&%s=%d&%s=%s&%s=%s", modelAdvertiser, profileID, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/campaigns/%d?%s=%d&%s=%d&%s=%s&%s=%s", modelAdvertiser, profileID, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil); err != nil {
 		return
 	}
 

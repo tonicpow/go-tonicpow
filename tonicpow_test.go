@@ -39,10 +39,6 @@ func TestNewClient(t *testing.T) {
 		t.Fatalf("expected value to be %s", testAPIKey)
 	}
 
-	if client.Parameters.APISessionCookie == nil {
-		t.Fatalf("expected value to be set, was empty/nil")
-	}
-
 	if client.Parameters.environment != LocalEnvironment {
 		t.Fatalf("expected value to be %s, got %s", LocalEnvironment, client.Parameters.environment)
 	}
@@ -148,79 +144,7 @@ func TestClient_Request(t *testing.T) {
 	}
 
 	// Start a new client
-	client, err := NewClient(testAPIKey, LocalEnvironment, nil)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	// Simple request - prolong session
-	err = client.ProlongSession("")
-	if err != nil {
-		t.Fatal(err)
-	}
-}
-
-// TestClient_EndSession tests the methods ProlongSession() and EndSession()
-func TestClient_EndSession(t *testing.T) {
-	// Skip this test in short mode (not needed)
-	if testing.Short() {
-		t.Skip("skipping testing in short mode")
-	}
-
-	// Start a new client
-	client, err := NewClient(testAPIKey, LocalEnvironment, nil)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	// Prolong should success
-	err = client.ProlongSession("")
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	// Should be a 200
-	if client.LastRequest.StatusCode != http.StatusOK {
-		t.Fatalf("expected to get %d but got %d", http.StatusOK, client.LastRequest.StatusCode)
-	}
-
-	// End our current session
-	err = client.EndSession("")
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	// Prolong should fail
-	err = client.ProlongSession("")
-	if err == nil {
-		t.Fatalf("expected prolong to fail after ending session")
-	}
-
-	// Should be a 401
-	if client.LastRequest.StatusCode != http.StatusUnauthorized {
-		t.Fatalf("expected to get %d but got %d", http.StatusUnauthorized, client.LastRequest.StatusCode)
-	}
-}
-
-// TestClient_ProlongSession tests the ProlongSession() method
-func TestClient_ProlongSession(t *testing.T) {
-
-	// Skip this test in short mode (not needed)
-	if testing.Short() {
-		t.Skip("skipping testing in short mode")
-	}
-
-	// Start a new client
-	client, err := NewClient(testAPIKey, LocalEnvironment, nil)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	// Using a custom token approach
-	token := client.Parameters.APISessionCookie.Value
-
-	// Prolong should success
-	err = client.ProlongSession(token)
+	_, err := NewClient(testAPIKey, LocalEnvironment, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -272,7 +196,7 @@ func TestClient_UpdateUser(t *testing.T) {
 	}
 
 	user.MiddleName = "Danger"
-	if user, err = client.UpdateUser(user, ""); err != nil {
+	if user, err = client.UpdateUser(user); err != nil {
 		t.Fatalf("%s", err.Error())
 	}
 }

@@ -19,7 +19,7 @@ func (c *Client) GetCurrentRate(currency string, customAmount float64) (rate *Ra
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/%s?%s=%f", modelRates, currency, fieldAmount, customAmount), http.MethodGet, nil, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/%s?%s=%f", modelRates, currency, fieldAmount, customAmount), http.MethodGet, nil); err != nil {
 		return
 	}
 

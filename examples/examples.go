@@ -49,27 +49,10 @@ func init() {
 }
 
 func main() {
-	//
-	// Example for ending the api session for the application
-	// This is not needed, sessions will automatically expire
-	//
-	defer func() {
-		_ = TonicPowAPI.EndSession("")
-	}()
 
 	// Example vars
 	var err error
-	var userSessionToken string
 	testPassword := "ExamplePassForNow0!"
-
-	//
-	// Example: Prolong a session
-	//
-	if err = TonicPowAPI.ProlongSession(""); err != nil {
-		log.Fatalf("ProlongSession: %s", err.Error())
-	} else {
-		log.Println("session created and prolonged...")
-	}
 
 	//
 	// Example: Create a user
@@ -106,8 +89,8 @@ func main() {
 	// Example: Update a user
 	//
 	user.FirstName = "Austin"
-	user.PayoutAddress = "mrz@moneybutton.com"
-	if user, err = TonicPowAPI.UpdateUser(user, ""); err != nil {
+	user.PayoutAddress = "12345@moneybutton.com"
+	if user, err = TonicPowAPI.UpdateUser(user); err != nil {
 		log.Fatalf("update user failed error %s - api error: %s data: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
 	} else {
 		log.Printf("user %d updated - first_name: %s", user.ID, user.FirstName)
@@ -129,15 +112,6 @@ func main() {
 	}
 
 	//
-	// Example: Accept/Approve the User (if required by application config)
-	//
-	if err = TonicPowAPI.AcceptUser(user.ID, "", "awesome person"); err != nil {
-		log.Fatalf("accept user failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
-	} else {
-		log.Printf("user accepted: %d", user.ID)
-	}
-
-	//
 	// Example: Get new updated balance for user
 	//
 	if user, err = TonicPowAPI.GetUserBalance(user.ID, 0); err != nil {
@@ -145,26 +119,6 @@ func main() {
 	} else {
 		log.Printf("user balance: %d", user.Balance)
 	}
-
-	//
-	// Example: Release internal balance to user's payout_address
-	//
-	if err = TonicPowAPI.ReleaseUserBalance(user.ID, "they deserve it all"); err != nil {
-		log.Fatalf("release balance failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
-	} else {
-		log.Println("release balance was successful")
-	}
-
-	//
-	// Example: Refund user's balance back to the corresponding campaigns
-	//
-	/*
-		if err = TonicPowAPI.RefundUserBalance(user.ID, "account was deemed fraudulent"); err != nil {
-			log.Fatalf("refund failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
-		} else {
-			log.Println("refund started...")
-		}
-	*/
 
 	//
 	// Example: Forgot password
@@ -204,44 +158,15 @@ func main() {
 		HomepageURL: "https://tonicpow.com",
 		IconURL:     "https://tonicpow.com/images/logos/apple-touch-icon.png",
 	}
-	if advertiser, err = createAdvertiserProfile(advertiser, ""); err != nil {
+	if advertiser, err = createAdvertiserProfile(advertiser); err != nil {
 		log.Fatal(err.Error())
 	}
 
 	//
 	// Example: Get an advertiser profile
 	//
-	if advertiser, err = getAdvertiserProfile(advertiser.ID, ""); err != nil {
+	if advertiser, err = getAdvertiserProfile(advertiser.ID); err != nil {
 		log.Fatal(err.Error())
-	}
-
-	//
-	// Example: Login for a user
-	//
-	user.Password = testPassword
-	userSessionToken, err = TonicPowAPI.LoginUser(user)
-	if err != nil {
-		log.Fatalf("user login failed error %s - api error: %s data: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
-	} else {
-		log.Printf("user login: %s token: %s", user.Email, userSessionToken)
-	}
-
-	//
-	// Example: Logout (just for our example)
-	//
-	defer func(token string) {
-		_ = TonicPowAPI.LogoutUser(token)
-		log.Println("user logout complete")
-	}(userSessionToken)
-
-	//
-	// Example: Current user details
-	//
-	user, err = TonicPowAPI.CurrentUser(userSessionToken)
-	if err != nil {
-		log.Fatalf("current user failed error %s - api error: %s data: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
-	} else {
-		log.Printf("current user: %s", user.Email)
 	}
 
 	//
@@ -266,7 +191,7 @@ func main() {
 	}
 
 	//
-	// Example: Create an advertiser as a user
+	// Example: Create an advertiser
 	//
 	advertiser = &tonicpow.AdvertiserProfile{
 		UserID:      user.ID,
@@ -274,14 +199,14 @@ func main() {
 		HomepageURL: "https://tonicpow.com",
 		IconURL:     "https://tonicpow.com/images/logos/apple-touch-icon.png",
 	}
-	if advertiser, err = createAdvertiserProfile(advertiser, userSessionToken); err != nil {
+	if advertiser, err = createAdvertiserProfile(advertiser); err != nil {
 		log.Fatal(err.Error())
 	}
 
 	//
 	// Example: Get Advertiser Profile
 	//
-	if advertiser, err = getAdvertiserProfile(advertiser.ID, userSessionToken); err != nil {
+	if advertiser, err = getAdvertiserProfile(advertiser.ID); err != nil {
 		log.Fatal(err.Error())
 	}
 
@@ -289,7 +214,7 @@ func main() {
 	// Example: Update advertising profile
 	//
 	advertiser.Name = "Acme New User Advertising"
-	if advertiser, err = TonicPowAPI.UpdateAdvertiserProfile(advertiser, userSessionToken); err != nil {
+	if advertiser, err = TonicPowAPI.UpdateAdvertiserProfile(advertiser); err != nil {
 		log.Fatalf("update advertiser failed error %s - api error: %s data: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
 	} else {
 		log.Printf("advertiser profile %s id %d updated", advertiser.Name, advertiser.ID)
@@ -316,14 +241,14 @@ func main() {
 		Title:               "TonicPow Offers",
 		ExpiresAt:           expiresAt.Format(time.RFC3339),
 	}
-	if campaign, err = createCampaign(campaign, userSessionToken); err != nil {
+	if campaign, err = createCampaign(campaign); err != nil {
 		log.Fatal(err.Error())
 	}
 
 	//
 	// Example: Get Campaign
 	//
-	if campaign, err = getCampaign(campaign.ID, userSessionToken); err != nil {
+	if campaign, err = getCampaign(campaign.ID); err != nil {
 		log.Fatal(err.Error())
 	}
 
@@ -338,14 +263,14 @@ func main() {
 		PayoutType:  "flat",
 		Title:       "Landing Page Leads",
 	}
-	if goal, err = createGoal(goal, userSessionToken); err != nil {
+	if goal, err = createGoal(goal); err != nil {
 		log.Fatal(err.Error())
 	}
 
 	//
 	// Example: Get Goal
 	//
-	if goal, err = getGoal(goal.ID, userSessionToken); err != nil {
+	if goal, err = getGoal(goal.ID); err != nil {
 		log.Fatal(err.Error())
 	}
 
@@ -364,7 +289,7 @@ func main() {
 		MaxPerPromoter: 2,
 		MaxPerVisitor:  2,
 	}
-	if goalPercent, err = createGoal(goalPercent, userSessionToken); err != nil {
+	if goalPercent, err = createGoal(goalPercent); err != nil {
 		log.Fatal(err.Error())
 	}
 
@@ -375,14 +300,14 @@ func main() {
 		CampaignID: campaign.ID,
 		UserID:     user.ID,
 	}
-	if link, err = createLink(link, userSessionToken); err != nil {
+	if link, err = createLink(link); err != nil {
 		log.Fatal(err.Error())
 	}
 
 	//
 	// Example: Get Link
 	//
-	if link, err = getLink(link.ID, userSessionToken); err != nil {
+	if link, err = getLink(link.ID); err != nil {
 		log.Fatal(err.Error())
 	}
 
@@ -394,7 +319,7 @@ func main() {
 		UserID:          user.ID,
 		CustomShortCode: fmt.Sprintf("%s%d", user.FirstName, rand.Intn(100000)),
 	}
-	if link, err = createLink(link, userSessionToken); err != nil {
+	if link, err = createLink(link); err != nil {
 		log.Fatal(err.Error())
 	}
 
@@ -406,14 +331,14 @@ func main() {
 		UserID:          user.ID,
 		CustomShortCode: fmt.Sprintf("%s%d", user.FirstName+"zzz", rand.Intn(100000)),
 	}
-	if link, err = createLink(link, userSessionToken); err != nil {
+	if link, err = createLink(link); err != nil {
 		log.Fatal(err.Error())
 	}
 
 	//
 	// Example: Get a campaign by link
 	//
-	if campaign, err = TonicPowAPI.GetCampaignByShortCode(link.ShortCode, userSessionToken); err != nil {
+	if campaign, err = TonicPowAPI.GetCampaignByShortCode(link.ShortCode); err != nil {
 		log.Fatalf("get campaign failed - api error: %s data: %s - local error: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data, err.Error())
 	} else {
 		log.Printf("got campaign by short code %s", link.ShortCode)
@@ -426,15 +351,15 @@ func main() {
 		TargetURL: "https://amazon.com",
 		UserID:    user.ID,
 	}
-	if linkByURL, err = createLinkByURL(linkByURL, userSessionToken); err != nil {
+	if linkByURL, err = createLinkByURL(linkByURL); err != nil {
 		log.Fatal(err.Error())
 	}
 
 	//
-	// Example: Get Link(s) by user
+	// Example: Get Link(s)
 	//
 	var linkResults *tonicpow.LinkResults
-	if linkResults, err = getLinks(link.ID, userSessionToken); err != nil {
+	if linkResults, err = getLinks(link.UserID); err != nil {
 		log.Fatal(err.Error())
 	}
 	if len(linkResults.Links) > 0 {
@@ -445,7 +370,7 @@ func main() {
 	// Example: List active campaigns
 	//
 	var campaignResults *tonicpow.CampaignResults
-	if campaignResults, err = TonicPowAPI.ListCampaigns("", 1, 5, tonicpow.SortByFieldCreatedAt, tonicpow.SortOrderDesc); err != nil {
+	if campaignResults, err = TonicPowAPI.ListCampaigns(1, 5, tonicpow.SortByFieldCreatedAt, tonicpow.SortOrderDesc); err != nil {
 		log.Fatalf("list campaign failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
 	} else {
 		log.Printf("campaigns found: %d page: %d", campaignResults.Results, campaignResults.CurrentPage)
@@ -490,24 +415,6 @@ func main() {
 	} else {
 		log.Printf("statistics found: active %d", statistics.Active)
 	}
-
-	//
-	// Example: Activate User
-	//
-	/*
-		if err = TonicPowAPI.ActivateUser(user.ID, ""); err != nil {
-			log.Fatalf("activate user failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
-		}
-	*/
-
-	//
-	// Example: Pause User
-	//
-	/*
-		if err = TonicPowAPI.PauseUser(user.ID, "", "reviewing account"); err != nil {
-			log.Fatalf("pause user failed - api error: %s", TonicPowAPI.LastRequest.Error.Message)
-		}
-	*/
 
 	//
 	// Example: Create a Visitor Session
@@ -606,27 +513,6 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	//
-	// Example: custom headers
-	//
-	TonicPowAPI.Parameters.CustomHeaders = make(map[string][]string)
-	TonicPowAPI.Parameters.CustomHeaders["X-Key"] = []string{"some-value"}
-	if err = TonicPowAPI.ProlongSession(""); err != nil {
-		log.Fatalf("ProlongSession: %s", err.Error())
-	} else {
-		log.Println("session created and prolonged...")
-	}
-
-	//
-	// Example: Create Conversion by User ID (percent based conversion - using a purchase amount, or some tx of value)
-	//
-	/*
-		if newConversion, err = TonicPowAPI.CreateConversionByUserID(goalPercent.ID, 2, "", 5.00, 0); err != nil {
-			log.Fatal(err.Error())
-		}
-		log.Printf("new conversion: %d", newConversion.ID)
-	*/
-
 	log.Println("examples complete!")
 }
 
@@ -634,8 +520,8 @@ func main() {
 // Example Functions
 //
 
-func createAdvertiserProfile(profile *tonicpow.AdvertiserProfile, userSessionToken string) (createdProfile *tonicpow.AdvertiserProfile, err error) {
-	if createdProfile, err = TonicPowAPI.CreateAdvertiserProfile(profile, userSessionToken); err != nil {
+func createAdvertiserProfile(profile *tonicpow.AdvertiserProfile) (createdProfile *tonicpow.AdvertiserProfile, err error) {
+	if createdProfile, err = TonicPowAPI.CreateAdvertiserProfile(profile); err != nil {
 		log.Fatalf("create advertiser failed - api error: %s data: %s - local error: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data, err.Error())
 	} else {
 		log.Printf("advertiser profile %s id %d created", createdProfile.Name, createdProfile.ID)
@@ -643,8 +529,8 @@ func createAdvertiserProfile(profile *tonicpow.AdvertiserProfile, userSessionTok
 	return
 }
 
-func getAdvertiserProfile(advertiserProfileID uint64, userSessionToken string) (advertiserProfile *tonicpow.AdvertiserProfile, err error) {
-	if advertiserProfile, err = TonicPowAPI.GetAdvertiserProfile(advertiserProfileID, userSessionToken); err != nil {
+func getAdvertiserProfile(advertiserProfileID uint64) (advertiserProfile *tonicpow.AdvertiserProfile, err error) {
+	if advertiserProfile, err = TonicPowAPI.GetAdvertiserProfile(advertiserProfileID); err != nil {
 		log.Fatalf("get advertiser profile failed - api error: %s data: %s - local error: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data, err.Error())
 	} else {
 		log.Printf("got advertiser profile by id %d", advertiserProfile.ID)
@@ -652,8 +538,8 @@ func getAdvertiserProfile(advertiserProfileID uint64, userSessionToken string) (
 	return
 }
 
-func createCampaign(campaign *tonicpow.Campaign, userSessionToken string) (createdCampaign *tonicpow.Campaign, err error) {
-	if createdCampaign, err = TonicPowAPI.CreateCampaign(campaign, userSessionToken); err != nil {
+func createCampaign(campaign *tonicpow.Campaign) (createdCampaign *tonicpow.Campaign, err error) {
+	if createdCampaign, err = TonicPowAPI.CreateCampaign(campaign); err != nil {
 		log.Fatalf("create campaign failed - api error: %s data: %s - local error: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data, err.Error())
 	} else {
 		log.Printf("campaign %s id %d created", createdCampaign.Title, createdCampaign.ID)
@@ -661,8 +547,8 @@ func createCampaign(campaign *tonicpow.Campaign, userSessionToken string) (creat
 	return
 }
 
-func getCampaign(campaignID uint64, userSessionToken string) (campaign *tonicpow.Campaign, err error) {
-	if campaign, err = TonicPowAPI.GetCampaign(campaignID, userSessionToken); err != nil {
+func getCampaign(campaignID uint64) (campaign *tonicpow.Campaign, err error) {
+	if campaign, err = TonicPowAPI.GetCampaign(campaignID); err != nil {
 		log.Fatalf("get campaign failed - api error: %s data: %s - local error: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data, err.Error())
 	} else {
 		log.Printf("got campaign by id %d", campaign.ID)
@@ -670,8 +556,8 @@ func getCampaign(campaignID uint64, userSessionToken string) (campaign *tonicpow
 	return
 }
 
-func createGoal(goal *tonicpow.Goal, userSessionToken string) (createdGoal *tonicpow.Goal, err error) {
-	if createdGoal, err = TonicPowAPI.CreateGoal(goal, userSessionToken); err != nil {
+func createGoal(goal *tonicpow.Goal) (createdGoal *tonicpow.Goal, err error) {
+	if createdGoal, err = TonicPowAPI.CreateGoal(goal); err != nil {
 		log.Fatalf("create goal failed - api error: %s data: %s - local error: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data, err.Error())
 	} else {
 		log.Printf("goal %s id %d created", createdGoal.Title, createdGoal.ID)
@@ -679,8 +565,8 @@ func createGoal(goal *tonicpow.Goal, userSessionToken string) (createdGoal *toni
 	return
 }
 
-func getGoal(goalID uint64, userSessionToken string) (goal *tonicpow.Goal, err error) {
-	if goal, err = TonicPowAPI.GetGoal(goalID, userSessionToken); err != nil {
+func getGoal(goalID uint64) (goal *tonicpow.Goal, err error) {
+	if goal, err = TonicPowAPI.GetGoal(goalID); err != nil {
 		log.Fatalf("get goal failed - api error: %s data: %s - local error: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data, err.Error())
 	} else {
 		log.Printf("got goal by id %d", goal.ID)
@@ -688,8 +574,8 @@ func getGoal(goalID uint64, userSessionToken string) (goal *tonicpow.Goal, err e
 	return
 }
 
-func createLink(link *tonicpow.Link, userSessionToken string) (createdLink *tonicpow.Link, err error) {
-	if createdLink, err = TonicPowAPI.CreateLink(link, userSessionToken); err != nil {
+func createLink(link *tonicpow.Link) (createdLink *tonicpow.Link, err error) {
+	if createdLink, err = TonicPowAPI.CreateLink(link); err != nil {
 		log.Fatalf("create link failed - api error: %s data: %s - local error: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data, err.Error())
 	} else {
 		log.Printf("link %s id %d created", createdLink.ShortCode, createdLink.ID)
@@ -697,8 +583,8 @@ func createLink(link *tonicpow.Link, userSessionToken string) (createdLink *toni
 	return
 }
 
-func createLinkByURL(link *tonicpow.Link, userSessionToken string) (createdLink *tonicpow.Link, err error) {
-	if createdLink, err = TonicPowAPI.CreateLinkByURL(link, userSessionToken); err != nil {
+func createLinkByURL(link *tonicpow.Link) (createdLink *tonicpow.Link, err error) {
+	if createdLink, err = TonicPowAPI.CreateLinkByURL(link); err != nil {
 		log.Fatalf("create link failed - api error: %s data: %s - local error: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data, err.Error())
 	} else {
 		log.Printf("link %s id %d created", createdLink.ShortCode, createdLink.ID)
@@ -706,8 +592,8 @@ func createLinkByURL(link *tonicpow.Link, userSessionToken string) (createdLink 
 	return
 }
 
-func getLink(linkID uint64, userSessionToken string) (link *tonicpow.Link, err error) {
-	if link, err = TonicPowAPI.GetLink(linkID, userSessionToken); err != nil {
+func getLink(linkID uint64) (link *tonicpow.Link, err error) {
+	if link, err = TonicPowAPI.GetLink(linkID); err != nil {
 		log.Fatalf("get link failed - api error: %s data: %s - local error: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data, err.Error())
 	} else {
 		log.Printf("got link by id %d", link.ID)
@@ -715,8 +601,8 @@ func getLink(linkID uint64, userSessionToken string) (link *tonicpow.Link, err e
 	return
 }
 
-func getLinks(userID uint64, userSessionToken string) (results *tonicpow.LinkResults, err error) {
-	if results, err = TonicPowAPI.ListLinksByUserID(userID, userSessionToken, 1, 20); err != nil {
+func getLinks(userID uint64) (results *tonicpow.LinkResults, err error) {
+	if results, err = TonicPowAPI.ListLinksByUserID(userID, 1, 20); err != nil {
 		log.Fatalf("get link failed - api error: %s data: %s - local error: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data, err.Error())
 	} else {
 		log.Printf("got link(s) %d - page: %d", results.Results, results.CurrentPage)

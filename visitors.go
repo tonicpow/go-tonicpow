@@ -19,7 +19,7 @@ func (c *Client) CreateVisitorSession(visitorSession *VisitorSession) (createdSe
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/%s", modelVisitors, modelVisitorSession), http.MethodPost, visitorSession, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/%s", modelVisitors, modelVisitorSession), http.MethodPost, visitorSession); err != nil {
 		return
 	}
 
@@ -47,7 +47,7 @@ func (c *Client) GetVisitorSession(visitorSessionGUID string) (visitorSession *V
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/%s/details/%s", modelVisitors, modelVisitorSession, visitorSessionGUID), http.MethodGet, nil, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/%s/details/%s", modelVisitors, modelVisitorSession, visitorSessionGUID), http.MethodGet, nil); err != nil {
 		return
 	}
 

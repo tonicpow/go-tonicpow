@@ -26,8 +26,5 @@ func NewClient(apiKey string, environment APIEnvironment, clientOptions *Options
 	c.Parameters.apiKey = apiKey
 	c.Parameters.environment = environment
 
-	// Start a new api session
-	err = c.createSession()
-
 	return
 }

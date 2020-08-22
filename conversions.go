@@ -28,7 +28,7 @@ func (c *Client) CreateConversionByGoalID(goalID uint64, tncpwSession, customDim
 
 	// Fire the request
 	var response string
-	if response, err = c.request(modelConversion, http.MethodPost, data, ""); err != nil {
+	if response, err = c.request(modelConversion, http.MethodPost, data); err != nil {
 		return
 	}
 
@@ -64,7 +64,7 @@ func (c *Client) CreateConversionByGoalName(goalName, tncpwSession, customDimens
 
 	// Fire the request
 	var response string
-	if response, err = c.request(modelConversion, http.MethodPost, data, ""); err != nil {
+	if response, err = c.request(modelConversion, http.MethodPost, data); err != nil {
 		return
 	}
 
@@ -100,7 +100,7 @@ func (c *Client) CreateConversionByUserID(goalID, userID uint64, customDimension
 
 	// Fire the request
 	var response string
-	if response, err = c.request(modelConversion, http.MethodPost, data, ""); err != nil {
+	if response, err = c.request(modelConversion, http.MethodPost, data); err != nil {
 		return
 	}
 
@@ -128,7 +128,7 @@ func (c *Client) GetConversion(conversionID uint64) (conversion *Conversion, err
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/details/%d", modelConversion, conversionID), http.MethodGet, nil, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/details/%d", modelConversion, conversionID), http.MethodGet, nil); err != nil {
 		return
 	}
 
@@ -158,7 +158,7 @@ func (c *Client) CancelConversion(conversionID uint64, cancelReason string) (con
 
 	// Fire the request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/cancel", modelConversion), http.MethodPut, data, ""); err != nil {
+	if response, err = c.request(fmt.Sprintf("%s/cancel", modelConversion), http.MethodPut, data); err != nil {
 		return
 	}
 

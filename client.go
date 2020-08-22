@@ -49,12 +49,10 @@ type LastRequest struct {
 
 // Parameters are application specific values for requests
 type Parameters struct {
-	apiKey            string              // is the given api key for the user
-	APISessionCookie  *http.Cookie        // is the current session cookie for the api key
-	CustomHeaders     map[string][]string // is used for setting custom header values on requests
-	environment       APIEnvironment      // is the current api environment to use
-	UserAgent         string              // (optional for changing user agents)
-	UserSessionCookie *http.Cookie        // is the current session cookie for a user (on behalf)
+	apiKey        string              // is the given api key for the user
+	CustomHeaders map[string][]string // is used for setting custom header values on requests
+	environment   APIEnvironment      // is the current api environment to use
+	UserAgent     string              // (optional for changing user agents)
 }
 
 // ClientDefaultOptions will return an Options struct with the default settings
@@ -140,7 +138,7 @@ func createClient(options *Options) (c *Client) {
 }
 
 // request is a generic wrapper for all api requests
-func (c *Client) request(endpoint string, method string, payload interface{}, customSessionToken string) (response string, err error) {
+func (c *Client) request(endpoint string, method string, payload interface{}) (response string, err error) {
 
 	// Set post value
 	var jsonValue []byte
@@ -176,6 +174,9 @@ func (c *Client) request(endpoint string, method string, payload interface{}, cu
 		return
 	}
 
+	// Set the auth header
+	request.Header.Set("api_key", c.Parameters.apiKey)
+
 	// Change the user agent
 	request.Header.Set("User-Agent", c.Parameters.UserAgent)
 
@@ -191,18 +192,6 @@ func (c *Client) request(endpoint string, method string, payload interface{}, cu
 	// Set the content type
 	if method == http.MethodPost || method == http.MethodPut {
 		request.Header.Set("Content-Type", "application/json")
-	}
-
-	// Custom token, used for user related requests
-	if len(customSessionToken) > 0 {
-		request.AddCookie(&http.Cookie{
-			Name:     sessionCookie,
-			Value:    customSessionToken,
-			MaxAge:   60 * 60 * 24,
-			HttpOnly: true,
-		})
-	} else if c.Parameters.APISessionCookie != nil {
-		request.AddCookie(c.Parameters.APISessionCookie)
 	}
 
 	// Fire the http request
@@ -223,21 +212,6 @@ func (c *Client) request(endpoint string, method string, payload interface{}, cu
 	var body []byte
 	if body, err = ioutil.ReadAll(resp.Body); err != nil {
 		return
-	}
-
-	// Got a session token? Set the session token for the api user or user via on behalf
-	for _, cookie := range resp.Cookies() {
-		if cookie.Name == sessionCookie {
-			if cookie.MaxAge <= 0 {
-				cookie = nil
-			}
-			if len(customSessionToken) > 0 {
-				c.Parameters.UserSessionCookie = cookie
-			} else {
-				c.Parameters.APISessionCookie = cookie
-			}
-			break
-		}
 	}
 
 	// Clear headers

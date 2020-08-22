@@ -137,28 +137,29 @@ type Error struct {
 //
 // For more information: https://docs.tonicpow.com/#50b3c130-7254-4a05-b312-b14647736e38
 type User struct {
-	Balance            uint64 `json:"balance"`
-	Earned             uint64 `json:"earned"`
-	Email              string `json:"email"`
-	EmailVerified      bool   `json:"email_verified"`
-	FirstName          string `json:"first_name"`
-	ID                 uint64 `json:"id,omitempty"`
-	InternalAddress    string `json:"internal_address"`
-	LastName           string `json:"last_name"`
-	MiddleName         string `json:"middle_name"`
-	NewPassword        string `json:"new_password,omitempty"`
-	NewPasswordConfirm string `json:"new_password_confirm,omitempty"`
-	Password           string `json:"password,omitempty"`
-	PayoutAddress      string `json:"payout_address"`
-	Phone              string `json:"phone"`
-	PhoneVerified      bool   `json:"phone_verified"`
-	ReferralLinkID     uint64 `json:"referral_link_id"`
-	Referrals          uint   `json:"referrals"`
-	ReferralsAccepted  uint   `json:"referrals_accepted"`
-	ReferralURL        string `json:"referral_url"`
-	ReferredByUserID   uint64 `json:"referred_by_user_id"`
-	Status             string `json:"status"`
-	TncpwSession       string `json:"tncpw_session,omitempty"`
+	AdvertiserProfiles []*AdvertiserProfile `json:"advertiser_profiles"`
+	Balance            uint64               `json:"balance"`
+	Earned             uint64               `json:"earned"`
+	Email              string               `json:"email"`
+	EmailVerified      bool                 `json:"email_verified"`
+	FirstName          string               `json:"first_name"`
+	ID                 uint64               `json:"id,omitempty"`
+	InternalAddress    string               `json:"internal_address"`
+	LastName           string               `json:"last_name"`
+	MiddleName         string               `json:"middle_name"`
+	NewPassword        string               `json:"new_password,omitempty"`
+	NewPasswordConfirm string               `json:"new_password_confirm,omitempty"`
+	Password           string               `json:"password,omitempty"`
+	PayoutAddress      string               `json:"payout_address"`
+	Phone              string               `json:"phone"`
+	PhoneVerified      bool                 `json:"phone_verified"`
+	ReferralLinkID     uint64               `json:"referral_link_id"`
+	Referrals          uint                 `json:"referrals"`
+	ReferralsAccepted  uint                 `json:"referrals_accepted"`
+	ReferralURL        string               `json:"referral_url"`
+	ReferredByUserID   uint64               `json:"referred_by_user_id"`
+	Status             string               `json:"status"`
+	TncpwSession       string               `json:"tncpw_session,omitempty"`
 }
 
 // AdvertiserProfile is the advertiser_profile model (child of User)
