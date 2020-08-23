@@ -8,7 +8,6 @@ import (
 )
 
 // NewClient creates a new client to submit requests pre-loaded with the API key
-// This will establish a new session given the API key
 //
 // For more information: https://docs.tonicpow.com
 func NewClient(apiKey string, environment APIEnvironment, clientOptions *Options) (c *Client, err error) {

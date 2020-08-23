@@ -511,25 +511,3 @@ func (c *Client) ListUserReferrals(page, resultsPerPage int, sortBy, sortOrder s
 	err = json.Unmarshal([]byte(response), &results)
 	return
 }
-
-// RequestActivation will send a Request for activation
-//
-// For more information: https://docs.tonicpow.com/#c3d2f569-dc5e-4885-9701-a58522cb92cf
-func (c *Client) RequestActivation(userID uint64) (err error) {
-
-	// Basic requirements
-	if userID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldID)
-		return
-	}
-
-	// Fire the Request
-	var response string
-	if response, err = c.Request(fmt.Sprintf("%s/status/Request?id=%d", modelUser, userID), http.MethodPut, nil); err != nil {
-		return
-	}
-
-	// Only a 200 is treated as a success
-	err = c.Error(http.StatusOK, response)
-	return
-}
