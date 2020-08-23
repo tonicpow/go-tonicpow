@@ -23,14 +23,14 @@ func (c *Client) CreateGoal(goal *Goal) (createdGoal *Goal, err error) {
 		return
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(modelGoal, http.MethodPost, goal); err != nil {
+	if response, err = c.Request(modelGoal, http.MethodPost, goal); err != nil {
 		return
 	}
 
 	// Only a 201 is treated as a success
-	if err = c.error(http.StatusCreated, response); err != nil {
+	if err = c.Error(http.StatusCreated, response); err != nil {
 		return
 	}
 
@@ -40,7 +40,7 @@ func (c *Client) CreateGoal(goal *Goal) (createdGoal *Goal, err error) {
 }
 
 // GetGoal will get an existing goal
-// This will return an error if the goal is not found (404)
+// This will return an Error if the goal is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#48d7bbc8-5d7b-4078-87b7-25f545c3deaf
 func (c *Client) GetGoal(goalID uint64) (goal *Goal, err error) {
@@ -51,14 +51,14 @@ func (c *Client) GetGoal(goalID uint64) (goal *Goal, err error) {
 		return
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/details/%d", modelGoal, goalID), http.MethodGet, nil); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/details/%d", modelGoal, goalID), http.MethodGet, nil); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	if err = c.error(http.StatusOK, response); err != nil {
+	if err = c.Error(http.StatusOK, response); err != nil {
 		return
 	}
 
@@ -81,14 +81,14 @@ func (c *Client) UpdateGoal(goal *Goal) (updatedGoal *Goal, err error) {
 	// Permit fields
 	goal.permitFields()
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(modelGoal, http.MethodPut, goal); err != nil {
+	if response, err = c.Request(modelGoal, http.MethodPut, goal); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	if err = c.error(http.StatusOK, response); err != nil {
+	if err = c.Error(http.StatusOK, response); err != nil {
 		return
 	}
 

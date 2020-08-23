@@ -29,14 +29,14 @@ func (c *Client) CreateCampaign(campaign *Campaign) (createdCampaign *Campaign, 
 		return
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(modelCampaign, http.MethodPost, campaign); err != nil {
+	if response, err = c.Request(modelCampaign, http.MethodPost, campaign); err != nil {
 		return
 	}
 
 	// Only a 201 is treated as a success
-	if err = c.error(http.StatusCreated, response); err != nil {
+	if err = c.Error(http.StatusCreated, response); err != nil {
 		return
 	}
 
@@ -46,7 +46,7 @@ func (c *Client) CreateCampaign(campaign *Campaign) (createdCampaign *Campaign, 
 }
 
 // GetCampaign will get an existing campaign
-// This will return an error if the campaign is not found (404)
+// This will return an Error if the campaign is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#b827446b-be34-4678-b347-33c4f63dbf9e
 func (c *Client) GetCampaign(campaignID uint64) (campaign *Campaign, err error) {
@@ -57,14 +57,14 @@ func (c *Client) GetCampaign(campaignID uint64) (campaign *Campaign, err error) 
 		return
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/details/%d", modelCampaign, campaignID), http.MethodGet, nil); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/details/%d", modelCampaign, campaignID), http.MethodGet, nil); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	if err = c.error(http.StatusOK, response); err != nil {
+	if err = c.Error(http.StatusOK, response); err != nil {
 		return
 	}
 
@@ -74,7 +74,7 @@ func (c *Client) GetCampaign(campaignID uint64) (campaign *Campaign, err error) 
 }
 
 // GetCampaignByShortCode will get an existing campaign via a short code (short link)
-// This will return an error if the campaign is not found (404)
+// This will return an Error if the campaign is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#8451b92f-ea74-47aa-8ac1-c96647e2dbfd
 func (c *Client) GetCampaignByShortCode(shortCode string) (campaign *Campaign, err error) {
@@ -85,14 +85,14 @@ func (c *Client) GetCampaignByShortCode(shortCode string) (campaign *Campaign, e
 		return
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/link/%s", modelCampaign, shortCode), http.MethodGet, nil); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/link/%s", modelCampaign, shortCode), http.MethodGet, nil); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	if err = c.error(http.StatusOK, response); err != nil {
+	if err = c.Error(http.StatusOK, response); err != nil {
 		return
 	}
 
@@ -102,7 +102,7 @@ func (c *Client) GetCampaignByShortCode(shortCode string) (campaign *Campaign, e
 }
 
 // GetCampaignBalance will update the model's balance from the chain
-// This will return an error if the campaign is not found (404)
+// This will return an Error if the campaign is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#b6c60c63-8ac5-4c74-a4a2-cf3e858e5a8d
 func (c *Client) GetCampaignBalance(campaignID uint64, lastBalance int64) (campaign *Campaign, err error) {
@@ -113,14 +113,14 @@ func (c *Client) GetCampaignBalance(campaignID uint64, lastBalance int64) (campa
 		return
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/balance/%d?%s=%d", modelCampaign, campaignID, fieldLastBalance, lastBalance), http.MethodGet, nil); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/balance/%d?%s=%d", modelCampaign, campaignID, fieldLastBalance, lastBalance), http.MethodGet, nil); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	if err = c.error(http.StatusOK, response); err != nil {
+	if err = c.Error(http.StatusOK, response); err != nil {
 		return
 	}
 
@@ -143,14 +143,14 @@ func (c *Client) UpdateCampaign(campaign *Campaign) (updatedCampaign *Campaign, 
 	// Permit fields
 	campaign.permitFields()
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(modelCampaign, http.MethodPut, campaign); err != nil {
+	if response, err = c.Request(modelCampaign, http.MethodPut, campaign); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	if err = c.error(http.StatusOK, response); err != nil {
+	if err = c.Error(http.StatusOK, response); err != nil {
 		return
 	}
 
@@ -160,7 +160,7 @@ func (c *Client) UpdateCampaign(campaign *Campaign) (updatedCampaign *Campaign, 
 }
 
 // ListCampaigns will return a list of active campaigns
-// This will return an error if the campaign is not found (404)
+// This will return an Error if the campaign is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#c1b17be6-cb10-48b3-a519-4686961ff41c
 func (c *Client) ListCampaigns(page, resultsPerPage int, sortBy, sortOrder string) (results *CampaignResults, err error) {
@@ -176,14 +176,14 @@ func (c *Client) ListCampaigns(page, resultsPerPage int, sortBy, sortOrder strin
 		sortOrder = SortOrderDesc
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/list?%s=%d&%s=%d&%s=%s&%s=%s", modelCampaign, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/list?%s=%d&%s=%d&%s=%s&%s=%s", modelCampaign, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	if err = c.error(http.StatusOK, response); err != nil {
+	if err = c.Error(http.StatusOK, response); err != nil {
 		return
 	}
 
@@ -193,7 +193,7 @@ func (c *Client) ListCampaigns(page, resultsPerPage int, sortBy, sortOrder strin
 }
 
 // ListCampaignsByURL will return a list of active campaigns
-// This will return an error if the url is not found (404)
+// This will return an Error if the url is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#30a15b69-7912-4e25-ba41-212529fba5ff
 func (c *Client) ListCampaignsByURL(targetURL string, page, resultsPerPage int, sortBy, sortOrder string) (results *CampaignResults, err error) {
@@ -215,14 +215,14 @@ func (c *Client) ListCampaignsByURL(targetURL string, page, resultsPerPage int, 
 		sortOrder = SortOrderDesc
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/find?%s=%s&%s=%d&%s=%d&%s=%s&%s=%s", modelCampaign, fieldTargetURL, targetURL, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/find?%s=%s&%s=%d&%s=%d&%s=%s&%s=%s", modelCampaign, fieldTargetURL, targetURL, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	if err = c.error(http.StatusOK, response); err != nil {
+	if err = c.Error(http.StatusOK, response); err != nil {
 		return
 	}
 
@@ -232,7 +232,7 @@ func (c *Client) ListCampaignsByURL(targetURL string, page, resultsPerPage int, 
 }
 
 // CampaignsFeed will return a feed of active campaigns
-// This will return an error if no campaigns are found (404)
+// This will return an Error if no campaigns are found (404)
 //
 // For more information: https://docs.tonicpow.com/#b3fe69d3-24ba-4c2a-a485-affbb0a738de
 func (c *Client) CampaignsFeed(feedType string) (feed string, err error) {
@@ -244,13 +244,13 @@ func (c *Client) CampaignsFeed(feedType string) (feed string, err error) {
 		feedType = FeedTypeRSS
 	}
 
-	// Fire the request
-	if feed, err = c.request(fmt.Sprintf("%s/feed?%s=%s", modelCampaign, fieldFeedType, feedType), http.MethodGet, nil); err != nil {
+	// Fire the Request
+	if feed, err = c.Request(fmt.Sprintf("%s/feed?%s=%s", modelCampaign, fieldFeedType, feedType), http.MethodGet, nil); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	err = c.error(http.StatusOK, feed)
+	err = c.Error(http.StatusOK, feed)
 
 	return
 }
@@ -260,14 +260,14 @@ func (c *Client) CampaignsFeed(feedType string) (feed string, err error) {
 // For more information: https://docs.tonicpow.com/#d3108b14-486e-4e27-8176-57ec63cd49f2
 func (c *Client) CampaignStatistics() (statistics *CampaignStatistics, err error) {
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/statistics", modelCampaign), http.MethodGet, nil); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/statistics", modelCampaign), http.MethodGet, nil); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	if err = c.error(http.StatusOK, response); err != nil {
+	if err = c.Error(http.StatusOK, response); err != nil {
 		return
 	}
 

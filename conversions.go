@@ -26,14 +26,14 @@ func (c *Client) CreateConversionByGoalID(goalID uint64, tncpwSession, customDim
 	// Start the post data
 	data := map[string]string{fieldGoalID: fmt.Sprintf("%d", goalID), fieldVisitorSessionGUID: tncpwSession, fieldCustomDimensions: customDimensions, fieldDelayInMinutes: fmt.Sprintf("%d", delayInMinutes), fieldAmount: fmt.Sprintf("%f", optionalPurchaseAmount)}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(modelConversion, http.MethodPost, data); err != nil {
+	if response, err = c.Request(modelConversion, http.MethodPost, data); err != nil {
 		return
 	}
 
 	// Only a 201 is treated as a success
-	if err = c.error(http.StatusCreated, response); err != nil {
+	if err = c.Error(http.StatusCreated, response); err != nil {
 		return
 	}
 
@@ -62,14 +62,14 @@ func (c *Client) CreateConversionByGoalName(goalName, tncpwSession, customDimens
 	// Start the post data
 	data := map[string]string{fieldName: goalName, fieldVisitorSessionGUID: tncpwSession, fieldCustomDimensions: customDimensions, fieldDelayInMinutes: fmt.Sprintf("%d", delayInMinutes), fieldAmount: fmt.Sprintf("%f", optionalPurchaseAmount)}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(modelConversion, http.MethodPost, data); err != nil {
+	if response, err = c.Request(modelConversion, http.MethodPost, data); err != nil {
 		return
 	}
 
 	// Only a 201 is treated as a success
-	if err = c.error(http.StatusCreated, response); err != nil {
+	if err = c.Error(http.StatusCreated, response); err != nil {
 		return
 	}
 
@@ -98,14 +98,14 @@ func (c *Client) CreateConversionByUserID(goalID, userID uint64, customDimension
 	// Start the post data
 	data := map[string]string{fieldGoalID: fmt.Sprintf("%d", goalID), fieldUserID: fmt.Sprintf("%d", userID), fieldCustomDimensions: customDimensions, fieldDelayInMinutes: fmt.Sprintf("%d", delayInMinutes), fieldAmount: fmt.Sprintf("%f", optionalPurchaseAmount)}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(modelConversion, http.MethodPost, data); err != nil {
+	if response, err = c.Request(modelConversion, http.MethodPost, data); err != nil {
 		return
 	}
 
 	// Only a 201 is treated as a success
-	if err = c.error(http.StatusCreated, response); err != nil {
+	if err = c.Error(http.StatusCreated, response); err != nil {
 		return
 	}
 
@@ -115,7 +115,7 @@ func (c *Client) CreateConversionByUserID(goalID, userID uint64, customDimension
 }
 
 // GetConversion will get an existing conversion
-// This will return an error if the goal is not found (404)
+// This will return an Error if the goal is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#fce465a1-d8d5-442d-be22-95169170167e
 func (c *Client) GetConversion(conversionID uint64) (conversion *Conversion, err error) {
@@ -126,14 +126,14 @@ func (c *Client) GetConversion(conversionID uint64) (conversion *Conversion, err
 		return
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/details/%d", modelConversion, conversionID), http.MethodGet, nil); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/details/%d", modelConversion, conversionID), http.MethodGet, nil); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	if err = c.error(http.StatusOK, response); err != nil {
+	if err = c.Error(http.StatusOK, response); err != nil {
 		return
 	}
 
@@ -156,14 +156,14 @@ func (c *Client) CancelConversion(conversionID uint64, cancelReason string) (con
 	// Start the post data
 	data := map[string]string{fieldID: fmt.Sprintf("%d", conversionID), fieldReason: cancelReason}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/cancel", modelConversion), http.MethodPut, data); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/cancel", modelConversion), http.MethodPut, data); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	if err = c.error(http.StatusOK, response); err != nil {
+	if err = c.Error(http.StatusOK, response); err != nil {
 		return
 	}
 

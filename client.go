@@ -17,7 +17,7 @@ import (
 // Client is the parent struct that wraps the heimdall client
 type Client struct {
 	httpClient  heimdall.Client // carries out the http operations
-	LastRequest *LastRequest    // is the raw information from the last request
+	LastRequest *LastRequest    // is the raw information from the last Request
 	Parameters  *Parameters     // contains application specific values
 }
 
@@ -40,11 +40,11 @@ type Options struct {
 
 // LastRequest is used to track what was submitted via the Request()
 type LastRequest struct {
-	Error      *Error `json:"error"`       // error is the last error response from the api
+	Error      *Error `json:"Error"`       // Error is the last Error response from the api
 	Method     string `json:"method"`      // method is the HTTP method used
-	PostData   string `json:"post_data"`   // postData is the post data submitted if POST/PUT request
-	StatusCode int    `json:"status_code"` // statusCode is the last code from the request
-	URL        string `json:"url"`         // url is the url used for the request
+	PostData   string `json:"post_data"`   // postData is the post data submitted if POST/PUT Request
+	StatusCode int    `json:"status_code"` // statusCode is the last code from the Request
+	URL        string `json:"url"`         // url is the url used for the Request
 }
 
 // Parameters are application specific values for requests
@@ -128,7 +128,7 @@ func createClient(options *Options) (c *Client) {
 		)
 	}
 
-	// Create a last request and parameters struct
+	// Create a last Request and parameters struct
 	c.LastRequest = new(LastRequest)
 	c.LastRequest.Error = new(Error)
 	c.Parameters = &Parameters{
@@ -137,13 +137,13 @@ func createClient(options *Options) (c *Client) {
 	return
 }
 
-// request is a generic wrapper for all api requests
-func (c *Client) request(endpoint string, method string, payload interface{}) (response string, err error) {
+// Request is a generic wrapper for all api requests
+func (c *Client) Request(endpoint string, method string, payload interface{}) (response string, err error) {
 
 	// Set post value
 	var jsonValue []byte
 
-	// Add the network value
+	// Add the environment
 	endpoint = fmt.Sprintf("%s%s", c.Parameters.environment, endpoint)
 
 	// Switch on methods
@@ -168,24 +168,22 @@ func (c *Client) request(endpoint string, method string, payload interface{}) (r
 	c.LastRequest.PostData = string(jsonValue)
 	c.LastRequest.URL = endpoint
 
-	// Start the request
+	// Start the Request
 	var request *http.Request
 	if request, err = http.NewRequest(method, endpoint, bytes.NewBuffer(jsonValue)); err != nil {
 		return
 	}
 
 	// Set the auth header
-	request.Header.Set("api_key", c.Parameters.apiKey)
+	request.Header.Set(fieldAPIKey, c.Parameters.apiKey)
 
 	// Change the user agent
 	request.Header.Set("User-Agent", c.Parameters.UserAgent)
 
 	// Custom headers?
-	if len(c.Parameters.CustomHeaders) > 0 {
-		for key, headers := range c.Parameters.CustomHeaders {
-			for _, value := range headers {
-				request.Header.Set(key, value)
-			}
+	for key, headers := range c.Parameters.CustomHeaders {
+		for _, value := range headers {
+			request.Header.Set(key, value)
 		}
 	}
 
@@ -194,7 +192,7 @@ func (c *Client) request(endpoint string, method string, payload interface{}) (r
 		request.Header.Set("Content-Type", "application/json")
 	}
 
-	// Fire the http request
+	// Fire the http Request
 	var resp *http.Response
 	if resp, err = c.httpClient.Do(request); err != nil {
 		return
@@ -222,8 +220,8 @@ func (c *Client) request(endpoint string, method string, payload interface{}) (r
 	return
 }
 
-// error will handle all basic error cases
-func (c *Client) error(expectedStatusCode int, response string) (err error) {
+// Error will handle all basic error cases
+func (c *Client) Error(expectedStatusCode int, response string) (err error) {
 	if c.LastRequest.StatusCode != expectedStatusCode {
 		c.LastRequest.Error = new(Error)
 		if err = json.Unmarshal([]byte(response), c.LastRequest.Error); err != nil {

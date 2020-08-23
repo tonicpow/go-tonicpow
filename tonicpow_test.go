@@ -230,4 +230,4 @@ func TestClient_GetUser(t *testing.T) {
 
 // todo: add more tests (covering all requests)
 
-// todo: add examples for each request that can be viewed in godocs
+// todo: add examples for each Request that can be viewed in godocs

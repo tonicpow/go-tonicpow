@@ -35,7 +35,7 @@ const (
 	fieldUserID              = "user_id"
 	fieldVisitorSessionGUID  = "tncpw_session"
 
-	// Model names (used for request endpoints)
+	// Model names (used for Request endpoints)
 	modelAdvertiser     = "advertisers"
 	modelCampaign       = "campaigns"
 	modelConversion     = "conversions"
@@ -86,7 +86,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.1"
+	defaultUserAgent string = "go-tonicpow: v0.4.2"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -120,7 +120,7 @@ var (
 	}
 )
 
-// Error is the universal error response from the API
+// Error is the universal Error response from the API
 //
 // For more information: https://docs.tonicpow.com/#d7fe13a3-2b6d-4399-8d0f-1d6b8ad6ebd9
 type Error struct {

@@ -23,14 +23,14 @@ func (c *Client) CreateAdvertiserProfile(profile *AdvertiserProfile) (createdPro
 		return
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(modelAdvertiser, http.MethodPost, profile); err != nil {
+	if response, err = c.Request(modelAdvertiser, http.MethodPost, profile); err != nil {
 		return
 	}
 
 	// Only a 201 is treated as a success
-	if err = c.error(http.StatusCreated, response); err != nil {
+	if err = c.Error(http.StatusCreated, response); err != nil {
 		return
 	}
 
@@ -40,7 +40,7 @@ func (c *Client) CreateAdvertiserProfile(profile *AdvertiserProfile) (createdPro
 }
 
 // GetAdvertiserProfile will get an existing advertiser profile
-// This will return an error if the profile is not found (404)
+// This will return an Error if the profile is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#b3a62d35-7778-4314-9321-01f5266c3b51
 func (c *Client) GetAdvertiserProfile(profileID uint64) (profile *AdvertiserProfile, err error) {
@@ -51,14 +51,14 @@ func (c *Client) GetAdvertiserProfile(profileID uint64) (profile *AdvertiserProf
 		return
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/details/%d", modelAdvertiser, profileID), http.MethodGet, nil); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/details/%d", modelAdvertiser, profileID), http.MethodGet, nil); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	if err = c.error(http.StatusOK, response); err != nil {
+	if err = c.Error(http.StatusOK, response); err != nil {
 		return
 	}
 
@@ -81,14 +81,14 @@ func (c *Client) UpdateAdvertiserProfile(profile *AdvertiserProfile) (updatedPro
 	// Permit fields
 	profile.permitFields()
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(modelAdvertiser, http.MethodPut, profile); err != nil {
+	if response, err = c.Request(modelAdvertiser, http.MethodPut, profile); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	if err = c.error(http.StatusOK, response); err != nil {
+	if err = c.Error(http.StatusOK, response); err != nil {
 		return
 	}
 
@@ -98,7 +98,7 @@ func (c *Client) UpdateAdvertiserProfile(profile *AdvertiserProfile) (updatedPro
 }
 
 // ListCampaignsByAdvertiserProfile will return a list of campaigns
-// This will return an error if the campaign is not found (404)
+// This will return an Error if the campaign is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#98017e9a-37dd-4810-9483-b6c400572e0c
 func (c *Client) ListCampaignsByAdvertiserProfile(profileID uint64, page, resultsPerPage int, sortBy, sortOrder string) (results *CampaignResults, err error) {
@@ -120,14 +120,14 @@ func (c *Client) ListCampaignsByAdvertiserProfile(profileID uint64, page, result
 		sortOrder = SortOrderDesc
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/campaigns/%d?%s=%d&%s=%d&%s=%s&%s=%s", modelAdvertiser, profileID, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/campaigns/%d?%s=%d&%s=%d&%s=%s&%s=%s", modelAdvertiser, profileID, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	if err = c.error(http.StatusOK, response); err != nil {
+	if err = c.Error(http.StatusOK, response); err != nil {
 		return
 	}
 

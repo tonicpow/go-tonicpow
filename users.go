@@ -32,14 +32,14 @@ func (c *Client) CreateUser(user *User) (createdUser *User, err error) {
 	// Permit fields before creating
 	user.permitFields()
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(modelUser, http.MethodPost, user); err != nil {
+	if response, err = c.Request(modelUser, http.MethodPost, user); err != nil {
 		return
 	}
 
 	// Only a 201 is treated as a success
-	if err = c.error(http.StatusCreated, response); err != nil {
+	if err = c.Error(http.StatusCreated, response); err != nil {
 		return
 	}
 
@@ -62,14 +62,14 @@ func (c *Client) UpdateUser(user *User) (updatedUser *User, err error) {
 	// Permit fields before updating
 	user.permitFields()
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(modelUser, http.MethodPut, user); err != nil {
+	if response, err = c.Request(modelUser, http.MethodPut, user); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	if err = c.error(http.StatusOK, response); err != nil {
+	if err = c.Error(http.StatusOK, response); err != nil {
 		return
 	}
 
@@ -79,7 +79,7 @@ func (c *Client) UpdateUser(user *User) (updatedUser *User, err error) {
 }
 
 // GetUser will get an existing user
-// This will return an error if the user is not found (404)
+// This will return an Error if the user is not found (404)
 // Use either an ID or email to get an existing user
 //
 // For more information: https://docs.tonicpow.com/#e6f764a2-5a91-4680-aa5e-03409dd878d8
@@ -99,14 +99,14 @@ func (c *Client) GetUser(byID uint64, byEmail string) (user *User, err error) {
 		params.Add(fieldEmail, byEmail)
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/details", modelUser), http.MethodGet, params); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/details", modelUser), http.MethodGet, params); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	if err = c.error(http.StatusOK, response); err != nil {
+	if err = c.Error(http.StatusOK, response); err != nil {
 		return
 	}
 
@@ -126,15 +126,15 @@ func (c *Client) GetUserBalance(userID uint64, lastBalance int64) (user *User, e
 		return
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/balance/%d?%s=%d", modelUser, userID, fieldLastBalance, lastBalance),
+	if response, err = c.Request(fmt.Sprintf("%s/balance/%d?%s=%d", modelUser, userID, fieldLastBalance, lastBalance),
 		http.MethodGet, nil); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	if err = c.error(http.StatusOK, response); err != nil {
+	if err = c.Error(http.StatusOK, response); err != nil {
 		return
 	}
 
@@ -154,14 +154,14 @@ func (c *Client) CurrentUser(userID uint64) (user *User, err error) {
 		return
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/account?id=%d", modelUser, userID), http.MethodGet, nil); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/account?id=%d", modelUser, userID), http.MethodGet, nil); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	if err = c.error(http.StatusOK, response); err != nil {
+	if err = c.Error(http.StatusOK, response); err != nil {
 		return
 	}
 
@@ -190,14 +190,14 @@ func (c *Client) LoginUser(email, password string) (user *User, err error) {
 		Password: password,
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/login", modelUser), http.MethodPost, user); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/login", modelUser), http.MethodPost, user); err != nil {
 		return
 	}
 
 	// Only a 201 is treated as a success
-	if err = c.error(http.StatusCreated, response); err != nil {
+	if err = c.Error(http.StatusCreated, response); err != nil {
 		return
 	}
 
@@ -206,7 +206,7 @@ func (c *Client) LoginUser(email, password string) (user *User, err error) {
 	return
 }
 
-// ForgotPassword will fire a forgot password request
+// ForgotPassword will fire a forgot password Request
 //
 // For more information: https://docs.tonicpow.com/#2c33dae4-d6b1-4949-9e84-fb02157ab7cd
 func (c *Client) ForgotPassword(emailAddress string) (err error) {
@@ -220,18 +220,18 @@ func (c *Client) ForgotPassword(emailAddress string) (err error) {
 	// Start the post data
 	data := map[string]string{fieldEmail: emailAddress}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/password/forgot", modelUser), http.MethodPost, data); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/password/forgot", modelUser), http.MethodPost, data); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	err = c.error(http.StatusOK, response)
+	err = c.Error(http.StatusOK, response)
 	return
 }
 
-// ResetPassword will reset a password from a ForgotPassword() request
+// ResetPassword will reset a password from a ForgotPassword() Request
 //
 // For more information: https://docs.tonicpow.com/#370fbeec-adb2-4ed3-82dc-2dffa840e490
 func (c *Client) ResetPassword(token, password, passwordConfirm string) (err error) {
@@ -254,117 +254,14 @@ func (c *Client) ResetPassword(token, password, passwordConfirm string) (err err
 	// Start the post data
 	data := map[string]string{fieldToken: token, fieldPassword: password, fieldPasswordConfirm: passwordConfirm}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/password/reset", modelUser), http.MethodPut, data); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/password/reset", modelUser), http.MethodPut, data); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	err = c.error(http.StatusOK, response)
-	return
-}
-
-// ResendEmailVerification will resend an email to the user
-//
-// For more information: https://docs.tonicpow.com/#a12a3eff-491b-4079-99f6-07497b9e4efe
-func (c *Client) ResendEmailVerification(userID uint64) (err error) {
-
-	// Basic requirements
-	if userID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldID)
-		return
-	}
-
-	// Start the post data
-	data := map[string]string{fieldID: fmt.Sprintf("%d", userID)}
-
-	// Fire the request
-	var response string
-	if response, err = c.request(fmt.Sprintf("%s/verify/%s/send", modelUser, fieldEmail), http.MethodPost, data); err != nil {
-		return
-	}
-
-	// Only a 200 is treated as a success
-	err = c.error(http.StatusOK, response)
-	return
-}
-
-// CompleteEmailVerification will complete an email verification with a given token
-//
-// For more information: https://docs.tonicpow.com/#f5081800-a224-4f36-8014-94981f0bd55d
-func (c *Client) CompleteEmailVerification(token string) (err error) {
-
-	// Basic requirements
-	if len(token) == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldToken)
-		return
-	}
-
-	// Start the post data
-	data := map[string]string{fieldToken: token}
-
-	// Fire the request
-	var response string
-	if response, err = c.request(fmt.Sprintf("%s/verify/%s", modelUser, fieldEmail), http.MethodPut, data); err != nil {
-		return
-	}
-
-	// Only a 200 is treated as a success
-	err = c.error(http.StatusOK, response)
-	return
-}
-
-// ResendPhoneVerification will resend a phone verification code to the user
-//
-// For more information: https://docs.tonicpow.com/#fcc4fe4d-f298-45bd-b51e-a5c107834528
-func (c *Client) ResendPhoneVerification(userID uint64) (err error) {
-
-	// Basic requirements
-	if userID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldID)
-		return
-	}
-
-	// Start the post data
-	data := map[string]string{fieldID: fmt.Sprintf("%d", userID)}
-
-	// Fire the request
-	var response string
-	if response, err = c.request(fmt.Sprintf("%s/verify/%s/send", modelUser, fieldPhone), http.MethodPost, data); err != nil {
-		return
-	}
-
-	// Only a 200 is treated as a success
-	err = c.error(http.StatusOK, response)
-	return
-}
-
-// CompletePhoneVerification will complete a phone verification with a given code and number
-//
-// For more information: https://docs.tonicpow.com/#573403c4-b872-475d-ac04-de32a88ecd19
-func (c *Client) CompletePhoneVerification(phone, code string) (err error) {
-
-	// Basic requirements
-	if len(phone) == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldPhone)
-		return
-	} else if len(code) == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldPhoneCode)
-		return
-	}
-
-	// Start the post data
-	data := map[string]string{fieldPhone: phone, fieldPhoneCode: code}
-
-	// Fire the request
-	var response string
-	if response, err = c.request(fmt.Sprintf("%s/verify/%s", modelUser, fieldPhone), http.MethodPut, data); err != nil {
-		return
-	}
-
-	// Only a 200 is treated as a success
-	err = c.error(http.StatusOK, response)
+	err = c.Error(http.StatusOK, response)
 	return
 }
 
@@ -387,14 +284,14 @@ func (c *Client) AcceptUser(userID uint64, email string, reason string) (err err
 		return
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/status/accept", modelUser), http.MethodPut, data); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/status/accept", modelUser), http.MethodPut, data); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	err = c.error(http.StatusOK, response)
+	err = c.Error(http.StatusOK, response)
 	return
 }
 
@@ -416,14 +313,14 @@ func (c *Client) ActivateUser(userID uint64, email string) (err error) {
 		return
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/status/activate", modelUser), http.MethodPut, data); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/status/activate", modelUser), http.MethodPut, data); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	err = c.error(http.StatusOK, response)
+	err = c.Error(http.StatusOK, response)
 	return
 }
 
@@ -445,19 +342,19 @@ func (c *Client) PauseUser(userID uint64, email string, reason string) (err erro
 		return
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/status/pause", modelUser), http.MethodPut, data); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/status/pause", modelUser), http.MethodPut, data); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	err = c.error(http.StatusOK, response)
+	err = c.Error(http.StatusOK, response)
 	return
 }
 
 // UserExists will check if a user exists by email address
-// This will return an error if the user is not found (404)
+// This will return an Error if the user is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#2d8c37d4-c88b-4cec-83ad-fa72b0f41f17
 func (c *Client) UserExists(byEmail string) (existsResponse *UserExists, err error) {
@@ -472,17 +369,17 @@ func (c *Client) UserExists(byEmail string) (existsResponse *UserExists, err err
 	params := url.Values{}
 	params.Add(fieldEmail, byEmail)
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/exists", modelUser), http.MethodGet, params); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/exists", modelUser), http.MethodGet, params); err != nil {
 		return
 	}
 
-	// Only a 200 is treated as a success, 404 is false and no error
+	// Only a 200 is treated as a success, 404 is false and no Error
 	if c.LastRequest.StatusCode == http.StatusNotFound {
 		return
 	}
-	if err = c.error(http.StatusOK, response); err != nil {
+	if err = c.Error(http.StatusOK, response); err != nil {
 		return
 	}
 
@@ -507,14 +404,14 @@ func (c *Client) ReleaseUserBalance(userID uint64, reason string) (err error) {
 		return
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/wallet/release", modelUser), http.MethodPut, data); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/wallet/release", modelUser), http.MethodPut, data); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	err = c.error(http.StatusOK, response)
+	err = c.Error(http.StatusOK, response)
 	return
 }
 
@@ -534,14 +431,14 @@ func (c *Client) RefundUserBalance(userID uint64, reason string) (err error) {
 		return
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/wallet/refund", modelUser), http.MethodPut, data); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/wallet/refund", modelUser), http.MethodPut, data); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	err = c.error(http.StatusOK, response)
+	err = c.Error(http.StatusOK, response)
 	return
 }
 
@@ -565,14 +462,14 @@ func (c *Client) GetUserReferrals(byID uint64, byEmail string) (referrals []*Use
 		params.Add(fieldEmail, byEmail)
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/referred", modelUser), http.MethodGet, params); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/referred", modelUser), http.MethodGet, params); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	if err = c.error(http.StatusOK, response); err != nil {
+	if err = c.Error(http.StatusOK, response); err != nil {
 		return
 	}
 
@@ -582,7 +479,7 @@ func (c *Client) GetUserReferrals(byID uint64, byEmail string) (referrals []*Use
 }
 
 // ListUserReferrals will return a list of active users that have referrals
-// This will return an error if no users are found (404)
+// This will return an Error if no users are found (404)
 //
 // For more information: https://docs.tonicpow.com/#3fd8e647-abfa-422f-90af-952cccd3be7c
 func (c *Client) ListUserReferrals(page, resultsPerPage int, sortBy, sortOrder string) (results *ReferralResults, err error) {
@@ -598,15 +495,15 @@ func (c *Client) ListUserReferrals(page, resultsPerPage int, sortBy, sortOrder s
 		sortOrder = SortOrderDesc
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/referrals?%s=%d&%s=%d&%s=%s&%s=%s", modelUser, fieldCurrentPage,
+	if response, err = c.Request(fmt.Sprintf("%s/referrals?%s=%d&%s=%d&%s=%s&%s=%s", modelUser, fieldCurrentPage,
 		page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	if err = c.error(http.StatusOK, response); err != nil {
+	if err = c.Error(http.StatusOK, response); err != nil {
 		return
 	}
 
@@ -615,7 +512,7 @@ func (c *Client) ListUserReferrals(page, resultsPerPage int, sortBy, sortOrder s
 	return
 }
 
-// RequestActivation will send a request for activation
+// RequestActivation will send a Request for activation
 //
 // For more information: https://docs.tonicpow.com/#c3d2f569-dc5e-4885-9701-a58522cb92cf
 func (c *Client) RequestActivation(userID uint64) (err error) {
@@ -626,13 +523,13 @@ func (c *Client) RequestActivation(userID uint64) (err error) {
 		return
 	}
 
-	// Fire the request
+	// Fire the Request
 	var response string
-	if response, err = c.request(fmt.Sprintf("%s/status/request?id=%d", modelUser, userID), http.MethodPut, nil); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/status/Request?id=%d", modelUser, userID), http.MethodPut, nil); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
-	err = c.error(http.StatusOK, response)
+	err = c.Error(http.StatusOK, response)
 	return
 }
