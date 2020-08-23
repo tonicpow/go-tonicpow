@@ -86,7 +86,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.3"
+	defaultUserAgent string = "go-tonicpow: v0.4.4"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -302,6 +302,14 @@ type ReferralResults struct {
 	Referrals      []*UserReferral `json:"referrals"`
 	Results        int             `json:"results"`
 	ResultsPerPage int             `json:"results_per_page"`
+}
+
+// AdvertiserResults is the page response for advertiser profile results from listing
+type AdvertiserResults struct {
+	Advertisers    []*AdvertiserProfile `json:"advertisers"`
+	CurrentPage    int                  `json:"current_page"`
+	Results        int                  `json:"results"`
+	ResultsPerPage int                  `json:"results_per_page"`
 }
 
 // CampaignResults is the page response for campaign results from listing
