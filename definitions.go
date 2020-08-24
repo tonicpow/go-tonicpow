@@ -86,7 +86,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.4"
+	defaultUserAgent string = "go-tonicpow: v0.4.5"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -160,6 +160,7 @@ type User struct {
 	ReferredByUserID   uint64               `json:"referred_by_user_id"`
 	Status             string               `json:"status"`
 	TncpwSession       string               `json:"tncpw_session,omitempty"`
+	TwitterAuth        bool                 `json:"twitter_auth"`
 }
 
 // AdvertiserProfile is the advertiser_profile model (child of User)
