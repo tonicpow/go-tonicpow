@@ -85,7 +85,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.7"
+	defaultUserAgent string = "go-tonicpow: v0.4.8"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -284,6 +284,12 @@ type UserExists struct {
 	Status      string `json:"status"`
 }
 
+// Promoter is the public promoter response
+type Promoter struct {
+	Earned        uint64 `json:"earned"`
+	PayoutAddress string `json:"payout_address"`
+}
+
 // UserReferral is a slim record of the User model
 //
 // For more information: https://docs.tonicpow.com/#50b3c130-7254-4a05-b312-b14647736e38
@@ -310,6 +316,14 @@ type AdvertiserResults struct {
 	CurrentPage    int                  `json:"current_page"`
 	Results        int                  `json:"results"`
 	ResultsPerPage int                  `json:"results_per_page"`
+}
+
+// PromoterResults is the page response for promoter results from listing
+type PromoterResults struct {
+	Promoters      []*Promoter `json:"promoters"`
+	CurrentPage    int         `json:"current_page"`
+	Results        int         `json:"results"`
+	ResultsPerPage int         `json:"results_per_page"`
 }
 
 // CampaignResults is the page response for campaign results from listing
