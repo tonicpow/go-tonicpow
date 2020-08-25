@@ -23,10 +23,9 @@ const (
 	fieldName                = "name"
 	fieldPassword            = "password"
 	fieldPasswordConfirm     = "password_confirm"
-	fieldPhone               = "phone"
-	fieldPhoneCode           = "phone_code"
 	fieldReason              = "reason"
 	fieldResultsPerPage      = "results_per_page"
+	fieldSearchQuery         = "query"
 	fieldShortCode           = "short_code"
 	fieldSortBy              = "sort_by"
 	fieldSortOrder           = "sort_order"
@@ -86,7 +85,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.6"
+	defaultUserAgent string = "go-tonicpow: v0.4.7"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
