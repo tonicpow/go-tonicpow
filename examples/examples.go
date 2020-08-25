@@ -380,7 +380,7 @@ func main() {
 	// Example: List active campaigns
 	//
 	var campaignResults *tonicpow.CampaignResults
-	if campaignResults, err = TonicPowAPI.ListCampaigns(1, 5, tonicpow.SortByFieldCreatedAt, tonicpow.SortOrderDesc); err != nil {
+	if campaignResults, err = TonicPowAPI.ListCampaigns(1, 5, tonicpow.SortByFieldCreatedAt, tonicpow.SortOrderDesc, ""); err != nil {
 		log.Fatalf("list campaign failed error %s - api error: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message)
 	} else {
 		log.Printf("campaigns found: %d page: %d", campaignResults.Results, campaignResults.CurrentPage)
