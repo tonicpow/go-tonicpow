@@ -86,7 +86,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.5"
+	defaultUserAgent string = "go-tonicpow: v0.4.6"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -243,7 +243,7 @@ type Link struct {
 	CustomShortCode string `json:"custom_short_code"`
 	ID              uint64 `json:"id,omitempty"`
 	ShortCode       string `json:"short_code"`
-	ShortCodeURL    string `json:"short_code_url"`
+	ShortCodeURL    string `json:"short_link_url"`
 	TargetURL       string `json:"target_url"`
 	UserID          uint64 `json:"user_id"`
 }
