@@ -85,7 +85,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.10"
+	defaultUserAgent string = "go-tonicpow: v0.4.11"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -138,6 +138,7 @@ type Error struct {
 type User struct {
 	AdvertiserProfiles []*AdvertiserProfile `json:"advertiser_profiles"`
 	Balance            uint64               `json:"balance"`
+	Bio                string               `json:"bio"`
 	Country            string               `json:"country"`
 	Earned             uint64               `json:"earned"`
 	Email              string               `json:"email"`
@@ -162,6 +163,7 @@ type User struct {
 	Status             string               `json:"status"`
 	TncpwSession       string               `json:"tncpw_session,omitempty"`
 	TwitterAuth        bool                 `json:"twitter_auth"`
+	Username           string               `json:"username"`
 }
 
 // AdvertiserProfile is the advertiser_profile model (child of User)
