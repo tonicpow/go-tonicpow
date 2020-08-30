@@ -85,7 +85,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.11"
+	defaultUserAgent string = "go-tonicpow: v0.4.12"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -95,9 +95,6 @@ const (
 
 	// StagingEnvironment is used for production-like testing
 	StagingEnvironment APIEnvironment = "https://api.staging.tonicpow.com/" + apiVersion + "/"
-
-	// sessionCookie is the cookie name for session tokens
-	sessionCookie = "session_token"
 )
 
 var (
@@ -137,6 +134,7 @@ type Error struct {
 // For more information: https://docs.tonicpow.com/#50b3c130-7254-4a05-b312-b14647736e38
 type User struct {
 	AdvertiserProfiles []*AdvertiserProfile `json:"advertiser_profiles"`
+	AvatarURL          string               `json:"avatar_url"`
 	Balance            uint64               `json:"balance"`
 	Bio                string               `json:"bio"`
 	Country            string               `json:"country"`
@@ -149,6 +147,7 @@ type User struct {
 	InternalAddress    string               `json:"internal_address"`
 	LastName           string               `json:"last_name"`
 	MiddleName         string               `json:"middle_name"`
+	MoneyButtonAuth    bool                 `json:"moneybutton_auth"`
 	NewPassword        string               `json:"new_password,omitempty"`
 	NewPasswordConfirm string               `json:"new_password_confirm,omitempty"`
 	Password           string               `json:"password,omitempty"`
@@ -160,10 +159,24 @@ type User struct {
 	ReferralsAccepted  uint                 `json:"referrals_accepted"`
 	ReferralURL        string               `json:"referral_url"`
 	ReferredByUserID   uint64               `json:"referred_by_user_id"`
+	RelayAuth          bool                 `json:"relay_auth"`
 	Status             string               `json:"status"`
 	TncpwSession       string               `json:"tncpw_session,omitempty"`
 	TwitterAuth        bool                 `json:"twitter_auth"`
 	Username           string               `json:"username"`
+}
+
+// Promoter is the public promoter response
+type Promoter struct {
+	AvatarURL       string `json:"avatar_url"`
+	Country         string `json:"country"`
+	EmailVerified   bool   `json:"email_verified"`
+	HandCashAuth    bool   `json:"handcash_auth"`
+	MoneyButtonAuth bool   `json:"moneybutton_auth"`
+	PhoneVerified   bool   `json:"phone_verified"`
+	RelayAuth       bool   `json:"relay_auth"`
+	TwitterAuth     bool   `json:"twitter_auth"`
+	Username        string `json:"username"`
 }
 
 // AdvertiserProfile is the advertiser_profile model (child of User)
@@ -227,6 +240,7 @@ type Goal struct {
 // For more information: https://docs.tonicpow.com/#75c837d5-3336-4d87-a686-d80c6f8938b9
 type Conversion struct {
 	Amount           float64 `json:"amount"`
+	CampaignID       uint64  `json:"campaign_id"`
 	CustomDimensions string  `json:"custom_dimensions"`
 	GoalID           uint64  `json:"goal_id"`
 	GoalName         string  `json:"goal_name"`
@@ -288,12 +302,6 @@ type UserExists struct {
 	Status      string `json:"status"`
 }
 
-// Promoter is the public promoter response
-type Promoter struct {
-	Earned        uint64 `json:"earned"`
-	PayoutAddress string `json:"payout_address"`
-}
-
 // UserReferral is a slim record of the User model
 //
 // For more information: https://docs.tonicpow.com/#50b3c130-7254-4a05-b312-b14647736e38
@@ -353,4 +361,21 @@ type LinkResults struct {
 	Links          []*Link `json:"links"`
 	Results        int     `json:"results"`
 	ResultsPerPage int     `json:"results_per_page"`
+}
+
+// ActivityItem is the item for a recent activity request
+type ActivityItem struct {
+	Action     string `json:"action"`
+	Amount     uint64 `json:"amount"`
+	CampaignID uint64 `json:"campaign_id"`
+	Date       string `json:"date"`
+	TxID       string `json:"tx_id"`
+}
+
+// RecentActivityResults is the page response for listing recent activity
+type RecentActivityResults struct {
+	Activities     []*ActivityItem `json:"activities"`
+	CurrentPage    int             `json:"current_page"`
+	Results        int             `json:"results"`
+	ResultsPerPage int             `json:"results_per_page"`
 }
