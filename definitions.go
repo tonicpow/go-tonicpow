@@ -123,9 +123,10 @@ type Error struct {
 	Code        int         `json:"code"`
 	Data        interface{} `json:"data"`
 	IPAddress   string      `json:"ip_address"`
-	Method      string      `json:"method"`
 	Message     string      `json:"message"`
+	Method      string      `json:"method"`
 	RequestGUID string      `json:"request_guid"`
+	StatusCode  int         `json:"status_code"`
 	URL         string      `json:"url"`
 }
 
