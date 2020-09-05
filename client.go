@@ -240,8 +240,12 @@ func (c *Client) Error(expectedStatusCode int, response string) (err error) {
 // createError will create an internal error and return a standard Go error
 //
 // Sets the minimum needed for message and HTTP status (used by apps etc)
+// This error can be raised before a TonicPow request is even created
 func (c *Client) createError(message string, statusCode int) error {
 	c.LastRequest.Error.StatusCode = statusCode
 	c.LastRequest.Error.Message = message
+	if c.LastRequest.StatusCode <= 0 {
+		c.LastRequest.StatusCode = statusCode
+	}
 	return errors.New(message)
 }
