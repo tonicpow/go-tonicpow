@@ -19,7 +19,7 @@ func (c *Client) CreateAdvertiserProfile(profile *AdvertiserProfile) (createdPro
 
 	// Basic requirements
 	if profile.UserID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldUserID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldUserID), http.StatusBadRequest)
 		return
 	}
 
@@ -35,7 +35,9 @@ func (c *Client) CreateAdvertiserProfile(profile *AdvertiserProfile) (createdPro
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &createdProfile)
+	if err = json.Unmarshal([]byte(response), &createdProfile); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "advertiser"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -47,7 +49,7 @@ func (c *Client) GetAdvertiserProfile(profileID uint64) (profile *AdvertiserProf
 
 	// Must have an id
 	if profileID == 0 {
-		err = fmt.Errorf("missing field: %s", fieldID)
+		err = c.createError(fmt.Sprintf("missing field: %s", fieldID), http.StatusBadRequest)
 		return
 	}
 
@@ -63,7 +65,9 @@ func (c *Client) GetAdvertiserProfile(profileID uint64) (profile *AdvertiserProf
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &profile)
+	if err = json.Unmarshal([]byte(response), &profile); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "advertiser"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -74,7 +78,7 @@ func (c *Client) UpdateAdvertiserProfile(profile *AdvertiserProfile) (updatedPro
 
 	// Basic requirements
 	if profile.ID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
 		return
 	}
 
@@ -93,7 +97,9 @@ func (c *Client) UpdateAdvertiserProfile(profile *AdvertiserProfile) (updatedPro
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &updatedProfile)
+	if err = json.Unmarshal([]byte(response), &updatedProfile); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "advertiser"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -105,14 +111,14 @@ func (c *Client) ListCampaignsByAdvertiserProfile(profileID uint64, page, result
 
 	// Basic requirements
 	if profileID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldAdvertiserProfileID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldAdvertiserProfileID), http.StatusBadRequest)
 		return
 	}
 
 	// Do we know this field?
 	if len(sortBy) > 0 {
 		if !isInList(strings.ToLower(sortBy), campaignSortFields) {
-			err = fmt.Errorf("sort by %s is not valid", sortBy)
+			err = c.createError(fmt.Sprintf("sort by %s is not valid", sortBy), http.StatusBadRequest)
 			return
 		}
 	} else {
@@ -132,7 +138,9 @@ func (c *Client) ListCampaignsByAdvertiserProfile(profileID uint64, page, result
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &results)
+	if err = json.Unmarshal([]byte(response), &results); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "advertiser"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -144,14 +152,14 @@ func (c *Client) ListAppsByAdvertiserProfile(profileID uint64, page, resultsPerP
 
 	// Basic requirements
 	if profileID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldAdvertiserProfileID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldAdvertiserProfileID), http.StatusBadRequest)
 		return
 	}
 
 	// Do we know this field?
 	if len(sortBy) > 0 {
 		if !isInList(strings.ToLower(sortBy), appSortFields) {
-			err = fmt.Errorf("sort by %s is not valid", sortBy)
+			err = c.createError(fmt.Sprintf("sort by %s is not valid", sortBy), http.StatusBadRequest)
 			return
 		}
 	} else {
@@ -171,6 +179,8 @@ func (c *Client) ListAppsByAdvertiserProfile(profileID uint64, page, resultsPerP
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &results)
+	if err = json.Unmarshal([]byte(response), &results); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "advertiser"), http.StatusExpectationFailed)
+	}
 	return
 }

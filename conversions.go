@@ -13,13 +13,13 @@ func (c *Client) CreateConversionByGoalID(goalID uint64, tncpwSession, customDim
 
 	// Must have a name
 	if goalID == 0 {
-		err = fmt.Errorf("missing field: %s", fieldID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
 		return
 	}
 
 	// Must have a session guid
 	if len(tncpwSession) == 0 {
-		err = fmt.Errorf("missing field: %s", fieldVisitorSessionGUID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldVisitorSessionGUID), http.StatusBadRequest)
 		return
 	}
 
@@ -38,7 +38,9 @@ func (c *Client) CreateConversionByGoalID(goalID uint64, tncpwSession, customDim
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &conversion)
+	if err = json.Unmarshal([]byte(response), &conversion); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "conversion"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -49,13 +51,13 @@ func (c *Client) CreateConversionByGoalName(goalName, tncpwSession, customDimens
 
 	// Must have a name
 	if len(goalName) == 0 {
-		err = fmt.Errorf("missing field: %s", fieldName)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldName), http.StatusBadRequest)
 		return
 	}
 
 	// Must have a session guid
 	if len(tncpwSession) == 0 {
-		err = fmt.Errorf("missing field: %s", fieldVisitorSessionGUID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldVisitorSessionGUID), http.StatusBadRequest)
 		return
 	}
 
@@ -74,7 +76,9 @@ func (c *Client) CreateConversionByGoalName(goalName, tncpwSession, customDimens
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &conversion)
+	if err = json.Unmarshal([]byte(response), &conversion); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "conversion"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -85,13 +89,13 @@ func (c *Client) CreateConversionByUserID(goalID, userID uint64, customDimension
 
 	// Must have a name
 	if goalID == 0 {
-		err = fmt.Errorf("missing field: %s", fieldID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
 		return
 	}
 
 	// Must have a user id
 	if userID == 0 {
-		err = fmt.Errorf("missing field: %s", fieldUserID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldUserID), http.StatusBadRequest)
 		return
 	}
 
@@ -110,7 +114,9 @@ func (c *Client) CreateConversionByUserID(goalID, userID uint64, customDimension
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &conversion)
+	if err = json.Unmarshal([]byte(response), &conversion); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "conversion"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -122,7 +128,7 @@ func (c *Client) GetConversion(conversionID uint64) (conversion *Conversion, err
 
 	// Must have an id
 	if conversionID == 0 {
-		err = fmt.Errorf("missing field: %s", fieldID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
 		return
 	}
 
@@ -138,7 +144,9 @@ func (c *Client) GetConversion(conversionID uint64) (conversion *Conversion, err
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &conversion)
+	if err = json.Unmarshal([]byte(response), &conversion); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "conversion"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -149,7 +157,7 @@ func (c *Client) CancelConversion(conversionID uint64, cancelReason string) (con
 
 	// Must have an id
 	if conversionID == 0 {
-		err = fmt.Errorf("missing field: %s", fieldID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
 		return
 	}
 
@@ -168,6 +176,8 @@ func (c *Client) CancelConversion(conversionID uint64, cancelReason string) (con
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &conversion)
+	if err = json.Unmarshal([]byte(response), &conversion); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "conversion"), http.StatusExpectationFailed)
+	}
 	return
 }

@@ -25,7 +25,7 @@ func (c *Client) CreateCampaign(campaign *Campaign) (createdCampaign *Campaign, 
 
 	// Basic requirements
 	if campaign.AdvertiserProfileID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldAdvertiserProfileID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldAdvertiserProfileID), http.StatusBadRequest)
 		return
 	}
 
@@ -41,7 +41,9 @@ func (c *Client) CreateCampaign(campaign *Campaign) (createdCampaign *Campaign, 
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &createdCampaign)
+	if err = json.Unmarshal([]byte(response), &createdCampaign); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "campaign"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -53,7 +55,7 @@ func (c *Client) GetCampaign(campaignID uint64) (campaign *Campaign, err error) 
 
 	// Must have an id
 	if campaignID == 0 {
-		err = fmt.Errorf("missing field: %s", fieldID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
 		return
 	}
 
@@ -69,7 +71,9 @@ func (c *Client) GetCampaign(campaignID uint64) (campaign *Campaign, err error) 
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &campaign)
+	if err = json.Unmarshal([]byte(response), &campaign); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "campaign"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -81,7 +85,7 @@ func (c *Client) GetCampaignByShortCode(shortCode string) (campaign *Campaign, e
 
 	// Must have a short code
 	if len(shortCode) == 0 {
-		err = fmt.Errorf("missing field: %s", fieldShortCode)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldShortCode), http.StatusBadRequest)
 		return
 	}
 
@@ -97,7 +101,9 @@ func (c *Client) GetCampaignByShortCode(shortCode string) (campaign *Campaign, e
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &campaign)
+	if err = json.Unmarshal([]byte(response), &campaign); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "campaign"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -109,7 +115,7 @@ func (c *Client) GetCampaignBalance(campaignID uint64, lastBalance int64) (campa
 
 	// Must have an id
 	if campaignID == 0 {
-		err = fmt.Errorf("missing field: %s", fieldID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
 		return
 	}
 
@@ -125,7 +131,9 @@ func (c *Client) GetCampaignBalance(campaignID uint64, lastBalance int64) (campa
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &campaign)
+	if err = json.Unmarshal([]byte(response), &campaign); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "campaign"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -136,7 +144,7 @@ func (c *Client) UpdateCampaign(campaign *Campaign) (updatedCampaign *Campaign, 
 
 	// Basic requirements
 	if campaign.ID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
 		return
 	}
 
@@ -155,7 +163,9 @@ func (c *Client) UpdateCampaign(campaign *Campaign) (updatedCampaign *Campaign, 
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &updatedCampaign)
+	if err = json.Unmarshal([]byte(response), &updatedCampaign); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "campaign"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -168,7 +178,7 @@ func (c *Client) ListCampaigns(page, resultsPerPage int, sortBy, sortOrder, sear
 	// Do we know this field?
 	if len(sortBy) > 0 {
 		if !isInList(strings.ToLower(sortBy), campaignSortFields) {
-			err = fmt.Errorf("sort by %s is not valid", sortBy)
+			err = c.createError(fmt.Sprintf("sort by %s is not valid", sortBy), http.StatusBadRequest)
 			return
 		}
 	} else {
@@ -188,7 +198,9 @@ func (c *Client) ListCampaigns(page, resultsPerPage int, sortBy, sortOrder, sear
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &results)
+	if err = json.Unmarshal([]byte(response), &results); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "campaign"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -200,14 +212,14 @@ func (c *Client) ListCampaignsByURL(targetURL string, page, resultsPerPage int, 
 
 	// Must have a value
 	if len(targetURL) == 0 {
-		err = fmt.Errorf("missing field: %s", fieldTargetURL)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldTargetURL), http.StatusBadRequest)
 		return
 	}
 
 	// Do we know this field?
 	if len(sortBy) > 0 {
 		if !isInList(strings.ToLower(sortBy), campaignSortFields) {
-			err = fmt.Errorf("sort by %s is not valid", sortBy)
+			err = c.createError(fmt.Sprintf("sort by %s is not valid", sortBy), http.StatusBadRequest)
 			return
 		}
 	} else {
@@ -227,7 +239,9 @@ func (c *Client) ListCampaignsByURL(targetURL string, page, resultsPerPage int, 
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &results)
+	if err = json.Unmarshal([]byte(response), &results); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "campaign"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -272,6 +286,8 @@ func (c *Client) CampaignStatistics() (statistics *CampaignStatistics, err error
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &statistics)
+	if err = json.Unmarshal([]byte(response), &statistics); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "statistics"), http.StatusExpectationFailed)
+	}
 	return
 }

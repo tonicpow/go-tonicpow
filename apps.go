@@ -13,10 +13,10 @@ func (c *Client) CreateApp(app *App) (createdApp *App, err error) {
 
 	// Basic requirements
 	if app.AdvertiserProfileID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldAdvertiserProfileID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldAdvertiserProfileID), http.StatusBadRequest)
 		return
 	} else if len(app.Name) == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldName)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldName), http.StatusBadRequest)
 		return
 	}
 
@@ -32,7 +32,9 @@ func (c *Client) CreateApp(app *App) (createdApp *App, err error) {
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &createdApp)
+	if err = json.Unmarshal([]byte(response), &createdApp); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "app"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -44,7 +46,7 @@ func (c *Client) GetApp(appID uint64) (app *App, err error) {
 
 	// Must have an id
 	if appID == 0 {
-		err = fmt.Errorf("missing field: %s", fieldID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
 		return
 	}
 
@@ -60,7 +62,9 @@ func (c *Client) GetApp(appID uint64) (app *App, err error) {
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &app)
+	if err = json.Unmarshal([]byte(response), &app); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "app"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -71,7 +75,7 @@ func (c *Client) UpdateApp(app *App) (updatedApp *App, err error) {
 
 	// Basic requirements
 	if app.ID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
 		return
 	}
 
@@ -87,6 +91,8 @@ func (c *Client) UpdateApp(app *App) (updatedApp *App, err error) {
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &updatedApp)
+	if err = json.Unmarshal([]byte(response), &updatedApp); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "app"), http.StatusExpectationFailed)
+	}
 	return
 }

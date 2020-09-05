@@ -13,7 +13,7 @@ func (c *Client) CreateVisitorSession(visitorSession *VisitorSession) (createdSe
 
 	// Basic requirements
 	if visitorSession.LinkID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldLinkID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldLinkID), http.StatusBadRequest)
 		return
 	}
 
@@ -29,7 +29,9 @@ func (c *Client) CreateVisitorSession(visitorSession *VisitorSession) (createdSe
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &createdSession)
+	if err = json.Unmarshal([]byte(response), &createdSession); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "visitor_session"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -41,7 +43,7 @@ func (c *Client) GetVisitorSession(visitorSessionGUID string) (visitorSession *V
 
 	// Must have an id
 	if len(visitorSessionGUID) == 0 {
-		err = fmt.Errorf("missing field: %s", fieldVisitorSessionGUID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldVisitorSessionGUID), http.StatusBadRequest)
 		return
 	}
 
@@ -57,6 +59,8 @@ func (c *Client) GetVisitorSession(visitorSessionGUID string) (visitorSession *V
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &visitorSession)
+	if err = json.Unmarshal([]byte(response), &visitorSession); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "visitor_session"), http.StatusExpectationFailed)
+	}
 	return
 }

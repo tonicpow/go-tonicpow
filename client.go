@@ -3,6 +3,7 @@ package tonicpow
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net"
@@ -151,6 +152,7 @@ func (c *Client) Request(endpoint string, method string, payload interface{}) (r
 	case http.MethodPost, http.MethodPut:
 		{
 			if jsonValue, err = json.Marshal(payload); err != nil {
+				err = c.createError("error marshalling data: "+err.Error(), http.StatusBadRequest)
 				return
 			}
 		}
@@ -171,6 +173,7 @@ func (c *Client) Request(endpoint string, method string, payload interface{}) (r
 	// Start the Request
 	var request *http.Request
 	if request, err = http.NewRequest(method, endpoint, bytes.NewBuffer(jsonValue)); err != nil {
+		err = c.createError("error creating new request: "+err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -195,6 +198,7 @@ func (c *Client) Request(endpoint string, method string, payload interface{}) (r
 	// Fire the http Request
 	var resp *http.Response
 	if resp, err = c.httpClient.Do(request); err != nil {
+		err = c.createError("error in do request: "+err.Error(), http.StatusExpectationFailed)
 		return
 	}
 
@@ -209,6 +213,7 @@ func (c *Client) Request(endpoint string, method string, payload interface{}) (r
 	// Read the body
 	var body []byte
 	if body, err = ioutil.ReadAll(resp.Body); err != nil {
+		err = c.createError("error reading body: "+err.Error(), http.StatusExpectationFailed)
 		return
 	}
 
@@ -230,4 +235,13 @@ func (c *Client) Error(expectedStatusCode int, response string) (err error) {
 		err = fmt.Errorf("%s", c.LastRequest.Error.Message)
 	}
 	return
+}
+
+// createError will create an internal error and return a standard Go error
+//
+// Sets the minimum needed for message and HTTP status (used by apps etc)
+func (c *Client) createError(message string, statusCode int) error {
+	c.LastRequest.Error.StatusCode = statusCode
+	c.LastRequest.Error.Message = message
+	return errors.New(message)
 }

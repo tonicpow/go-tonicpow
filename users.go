@@ -25,7 +25,7 @@ func (c *Client) CreateUser(user *User) (createdUser *User, err error) {
 
 	// Basic requirements
 	if len(user.Email) == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldEmail)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldEmail), http.StatusBadRequest)
 		return
 	}
 
@@ -44,7 +44,9 @@ func (c *Client) CreateUser(user *User) (createdUser *User, err error) {
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &createdUser)
+	if err = json.Unmarshal([]byte(response), &createdUser); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "user"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -55,7 +57,7 @@ func (c *Client) UpdateUser(user *User) (updatedUser *User, err error) {
 
 	// Basic requirements
 	if user.ID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
 		return
 	}
 
@@ -74,7 +76,9 @@ func (c *Client) UpdateUser(user *User) (updatedUser *User, err error) {
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &updatedUser)
+	if err = json.Unmarshal([]byte(response), &updatedUser); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "user"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -87,7 +91,7 @@ func (c *Client) GetUser(byID uint64, byEmail string) (user *User, err error) {
 
 	// Must have either an ID or email
 	if byID == 0 && len(byEmail) == 0 {
-		err = fmt.Errorf("missing either %s or %s", fieldID, fieldEmail)
+		err = c.createError(fmt.Sprintf("missing either %s or %s", fieldID, fieldEmail), http.StatusBadRequest)
 		return
 	}
 
@@ -111,7 +115,9 @@ func (c *Client) GetUser(byID uint64, byEmail string) (user *User, err error) {
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &user)
+	if err = json.Unmarshal([]byte(response), &user); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "user"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -122,7 +128,7 @@ func (c *Client) GetUserBalance(userID uint64, lastBalance int64) (user *User, e
 
 	// Basic requirements
 	if userID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
 		return
 	}
 
@@ -139,7 +145,9 @@ func (c *Client) GetUserBalance(userID uint64, lastBalance int64) (user *User, e
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &user)
+	if err = json.Unmarshal([]byte(response), &user); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "user"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -150,7 +158,7 @@ func (c *Client) CurrentUser(userID uint64) (user *User, err error) {
 
 	// No current user
 	if userID == 0 {
-		err = fmt.Errorf("missing user id")
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
 		return
 	}
 
@@ -166,7 +174,9 @@ func (c *Client) CurrentUser(userID uint64) (user *User, err error) {
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &user)
+	if err = json.Unmarshal([]byte(response), &user); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "user"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -177,10 +187,10 @@ func (c *Client) LoginUser(email, password string) (user *User, err error) {
 
 	// Basic requirements
 	if len(email) == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldEmail)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldEmail), http.StatusBadRequest)
 		return
 	} else if len(password) == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldPassword)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldPassword), http.StatusBadRequest)
 		return
 	}
 
@@ -202,7 +212,9 @@ func (c *Client) LoginUser(email, password string) (user *User, err error) {
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &user)
+	if err = json.Unmarshal([]byte(response), &user); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "user"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -213,7 +225,7 @@ func (c *Client) ForgotPassword(emailAddress string) (err error) {
 
 	// Basic requirements
 	if len(emailAddress) == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldEmail)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldEmail), http.StatusBadRequest)
 		return
 	}
 
@@ -238,16 +250,16 @@ func (c *Client) ResetPassword(token, password, passwordConfirm string) (err err
 
 	// Basic requirements
 	if len(token) == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldToken)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldToken), http.StatusBadRequest)
 		return
 	} else if len(token) <= 10 {
-		err = fmt.Errorf("invalid token: %s", token)
+		err = c.createError(fmt.Sprintf("invalid token: %s", token), http.StatusBadRequest)
 		return
 	} else if len(password) == 0 || len(passwordConfirm) == 0 {
-		err = fmt.Errorf("missing required attribute: %s or %s", fieldPassword, fieldPasswordConfirm)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s or %s", fieldPassword, fieldPasswordConfirm), http.StatusBadRequest)
 		return
 	} else if password != passwordConfirm {
-		err = fmt.Errorf("given passwords don't match")
+		err = c.createError("given passwords don't match", http.StatusBadRequest)
 		return
 	}
 
@@ -280,7 +292,7 @@ func (c *Client) AcceptUser(userID uint64, email string, reason string) (err err
 	} else if len(email) > 0 {
 		data = map[string]string{fieldEmail: email, fieldReason: reason}
 	} else {
-		err = fmt.Errorf("missing required attribute: %s or %s", fieldUserID, fieldEmail)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s or %s", fieldUserID, fieldEmail), http.StatusBadRequest)
 		return
 	}
 
@@ -309,7 +321,7 @@ func (c *Client) ActivateUser(userID uint64, email string) (err error) {
 	} else if len(email) > 0 {
 		data = map[string]string{fieldEmail: email}
 	} else {
-		err = fmt.Errorf("missing required attribute: %s or %s", fieldUserID, fieldEmail)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s or %s", fieldUserID, fieldEmail), http.StatusBadRequest)
 		return
 	}
 
@@ -338,7 +350,7 @@ func (c *Client) PauseUser(userID uint64, email string, reason string) (err erro
 	} else if len(email) > 0 {
 		data = map[string]string{fieldEmail: email, fieldReason: reason}
 	} else {
-		err = fmt.Errorf("missing required attribute: %s or %s", fieldUserID, fieldEmail)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s or %s", fieldUserID, fieldEmail), http.StatusBadRequest)
 		return
 	}
 
@@ -361,7 +373,7 @@ func (c *Client) UserExists(byEmail string) (existsResponse *UserExists, err err
 
 	// Must have email
 	if len(byEmail) == 0 {
-		err = fmt.Errorf("missing %s", fieldEmail)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldEmail), http.StatusBadRequest)
 		return
 	}
 
@@ -384,7 +396,9 @@ func (c *Client) UserExists(byEmail string) (existsResponse *UserExists, err err
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &existsResponse)
+	if err = json.Unmarshal([]byte(response), &existsResponse); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "user"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -400,7 +414,7 @@ func (c *Client) ReleaseUserBalance(userID uint64, reason string) (err error) {
 	if userID > 0 {
 		data = map[string]string{fieldID: fmt.Sprintf("%d", userID), fieldReason: reason}
 	} else {
-		err = fmt.Errorf("missing required attribute: %s", fieldUserID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldUserID), http.StatusBadRequest)
 		return
 	}
 
@@ -427,7 +441,7 @@ func (c *Client) RefundUserBalance(userID uint64, reason string) (err error) {
 	if userID > 0 {
 		data = map[string]string{fieldID: fmt.Sprintf("%d", userID), fieldReason: reason}
 	} else {
-		err = fmt.Errorf("missing required attribute: %s", fieldUserID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldUserID), http.StatusBadRequest)
 		return
 	}
 
@@ -450,7 +464,7 @@ func (c *Client) GetUserReferrals(byID uint64, byEmail string) (referrals []*Use
 
 	// Must have either an ID or email
 	if byID == 0 && len(byEmail) == 0 {
-		err = fmt.Errorf("missing either %s or %s", fieldID, fieldEmail)
+		err = c.createError(fmt.Sprintf("missing either %s or %s", fieldID, fieldEmail), http.StatusBadRequest)
 		return
 	}
 
@@ -474,7 +488,9 @@ func (c *Client) GetUserReferrals(byID uint64, byEmail string) (referrals []*Use
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &referrals)
+	if err = json.Unmarshal([]byte(response), &referrals); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "referrals"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -487,7 +503,7 @@ func (c *Client) ListUserReferrals(page, resultsPerPage int, sortBy, sortOrder s
 	// Do we know this field?
 	if len(sortBy) > 0 {
 		if !isInList(strings.ToLower(sortBy), referralSortFields) {
-			err = fmt.Errorf("sort by %s is not valid", sortBy)
+			err = c.createError(fmt.Sprintf("sort by %s is not valid", sortBy), http.StatusBadRequest)
 			return
 		}
 	} else {
@@ -508,7 +524,9 @@ func (c *Client) ListUserReferrals(page, resultsPerPage int, sortBy, sortOrder s
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &results)
+	if err = json.Unmarshal([]byte(response), &results); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "user"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -520,14 +538,14 @@ func (c *Client) ListAppsByUser(userID uint64, page, resultsPerPage int, sortBy,
 
 	// Basic requirements
 	if userID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldUserID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldUserID), http.StatusBadRequest)
 		return
 	}
 
 	// Do we know this field?
 	if len(sortBy) > 0 {
 		if !isInList(strings.ToLower(sortBy), appSortFields) {
-			err = fmt.Errorf("sort by %s is not valid", sortBy)
+			err = c.createError(fmt.Sprintf("sort by %s is not valid", sortBy), http.StatusBadRequest)
 			return
 		}
 	} else {
@@ -547,6 +565,8 @@ func (c *Client) ListAppsByUser(userID uint64, page, resultsPerPage int, sortBy,
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &results)
+	if err = json.Unmarshal([]byte(response), &results); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "user"), http.StatusExpectationFailed)
+	}
 	return
 }

@@ -13,7 +13,7 @@ func (c *Client) GetCurrentRate(currency string, customAmount float64) (rate *Ra
 
 	// Must have an currency
 	if len(currency) == 0 {
-		err = fmt.Errorf("missing field: %s", fieldCurrency)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldCurrency), http.StatusBadRequest)
 		return
 	}
 
@@ -29,6 +29,8 @@ func (c *Client) GetCurrentRate(currency string, customAmount float64) (rate *Ra
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &rate)
+	if err = json.Unmarshal([]byte(response), &rate); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "rate"), http.StatusExpectationFailed)
+	}
 	return
 }

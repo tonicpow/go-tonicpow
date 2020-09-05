@@ -13,12 +13,12 @@ func (c *Client) CreateLink(link *Link) (createdLink *Link, err error) {
 
 	// Basic requirements
 	if link.CampaignID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldCampaignID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldCampaignID), http.StatusBadRequest)
 		return
 	}
 
 	if link.UserID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldUserID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldUserID), http.StatusBadRequest)
 		return
 	}
 
@@ -34,7 +34,9 @@ func (c *Client) CreateLink(link *Link) (createdLink *Link, err error) {
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &createdLink)
+	if err = json.Unmarshal([]byte(response), &createdLink); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "link"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -45,12 +47,12 @@ func (c *Client) CreateLinkByURL(link *Link) (createdLink *Link, err error) {
 
 	// Basic requirements
 	if len(link.TargetURL) == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldTargetURL)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldTargetURL), http.StatusBadRequest)
 		return
 	}
 
 	if link.UserID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldUserID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldUserID), http.StatusBadRequest)
 		return
 	}
 
@@ -69,7 +71,9 @@ func (c *Client) CreateLinkByURL(link *Link) (createdLink *Link, err error) {
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &createdLink)
+	if err = json.Unmarshal([]byte(response), &createdLink); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "link"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -81,7 +85,7 @@ func (c *Client) GetLink(linkID uint64) (link *Link, err error) {
 
 	// Must have an id
 	if linkID == 0 {
-		err = fmt.Errorf("missing field: %s", fieldID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
 		return
 	}
 
@@ -97,7 +101,9 @@ func (c *Client) GetLink(linkID uint64) (link *Link, err error) {
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &link)
+	if err = json.Unmarshal([]byte(response), &link); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "link"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -109,7 +115,7 @@ func (c *Client) CheckLink(shortCode string) (link *Link, err error) {
 
 	// Must have a short code
 	if len(shortCode) == 0 {
-		err = fmt.Errorf("missing field: %s", fieldShortCode)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldShortCode), http.StatusBadRequest)
 		return
 	}
 
@@ -125,7 +131,9 @@ func (c *Client) CheckLink(shortCode string) (link *Link, err error) {
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &link)
+	if err = json.Unmarshal([]byte(response), &link); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "link"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -137,7 +145,7 @@ func (c *Client) ListLinksByUserID(userID uint64, page, resultsPerPage int) (res
 
 	// Must have an id
 	if userID == 0 {
-		err = fmt.Errorf("missing field: %s", fieldID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldUserID), http.StatusBadRequest)
 		return
 	}
 
@@ -153,6 +161,8 @@ func (c *Client) ListLinksByUserID(userID uint64, page, resultsPerPage int) (res
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &results)
+	if err = json.Unmarshal([]byte(response), &results); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "link"), http.StatusExpectationFailed)
+	}
 	return
 }

@@ -19,7 +19,7 @@ func (c *Client) CreateGoal(goal *Goal) (createdGoal *Goal, err error) {
 
 	// Basic requirements
 	if goal.CampaignID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldCampaignID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldCampaignID), http.StatusBadRequest)
 		return
 	}
 
@@ -35,7 +35,9 @@ func (c *Client) CreateGoal(goal *Goal) (createdGoal *Goal, err error) {
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &createdGoal)
+	if err = json.Unmarshal([]byte(response), &createdGoal); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "goal"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -47,7 +49,7 @@ func (c *Client) GetGoal(goalID uint64) (goal *Goal, err error) {
 
 	// Must have an id
 	if goalID == 0 {
-		err = fmt.Errorf("missing field: %s", fieldID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
 		return
 	}
 
@@ -63,7 +65,9 @@ func (c *Client) GetGoal(goalID uint64) (goal *Goal, err error) {
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &goal)
+	if err = json.Unmarshal([]byte(response), &goal); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "goal"), http.StatusExpectationFailed)
+	}
 	return
 }
 
@@ -74,7 +78,7 @@ func (c *Client) UpdateGoal(goal *Goal) (updatedGoal *Goal, err error) {
 
 	// Basic requirements
 	if goal.ID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldID)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
 		return
 	}
 
@@ -93,6 +97,8 @@ func (c *Client) UpdateGoal(goal *Goal) (updatedGoal *Goal, err error) {
 	}
 
 	// Convert model response
-	err = json.Unmarshal([]byte(response), &updatedGoal)
+	if err = json.Unmarshal([]byte(response), &updatedGoal); err != nil {
+		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "goal"), http.StatusExpectationFailed)
+	}
 	return
 }
