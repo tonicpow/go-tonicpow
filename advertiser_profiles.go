@@ -135,3 +135,42 @@ func (c *Client) ListCampaignsByAdvertiserProfile(profileID uint64, page, result
 	err = json.Unmarshal([]byte(response), &results)
 	return
 }
+
+// ListAppsByAdvertiserProfile will return a list of apps
+// This will return an Error if the campaign is not found (404)
+//
+// For more information: (todo)
+func (c *Client) ListAppsByAdvertiserProfile(profileID uint64, page, resultsPerPage int, sortBy, sortOrder string) (results *AppResults, err error) {
+
+	// Basic requirements
+	if profileID == 0 {
+		err = fmt.Errorf("missing required attribute: %s", fieldAdvertiserProfileID)
+		return
+	}
+
+	// Do we know this field?
+	if len(sortBy) > 0 {
+		if !isInList(strings.ToLower(sortBy), appSortFields) {
+			err = fmt.Errorf("sort by %s is not valid", sortBy)
+			return
+		}
+	} else {
+		sortBy = SortByFieldCreatedAt
+		sortOrder = SortOrderDesc
+	}
+
+	// Fire the Request
+	var response string
+	if response, err = c.Request(fmt.Sprintf("%s/apps/%d?%s=%d&%s=%d&%s=%s&%s=%s", modelAdvertiser, profileID, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	if err = c.Error(http.StatusOK, response); err != nil {
+		return
+	}
+
+	// Convert model response
+	err = json.Unmarshal([]byte(response), &results)
+	return
+}

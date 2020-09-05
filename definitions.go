@@ -36,6 +36,7 @@ const (
 
 	// Model names (used for Request endpoints)
 	modelAdvertiser     = "advertisers"
+	modelApp            = "apps"
 	modelCampaign       = "campaigns"
 	modelConversion     = "conversions"
 	modelGoal           = "goals"
@@ -53,6 +54,9 @@ const (
 
 	// SortByFieldEarned is for sorting results by field: earned
 	SortByFieldEarned = "earned"
+
+	// SortByFieldName is for sorting results by field: name
+	SortByFieldName = "name"
 
 	// SortByFieldLinksCreated is for sorting results by field: links_created
 	SortByFieldLinksCreated = "links_created"
@@ -85,7 +89,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.15"
+	defaultUserAgent string = "go-tonicpow: v0.4.16"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -98,6 +102,12 @@ const (
 )
 
 var (
+
+	// appSortFields is used for allowing specific fields for sorting
+	appSortFields = []string{
+		SortByFieldCreatedAt,
+		SortByFieldName,
+	}
 
 	// campaignSortFields is used for allowing specific fields for sorting
 	campaignSortFields = []string{
