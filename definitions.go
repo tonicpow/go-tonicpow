@@ -85,7 +85,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.14"
+	defaultUserAgent string = "go-tonicpow: v0.4.15"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -188,6 +188,16 @@ type AdvertiserProfile struct {
 	ID          uint64 `json:"id,omitempty"`
 	Name        string `json:"name"`
 	UserID      uint64 `json:"user_id"`
+}
+
+// App is the app model (child of advertiser_profile)
+//
+// For more information: (todo)
+type App struct {
+	AdvertiserProfileID uint64 `json:"advertiser_profile_id"`
+	Name                string `json:"name"`
+	UserID              uint64 `json:"user_id"`
+	ID                  uint64 `json:"id"`
 }
 
 // Campaign is the campaign model (child of AdvertiserProfile)
@@ -328,6 +338,14 @@ type AdvertiserResults struct {
 	CurrentPage    int                  `json:"current_page"`
 	Results        int                  `json:"results"`
 	ResultsPerPage int                  `json:"results_per_page"`
+}
+
+// AppResults is the page response for app results from listing
+type AppResults struct {
+	Apps           []*App `json:"apps"`
+	CurrentPage    int    `json:"current_page"`
+	Results        int    `json:"results"`
+	ResultsPerPage int    `json:"results_per_page"`
 }
 
 // PromoterResults is the page response for promoter results from listing
