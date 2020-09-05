@@ -555,7 +555,7 @@ func (c *Client) ListAppsByUser(userID uint64, page, resultsPerPage int, sortBy,
 
 	// Fire the Request
 	var response string
-	if response, err = c.Request(fmt.Sprintf("%s/apps/%d?%s=%d&%s=%d&%s=%s&%s=%s", modelUser, userID, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/apps/?id=%d&%s=%d&%s=%d&%s=%s&%s=%s", modelUser, userID, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil); err != nil {
 		return
 	}
 

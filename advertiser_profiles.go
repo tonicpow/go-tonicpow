@@ -169,7 +169,7 @@ func (c *Client) ListAppsByAdvertiserProfile(profileID uint64, page, resultsPerP
 
 	// Fire the Request
 	var response string
-	if response, err = c.Request(fmt.Sprintf("%s/apps/%d?%s=%d&%s=%d&%s=%s&%s=%s", modelAdvertiser, profileID, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/apps/?id=%d&%s=%d&%s=%d&%s=%s&%s=%s", modelAdvertiser, profileID, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil); err != nil {
 		return
 	}
 
