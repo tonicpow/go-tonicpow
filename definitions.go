@@ -90,7 +90,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.25"
+	defaultUserAgent string = "go-tonicpow: v0.4.26"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -218,6 +218,7 @@ type App struct {
 type APIKey struct {
 	Active      bool   `json:"active"`
 	AppID       uint64 `json:"app_id"`
+	CreatedAt   string `json:"created_at"`
 	ID          uint64 `json:"id"`
 	Key         string `json:"key"`
 	Name        string `json:"name"`
