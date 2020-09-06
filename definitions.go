@@ -90,7 +90,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.24"
+	defaultUserAgent string = "go-tonicpow: v0.4.25"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -194,11 +194,12 @@ type Promoter struct {
 //
 // For more information: https://docs.tonicpow.com/#2f9ec542-0f88-4671-b47c-d0ee390af5ea
 type AdvertiserProfile struct {
-	HomepageURL string `json:"homepage_url"`
-	IconURL     string `json:"icon_url"`
-	ID          uint64 `json:"id,omitempty"`
-	Name        string `json:"name"`
-	UserID      uint64 `json:"user_id"`
+	DomainVerified bool   `json:"domain_verified"`
+	HomepageURL    string `json:"homepage_url"`
+	IconURL        string `json:"icon_url"`
+	ID             uint64 `json:"id,omitempty"`
+	Name           string `json:"name"`
+	UserID         uint64 `json:"user_id"`
 }
 
 // App is the app model (child of advertiser_profile)
@@ -251,6 +252,7 @@ type Campaign struct {
 	CreatedAt           string             `json:"created_at"`
 	Currency            string             `json:"currency"`
 	Description         string             `json:"description"`
+	DomainVerified      bool               `json:"domain_verified"`
 	ExpiresAt           string             `json:"expires_at"`
 	FundingAddress      string             `json:"funding_address"`
 	Goals               []*Goal            `json:"goals"`
@@ -264,7 +266,7 @@ type Campaign struct {
 	Slug                string             `json:"slug"`
 	TargetURL           string             `json:"target_url"`
 	Title               string             `json:"title"`
-	TXID                string             `json:"-"`
+	TxID                string             `json:"-"`
 }
 
 // Goal is the goal model (child of Campaign)
