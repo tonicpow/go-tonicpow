@@ -46,7 +46,7 @@ func (c *Client) GetApp(appID uint64) (app *App, err error) {
 
 	// Must have an id
 	if appID == 0 {
-		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldAppID), http.StatusBadRequest)
 		return
 	}
 
@@ -75,7 +75,7 @@ func (c *Client) UpdateApp(app *App) (updatedApp *App, err error) {
 
 	// Basic requirements
 	if app.ID == 0 {
-		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldAppID), http.StatusBadRequest)
 		return
 	}
 
