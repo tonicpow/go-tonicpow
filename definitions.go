@@ -89,7 +89,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.19"
+	defaultUserAgent string = "go-tonicpow: v0.4.20"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -205,9 +205,24 @@ type AdvertiserProfile struct {
 // For more information: (todo)
 type App struct {
 	AdvertiserProfileID uint64 `json:"advertiser_profile_id"`
+	ID                  uint64 `json:"id"`
 	Name                string `json:"name"`
 	UserID              uint64 `json:"user_id"`
-	ID                  uint64 `json:"id"`
+}
+
+// APIKey is the api_key model (child of app)
+//
+// For more information: (todo)
+type APIKey struct {
+	Active     bool   `json:"active"`
+	AppID      uint64 `json:"app_id"`
+	ID         uint64 `json:"id"`
+	Key        string `json:"key"`
+	Name       string `json:"name"`
+	Preview    string `json:"preview"`
+	UserID     uint64 `json:"user_id"`
+	ScopeID    uint64 `json:"scope_id"`
+	ScopeModel string `json:"scope_model"`
 }
 
 // Campaign is the campaign model (child of AdvertiserProfile)
@@ -406,4 +421,12 @@ type RecentActivityResults struct {
 	CurrentPage    int             `json:"current_page"`
 	Results        int             `json:"results"`
 	ResultsPerPage int             `json:"results_per_page"`
+}
+
+// APIKeyResults is the page response for listing api_keys
+type APIKeyResults struct {
+	APIKeys        []*APIKey `json:"api_keys"`
+	CurrentPage    int       `json:"current_page"`
+	Results        int       `json:"results"`
+	ResultsPerPage int       `json:"results_per_page"`
 }
