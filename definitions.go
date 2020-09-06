@@ -89,7 +89,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.22"
+	defaultUserAgent string = "go-tonicpow: v0.4.23"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -233,7 +233,7 @@ type Domain struct {
 	DomainName string `json:"domain_name"`
 	ID         uint64 `json:"id"`
 	Label      string `json:"label"`
-	PersonID   uint64 `json:"user_id"`
+	UserID     uint64 `json:"user_id"`
 	Verified   bool   `json:"verified"`
 }
 
