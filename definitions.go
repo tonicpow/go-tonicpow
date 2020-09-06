@@ -89,7 +89,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.20"
+	defaultUserAgent string = "go-tonicpow: v0.4.21"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -214,15 +214,16 @@ type App struct {
 //
 // For more information: (todo)
 type APIKey struct {
-	Active     bool   `json:"active"`
-	AppID      uint64 `json:"app_id"`
-	ID         uint64 `json:"id"`
-	Key        string `json:"key"`
-	Name       string `json:"name"`
-	Preview    string `json:"preview"`
-	UserID     uint64 `json:"user_id"`
-	ScopeID    uint64 `json:"scope_id"`
-	ScopeModel string `json:"scope_model"`
+	Active      bool   `json:"active"`
+	AppID       uint64 `json:"app_id"`
+	ID          uint64 `json:"id"`
+	Key         string `json:"key"`
+	Name        string `json:"name"`
+	Preview     string `json:"preview"`
+	ScopeID     uint64 `json:"scope_id"`
+	ScopeModel  string `json:"scope_model"`
+	UserID      uint64 `json:"user_id"`
+	WriteAccess bool   `json:"write_access"`
 }
 
 // Campaign is the campaign model (child of AdvertiserProfile)
