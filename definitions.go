@@ -89,7 +89,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.21"
+	defaultUserAgent string = "go-tonicpow: v0.4.22"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -224,6 +224,17 @@ type APIKey struct {
 	ScopeModel  string `json:"scope_model"`
 	UserID      uint64 `json:"user_id"`
 	WriteAccess bool   `json:"write_access"`
+}
+
+// Domain is returned after creating a domain
+type Domain struct {
+	CnameName  string `json:"cname_name"`
+	CnameValue string `json:"cname_value"`
+	DomainName string `json:"domain_name"`
+	ID         uint64 `json:"id"`
+	Label      string `json:"label"`
+	PersonID   uint64 `json:"user_id"`
+	Verified   bool   `json:"verified"`
 }
 
 // Campaign is the campaign model (child of AdvertiserProfile)
@@ -428,6 +439,14 @@ type RecentActivityResults struct {
 type APIKeyResults struct {
 	APIKeys        []*APIKey `json:"api_keys"`
 	CurrentPage    int       `json:"current_page"`
+	Results        int       `json:"results"`
+	ResultsPerPage int       `json:"results_per_page"`
+}
+
+// DomainResults is the page response for listing domains
+type DomainResults struct {
+	CurrentPage    int       `json:"current_page"`
+	Domains        []*Domain `json:"domains"`
 	Results        int       `json:"results"`
 	ResultsPerPage int       `json:"results_per_page"`
 }
