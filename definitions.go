@@ -90,7 +90,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.26"
+	defaultUserAgent string = "go-tonicpow: v0.4.27"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -210,6 +210,7 @@ type App struct {
 	ID                  uint64 `json:"id"`
 	Name                string `json:"name"`
 	UserID              uint64 `json:"user_id"`
+	WebhookURL          string `json:"webhook_url"`
 }
 
 // APIKey is the api_key model (child of app)
@@ -258,6 +259,7 @@ type Campaign struct {
 	FundingAddress      string             `json:"funding_address"`
 	Goals               []*Goal            `json:"goals"`
 	ID                  uint64             `json:"id,omitempty"`
+	Images              []*CampaignImage   `json:"images"`
 	ImageURL            string             `json:"image_url"`
 	LinksCreated        uint64             `json:"links_created"`
 	MatchDomain         bool               `json:"match_domain"`
@@ -268,6 +270,14 @@ type Campaign struct {
 	TargetURL           string             `json:"target_url"`
 	Title               string             `json:"title"`
 	TxID                string             `json:"-"`
+}
+
+// CampaignImage is the structure of the image meta data
+type CampaignImage struct {
+	Height   int    `json:"height"`
+	MimeType string `json:"mime_type"`
+	URL      string `json:"url"`
+	Width    int    `json:"width"`
 }
 
 // Goal is the goal model (child of Campaign)
@@ -310,6 +320,7 @@ type Link struct {
 	CampaignID      uint64 `json:"campaign_id"`
 	CustomShortCode string `json:"custom_short_code"`
 	ID              uint64 `json:"id,omitempty"`
+	Label           string `json:"label"`
 	ShortCode       string `json:"short_code"`
 	ShortCodeURL    string `json:"short_link_url"`
 	TargetURL       string `json:"target_url"`
