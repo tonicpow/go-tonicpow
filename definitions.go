@@ -475,8 +475,8 @@ type Widget struct {
 	Height          int    `json:"height"`
 	ID              uint64 `json:"id"`
 	Label           string `json:"label"`
-	PersonID        uint64 `json:"user_id"`
 	TxID            string `json:"tx_id"`
+	UserID          uint64 `json:"user_id"`
 	Width           int    `json:"width"`
 }
 
