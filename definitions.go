@@ -19,6 +19,7 @@ const (
 	fieldFeedType            = "feed_type"
 	fieldGoalID              = "goal_id"
 	fieldID                  = "id"
+	fieldLabel               = "label"
 	fieldLastBalance         = "last_balance"
 	fieldLinkID              = "link_id"
 	fieldName                = "name"
@@ -34,6 +35,7 @@ const (
 	fieldToken               = "token"
 	fieldUserID              = "user_id"
 	fieldVisitorSessionGUID  = "tncpw_session"
+	fieldWidgetID            = "widget_id"
 
 	// Model names (used for Request endpoints)
 	modelAdvertiser     = "advertisers"
@@ -46,6 +48,7 @@ const (
 	modelUser           = "users"
 	modelVisitors       = "visitors"
 	modelVisitorSession = "sessions"
+	modelWidget         = "widgets"
 
 	// SortByFieldBalance is for sorting results by field: balance
 	SortByFieldBalance = "balance"
@@ -90,7 +93,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.27"
+	defaultUserAgent string = "go-tonicpow: v0.4.28"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -141,53 +144,13 @@ type Error struct {
 	URL         string      `json:"url"`
 }
 
-// User is the user model
-//
-// For more information: https://docs.tonicpow.com/#50b3c130-7254-4a05-b312-b14647736e38
-type User struct {
-	AvatarURL          string `json:"avatar_url"`
-	Balance            uint64 `json:"balance"`
-	Bio                string `json:"bio"`
-	Country            string `json:"country"`
-	Earned             uint64 `json:"earned"`
-	Email              string `json:"email"`
-	EmailVerified      bool   `json:"email_verified"`
-	FirstName          string `json:"first_name"`
-	HandCashAuth       bool   `json:"handcash_auth"`
-	ID                 uint64 `json:"id,omitempty"`
-	InternalAddress    string `json:"internal_address"`
-	LastName           string `json:"last_name"`
-	MiddleName         string `json:"middle_name"`
-	MoneyButtonAuth    bool   `json:"moneybutton_auth"`
-	NewPassword        string `json:"new_password,omitempty"`
-	NewPasswordConfirm string `json:"new_password_confirm,omitempty"`
-	Password           string `json:"password,omitempty"`
-	PayoutAddress      string `json:"payout_address"`
-	Phone              string `json:"phone"`
-	PhoneVerified      bool   `json:"phone_verified"`
-	ReferralLinkID     uint64 `json:"referral_link_id"`
-	Referrals          uint   `json:"referrals"`
-	ReferralsAccepted  uint   `json:"referrals_accepted"`
-	ReferralURL        string `json:"referral_url"`
-	ReferredByUserID   uint64 `json:"referred_by_user_id"`
-	RelayAuth          bool   `json:"relay_auth"`
-	Status             string `json:"status"`
-	TncpwSession       string `json:"tncpw_session,omitempty"`
-	TwitterAuth        bool   `json:"twitter_auth"`
-	Username           string `json:"username"`
-}
-
-// Promoter is the public promoter response
-type Promoter struct {
-	AvatarURL       string `json:"avatar_url"`
-	Country         string `json:"country"`
-	EmailVerified   bool   `json:"email_verified"`
-	HandCashAuth    bool   `json:"handcash_auth"`
-	MoneyButtonAuth bool   `json:"moneybutton_auth"`
-	PhoneVerified   bool   `json:"phone_verified"`
-	RelayAuth       bool   `json:"relay_auth"`
-	TwitterAuth     bool   `json:"twitter_auth"`
-	Username        string `json:"username"`
+// ActivityItem is the item for a recent activity request
+type ActivityItem struct {
+	Action     string `json:"action"`
+	Amount     uint64 `json:"amount"`
+	CampaignID uint64 `json:"campaign_id"`
+	Date       string `json:"date"`
+	TxID       string `json:"tx_id"`
 }
 
 // AdvertiserProfile is the advertiser_profile model (child of User)
@@ -202,6 +165,14 @@ type AdvertiserProfile struct {
 	UserID         uint64 `json:"user_id"`
 }
 
+// AdvertiserResults is the page response for advertiser profile results from listing
+type AdvertiserResults struct {
+	Advertisers    []*AdvertiserProfile `json:"advertisers"`
+	CurrentPage    int                  `json:"current_page"`
+	Results        int                  `json:"results"`
+	ResultsPerPage int                  `json:"results_per_page"`
+}
+
 // App is the app model (child of advertiser_profile)
 //
 // For more information: (todo)
@@ -211,6 +182,14 @@ type App struct {
 	Name                string `json:"name"`
 	UserID              uint64 `json:"user_id"`
 	WebhookURL          string `json:"webhook_url"`
+}
+
+// AppResults is the page response for app results from listing
+type AppResults struct {
+	Apps           []*App `json:"apps"`
+	CurrentPage    int    `json:"current_page"`
+	Results        int    `json:"results"`
+	ResultsPerPage int    `json:"results_per_page"`
 }
 
 // APIKey is the api_key model (child of app)
@@ -230,15 +209,12 @@ type APIKey struct {
 	WriteAccess bool   `json:"write_access"`
 }
 
-// Domain is returned after creating a domain
-type Domain struct {
-	CnameName  string `json:"cname_name"`
-	CnameValue string `json:"cname_value"`
-	DomainName string `json:"domain_name"`
-	ID         uint64 `json:"id"`
-	Label      string `json:"label"`
-	UserID     uint64 `json:"user_id"`
-	Verified   bool   `json:"verified"`
+// APIKeyResults is the page response for listing api_keys
+type APIKeyResults struct {
+	APIKeys        []*APIKey `json:"api_keys"`
+	CurrentPage    int       `json:"current_page"`
+	Results        int       `json:"results"`
+	ResultsPerPage int       `json:"results_per_page"`
 }
 
 // Campaign is the campaign model (child of AdvertiserProfile)
@@ -280,20 +256,21 @@ type CampaignImage struct {
 	Width    int    `json:"width"`
 }
 
-// Goal is the goal model (child of Campaign)
-//
-// For more information: https://docs.tonicpow.com/#316b77ab-4900-4f3d-96a7-e67c00af10ca
-type Goal struct {
-	CampaignID     uint64  `json:"campaign_id"`
-	Description    string  `json:"description"`
-	ID             uint64  `json:"id,omitempty"`
-	MaxPerPromoter int16   `json:"max_per_promoter"`
-	MaxPerVisitor  int16   `json:"max_per_visitor"`
-	Name           string  `json:"name"`
-	PayoutRate     float64 `json:"payout_rate"`
-	Payouts        int     `json:"payouts"`
-	PayoutType     string  `json:"payout_type"`
-	Title          string  `json:"title"`
+// CampaignResults is the page response for campaign results from listing
+type CampaignResults struct {
+	Campaigns      []*Campaign `json:"campaigns"`
+	CurrentPage    int         `json:"current_page"`
+	Results        int         `json:"results"`
+	ResultsPerPage int         `json:"results_per_page"`
+}
+
+// CampaignStatistics is what we cache for redis for basic stats
+type CampaignStatistics struct {
+	Active          uint64  `json:"active"`
+	Balance         float64 `json:"balance"`
+	BalanceSatoshis uint64  `json:"balance_satoshis"`
+	Currency        string  `json:"currency"`
+	Total           uint64  `json:"total"`
 }
 
 // Conversion is the response of getting a conversion
@@ -312,6 +289,41 @@ type Conversion struct {
 	UserID           uint64  `json:"user_id"`
 }
 
+// Domain is returned after creating a domain
+type Domain struct {
+	CnameName  string `json:"cname_name"`
+	CnameValue string `json:"cname_value"`
+	DomainName string `json:"domain_name"`
+	ID         uint64 `json:"id"`
+	Label      string `json:"label"`
+	UserID     uint64 `json:"user_id"`
+	Verified   bool   `json:"verified"`
+}
+
+// DomainResults is the page response for listing domains
+type DomainResults struct {
+	CurrentPage    int       `json:"current_page"`
+	Domains        []*Domain `json:"domains"`
+	Results        int       `json:"results"`
+	ResultsPerPage int       `json:"results_per_page"`
+}
+
+// Goal is the goal model (child of Campaign)
+//
+// For more information: https://docs.tonicpow.com/#316b77ab-4900-4f3d-96a7-e67c00af10ca
+type Goal struct {
+	CampaignID     uint64  `json:"campaign_id"`
+	Description    string  `json:"description"`
+	ID             uint64  `json:"id,omitempty"`
+	MaxPerPromoter int16   `json:"max_per_promoter"`
+	MaxPerVisitor  int16   `json:"max_per_visitor"`
+	Name           string  `json:"name"`
+	PayoutRate     float64 `json:"payout_rate"`
+	Payouts        int     `json:"payouts"`
+	PayoutType     string  `json:"payout_type"`
+	Title          string  `json:"title"`
+}
+
 // Link is the link model (child of User) (relates Campaign to User)
 // Use the CustomShortCode on create for using your own short code
 //
@@ -327,19 +339,33 @@ type Link struct {
 	UserID          uint64 `json:"user_id"`
 }
 
-// VisitorSession is the session for any visitor or user (related to link and campaign)
-//
-// For more information: https://docs.tonicpow.com/#d0d9055a-0c92-4f55-a370-762d44acf801
-type VisitorSession struct {
-	CampaignID       uint64 `json:"campaign_id"`
-	CustomDimensions string `json:"custom_dimensions"`
-	IPAddress        string `json:"ip_address"`
-	LinkID           uint64 `json:"link_id"`
-	LinkUserID       uint64 `json:"link_user_id"`
-	Provider         string `json:"provider"`
-	Referer          string `json:"referer"`
-	TncpwSession     string `json:"tncpw_session,omitempty"`
-	UserAgent        string `json:"user_agent"`
+// LinkResults is the page response for link results from listing
+type LinkResults struct {
+	CurrentPage    int     `json:"current_page"`
+	Links          []*Link `json:"links"`
+	Results        int     `json:"results"`
+	ResultsPerPage int     `json:"results_per_page"`
+}
+
+// Promoter is the public promoter response
+type Promoter struct {
+	AvatarURL       string `json:"avatar_url"`
+	Country         string `json:"country"`
+	EmailVerified   bool   `json:"email_verified"`
+	HandCashAuth    bool   `json:"handcash_auth"`
+	MoneyButtonAuth bool   `json:"moneybutton_auth"`
+	PhoneVerified   bool   `json:"phone_verified"`
+	RelayAuth       bool   `json:"relay_auth"`
+	TwitterAuth     bool   `json:"twitter_auth"`
+	Username        string `json:"username"`
+}
+
+// PromoterResults is the page response for promoter results from listing
+type PromoterResults struct {
+	Promoters      []*Promoter `json:"promoters"`
+	CurrentPage    int         `json:"current_page"`
+	Results        int         `json:"results"`
+	ResultsPerPage int         `json:"results_per_page"`
 }
 
 // Rate is the rate results
@@ -353,6 +379,58 @@ type Rate struct {
 	Price               float64 `json:"price"`
 	PriceInSatoshis     int64   `json:"price_in_satoshis"`
 	RateLastUpdated     string  `json:"rate_last_updated,omitempty"`
+}
+
+// RecentActivityResults is the page response for listing recent activity
+type RecentActivityResults struct {
+	Activities     []*ActivityItem `json:"activities"`
+	CurrentPage    int             `json:"current_page"`
+	Results        int             `json:"results"`
+	ResultsPerPage int             `json:"results_per_page"`
+}
+
+// ReferralResults is the page response for referral results from listing
+type ReferralResults struct {
+	CurrentPage    int             `json:"current_page"`
+	Referrals      []*UserReferral `json:"referrals"`
+	Results        int             `json:"results"`
+	ResultsPerPage int             `json:"results_per_page"`
+}
+
+// User is the user model
+//
+// For more information: https://docs.tonicpow.com/#50b3c130-7254-4a05-b312-b14647736e38
+type User struct {
+	AvatarURL          string `json:"avatar_url"`
+	Balance            uint64 `json:"balance"`
+	Bio                string `json:"bio"`
+	Country            string `json:"country"`
+	Earned             uint64 `json:"earned"`
+	Email              string `json:"email"`
+	EmailVerified      bool   `json:"email_verified"`
+	FirstName          string `json:"first_name"`
+	HandCashAuth       bool   `json:"handcash_auth"`
+	ID                 uint64 `json:"id,omitempty"`
+	InternalAddress    string `json:"internal_address"`
+	LastName           string `json:"last_name"`
+	MiddleName         string `json:"middle_name"`
+	MoneyButtonAuth    bool   `json:"moneybutton_auth"`
+	NewPassword        string `json:"new_password,omitempty"`
+	NewPasswordConfirm string `json:"new_password_confirm,omitempty"`
+	Password           string `json:"password,omitempty"`
+	PayoutAddress      string `json:"payout_address"`
+	Phone              string `json:"phone"`
+	PhoneVerified      bool   `json:"phone_verified"`
+	ReferralLinkID     uint64 `json:"referral_link_id"`
+	Referrals          uint   `json:"referrals"`
+	ReferralsAccepted  uint   `json:"referrals_accepted"`
+	ReferralURL        string `json:"referral_url"`
+	ReferredByUserID   uint64 `json:"referred_by_user_id"`
+	RelayAuth          bool   `json:"relay_auth"`
+	Status             string `json:"status"`
+	TncpwSession       string `json:"tncpw_session,omitempty"`
+	TwitterAuth        bool   `json:"twitter_auth"`
+	Username           string `json:"username"`
 }
 
 // UserExists is a slim record of the User model
@@ -376,92 +454,36 @@ type UserReferral struct {
 	Status           string `json:"status"`
 }
 
-// ReferralResults is the page response for referral results from listing
-type ReferralResults struct {
-	CurrentPage    int             `json:"current_page"`
-	Referrals      []*UserReferral `json:"referrals"`
-	Results        int             `json:"results"`
-	ResultsPerPage int             `json:"results_per_page"`
+// VisitorSession is the session for any visitor or user (related to link and campaign)
+//
+// For more information: https://docs.tonicpow.com/#d0d9055a-0c92-4f55-a370-762d44acf801
+type VisitorSession struct {
+	CampaignID       uint64 `json:"campaign_id"`
+	CustomDimensions string `json:"custom_dimensions"`
+	IPAddress        string `json:"ip_address"`
+	LinkID           uint64 `json:"link_id"`
+	LinkUserID       uint64 `json:"link_user_id"`
+	Provider         string `json:"provider"`
+	Referer          string `json:"referer"`
+	TncpwSession     string `json:"tncpw_session,omitempty"`
+	UserAgent        string `json:"user_agent"`
 }
 
-// AdvertiserResults is the page response for advertiser profile results from listing
-type AdvertiserResults struct {
-	Advertisers    []*AdvertiserProfile `json:"advertisers"`
-	CurrentPage    int                  `json:"current_page"`
-	Results        int                  `json:"results"`
-	ResultsPerPage int                  `json:"results_per_page"`
+// Widget is returned after creating a widget
+type Widget struct {
+	AcceptedDomains string `json:"accepted_domains"`
+	Height          int    `json:"height"`
+	ID              uint64 `json:"id"`
+	Label           string `json:"label"`
+	PersonID        uint64 `json:"user_id"`
+	TxID            string `json:"tx_id"`
+	Width           int    `json:"width"`
 }
 
-// AppResults is the page response for app results from listing
-type AppResults struct {
-	Apps           []*App `json:"apps"`
-	CurrentPage    int    `json:"current_page"`
-	Results        int    `json:"results"`
-	ResultsPerPage int    `json:"results_per_page"`
-}
-
-// PromoterResults is the page response for promoter results from listing
-type PromoterResults struct {
-	Promoters      []*Promoter `json:"promoters"`
-	CurrentPage    int         `json:"current_page"`
-	Results        int         `json:"results"`
-	ResultsPerPage int         `json:"results_per_page"`
-}
-
-// CampaignResults is the page response for campaign results from listing
-type CampaignResults struct {
-	Campaigns      []*Campaign `json:"campaigns"`
-	CurrentPage    int         `json:"current_page"`
-	Results        int         `json:"results"`
-	ResultsPerPage int         `json:"results_per_page"`
-}
-
-// CampaignStatistics is what we cache for redis for basic stats
-type CampaignStatistics struct {
-	Active          uint64  `json:"active"`
-	Balance         float64 `json:"balance"`
-	BalanceSatoshis uint64  `json:"balance_satoshis"`
-	Currency        string  `json:"currency"`
-	Total           uint64  `json:"total"`
-}
-
-// LinkResults is the page response for link results from listing
-type LinkResults struct {
-	CurrentPage    int     `json:"current_page"`
-	Links          []*Link `json:"links"`
-	Results        int     `json:"results"`
-	ResultsPerPage int     `json:"results_per_page"`
-}
-
-// ActivityItem is the item for a recent activity request
-type ActivityItem struct {
-	Action     string `json:"action"`
-	Amount     uint64 `json:"amount"`
-	CampaignID uint64 `json:"campaign_id"`
-	Date       string `json:"date"`
-	TxID       string `json:"tx_id"`
-}
-
-// RecentActivityResults is the page response for listing recent activity
-type RecentActivityResults struct {
-	Activities     []*ActivityItem `json:"activities"`
-	CurrentPage    int             `json:"current_page"`
-	Results        int             `json:"results"`
-	ResultsPerPage int             `json:"results_per_page"`
-}
-
-// APIKeyResults is the page response for listing api_keys
-type APIKeyResults struct {
-	APIKeys        []*APIKey `json:"api_keys"`
+// WidgetResults is the page response for listing widgets
+type WidgetResults struct {
 	CurrentPage    int       `json:"current_page"`
 	Results        int       `json:"results"`
 	ResultsPerPage int       `json:"results_per_page"`
-}
-
-// DomainResults is the page response for listing domains
-type DomainResults struct {
-	CurrentPage    int       `json:"current_page"`
-	Domains        []*Domain `json:"domains"`
-	Results        int       `json:"results"`
-	ResultsPerPage int       `json:"results_per_page"`
+	Widgets        []*Widget `json:"widgets"`
 }
