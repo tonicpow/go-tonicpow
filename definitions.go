@@ -93,7 +93,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.29"
+	defaultUserAgent string = "go-tonicpow: v0.4.30"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -221,31 +221,32 @@ type APIKeyResults struct {
 //
 // For more information: https://docs.tonicpow.com/#5aca2fc7-b3c8-445b-aa88-f62a681f8e0c
 type Campaign struct {
-	AdvertiserProfile   *AdvertiserProfile `json:"advertiser_profile"`
-	AdvertiserProfileID uint64             `json:"advertiser_profile_id"`
-	Balance             float64            `json:"balance"`
-	BalanceSatoshis     uint64             `json:"balance_satoshis"`
-	BotProtection       bool               `json:"bot_protection"`
-	ContributeEnabled   bool               `json:"contribute_enabled"`
-	CreatedAt           string             `json:"created_at"`
-	Currency            string             `json:"currency"`
-	Description         string             `json:"description"`
-	DomainVerified      bool               `json:"domain_verified"`
-	ExpiresAt           string             `json:"expires_at"`
-	FundingAddress      string             `json:"funding_address"`
-	Goals               []*Goal            `json:"goals"`
-	ID                  uint64             `json:"id,omitempty"`
-	Images              []*CampaignImage   `json:"images"`
-	ImageURL            string             `json:"image_url"`
-	LinksCreated        uint64             `json:"links_created"`
-	MatchDomain         bool               `json:"match_domain"`
-	PaidClicks          uint64             `json:"paid_clicks"`
-	PayPerClickRate     float64            `json:"pay_per_click_rate"`
-	PublicGUID          string             `json:"public_guid"`
-	Slug                string             `json:"slug"`
-	TargetURL           string             `json:"target_url"`
-	Title               string             `json:"title"`
-	TxID                string             `json:"-"`
+	AdvertiserProfile   *AdvertiserProfile    `json:"advertiser_profile"`
+	AdvertiserProfileID uint64                `json:"advertiser_profile_id"`
+	Balance             float64               `json:"balance"`
+	BalanceSatoshis     uint64                `json:"balance_satoshis"`
+	BotProtection       bool                  `json:"bot_protection"`
+	ContributeEnabled   bool                  `json:"contribute_enabled"`
+	CreatedAt           string                `json:"created_at"`
+	Currency            string                `json:"currency"`
+	Description         string                `json:"description"`
+	DomainVerified      bool                  `json:"domain_verified"`
+	ExpiresAt           string                `json:"expires_at"`
+	FundingAddress      string                `json:"funding_address"`
+	Goals               []*Goal               `json:"goals"`
+	ID                  uint64                `json:"id,omitempty"`
+	Images              []*CampaignImage      `json:"images"`
+	ImageURL            string                `json:"image_url"`
+	LinksCreated        uint64                `json:"links_created"`
+	MatchDomain         bool                  `json:"match_domain"`
+	PaidClicks          uint64                `json:"paid_clicks"`
+	PayPerClickRate     float64               `json:"pay_per_click_rate"`
+	PublicGUID          string                `json:"public_guid"`
+	Requirements        *CampaignRequirements `json:"requirements"`
+	Slug                string                `json:"slug"`
+	TargetURL           string                `json:"target_url"`
+	Title               string                `json:"title"`
+	TxID                string                `json:"-"`
 }
 
 // CampaignImage is the structure of the image meta data
@@ -254,6 +255,14 @@ type CampaignImage struct {
 	MimeType string `json:"mime_type"`
 	URL      string `json:"url"`
 	Width    int    `json:"width"`
+}
+
+// CampaignRequirements is the structure for "requirements"
+type CampaignRequirements struct {
+	HandCash    bool `json:"handcash"`
+	KYC         bool `json:"kyc"`
+	MoneyButton bool `json:"moneybutton"`
+	Twitter     bool `json:"twitter"`
 }
 
 // CampaignResults is the page response for campaign results from listing
