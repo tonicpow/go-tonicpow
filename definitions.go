@@ -93,7 +93,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.30"
+	defaultUserAgent string = "go-tonicpow: v0.4.31"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -262,6 +262,7 @@ type CampaignRequirements struct {
 	HandCash    bool `json:"handcash"`
 	KYC         bool `json:"kyc"`
 	MoneyButton bool `json:"moneybutton"`
+	Relay       bool `json:"relay"`
 	Twitter     bool `json:"twitter"`
 }
 
