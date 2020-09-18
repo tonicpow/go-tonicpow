@@ -93,7 +93,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.31"
+	defaultUserAgent string = "go-tonicpow: v0.4.32"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -215,6 +215,26 @@ type APIKeyResults struct {
 	CurrentPage    int       `json:"current_page"`
 	Results        int       `json:"results"`
 	ResultsPerPage int       `json:"results_per_page"`
+}
+
+// Blocked is the blocked_user model
+//
+// For more information: (todo)
+type Blocked struct {
+	AdvertiserProfileID uint64 `json:"advertiser_profile_id"`
+	BlockedPersonID     uint64 `json:"blocked_user_id"`
+	CampaignID          uint64 `json:"campaign_id"`
+	ID                  uint64 `json:"id"`
+	PersonID            uint64 `json:"user_id"`
+	Reason              string `json:"reason"`
+}
+
+// BlockedResults is the page response for listing blocks
+type BlockedResults struct {
+	Blocks         []*Blocked `json:"blocks"`
+	CurrentPage    int        `json:"current_page"`
+	Results        int        `json:"results"`
+	ResultsPerPage int        `json:"results_per_page"`
 }
 
 // Campaign is the campaign model (child of AdvertiserProfile)
