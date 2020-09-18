@@ -93,7 +93,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.32"
+	defaultUserAgent string = "go-tonicpow: v0.4.33"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -222,11 +222,11 @@ type APIKeyResults struct {
 // For more information: (todo)
 type Blocked struct {
 	AdvertiserProfileID uint64 `json:"advertiser_profile_id"`
-	BlockedPersonID     uint64 `json:"blocked_user_id"`
+	BlockedUserID       uint64 `json:"blocked_user_id"`
 	CampaignID          uint64 `json:"campaign_id"`
 	ID                  uint64 `json:"id"`
-	PersonID            uint64 `json:"user_id"`
 	Reason              string `json:"reason"`
+	UserID              uint64 `json:"user_id"`
 }
 
 // BlockedResults is the page response for listing blocks
