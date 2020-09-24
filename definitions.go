@@ -93,7 +93,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.33"
+	defaultUserAgent string = "go-tonicpow: v0.4.34"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -269,6 +269,17 @@ type Campaign struct {
 	TxID                string                `json:"-"`
 }
 
+// CampaignApplication is the structure of the campaign application data
+type CampaignApplication struct {
+	AdvertiserProfileID uint64 `json:"advertiser_profile_id"`
+	CampaignID          uint64 `json:"campaign_id"`
+	ID                  uint64 `json:"id"`
+	Response            string `json:"response"`
+	Status              string `json:"status"`
+	Submission          string `json:"submission"`
+	UserID              uint64 `json:"user_id"`
+}
+
 // CampaignImage is the structure of the image meta data
 type CampaignImage struct {
 	Height   int    `json:"height"`
@@ -279,6 +290,7 @@ type CampaignImage struct {
 
 // CampaignRequirements is the structure for "requirements"
 type CampaignRequirements struct {
+	Application bool `json:"application"`
 	HandCash    bool `json:"handcash"`
 	KYC         bool `json:"kyc"`
 	MoneyButton bool `json:"moneybutton"`
