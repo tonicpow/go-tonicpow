@@ -196,7 +196,7 @@ func TestClient_UpdateUser(t *testing.T) {
 	}
 
 	user.MiddleName = "Danger"
-	if user, err = client.UpdateUser(user); err != nil {
+	if _, err = client.UpdateUser(user); err != nil {
 		t.Fatalf("%s", err.Error())
 	}
 }
@@ -223,7 +223,7 @@ func TestClient_GetUser(t *testing.T) {
 		t.Fatalf("%s", err.Error())
 	}
 
-	if user, err = client.GetUser(user.ID, user.Email); err != nil {
+	if _, err = client.GetUser(user.ID, user.Email); err != nil {
 		t.Fatalf("%s", err.Error())
 	}
 }

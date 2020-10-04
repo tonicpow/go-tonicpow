@@ -2,6 +2,7 @@ package tonicpow
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -152,7 +153,7 @@ func (c *Client) Request(endpoint string, method string, payload interface{}) (r
 	case http.MethodPost, http.MethodPut:
 		{
 			if jsonValue, err = json.Marshal(payload); err != nil {
-				err = c.createError("error marshalling data: "+err.Error(), http.StatusBadRequest)
+				err = c.createError("error marshaling data: "+err.Error(), http.StatusBadRequest)
 				return
 			}
 		}
@@ -172,7 +173,7 @@ func (c *Client) Request(endpoint string, method string, payload interface{}) (r
 
 	// Start the Request
 	var request *http.Request
-	if request, err = http.NewRequest(method, endpoint, bytes.NewBuffer(jsonValue)); err != nil {
+	if request, err = http.NewRequestWithContext(context.Background(), method, endpoint, bytes.NewBuffer(jsonValue)); err != nil {
 		err = c.createError("error creating new request: "+err.Error(), http.StatusBadRequest)
 		return
 	}

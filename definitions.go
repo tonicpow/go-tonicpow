@@ -93,7 +93,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.34"
+	defaultUserAgent string = "go-tonicpow: v0.4.35"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -194,18 +194,20 @@ type AppResults struct {
 
 // APIKey is the api_key model (child of app)
 //
+// DO NOT CHANGE ORDER - Optimized for memory (malign)
+//
 // For more information: (todo)
 type APIKey struct {
-	Active      bool   `json:"active"`
-	AppID       uint64 `json:"app_id"`
 	CreatedAt   string `json:"created_at"`
-	ID          uint64 `json:"id"`
 	Key         string `json:"key"`
 	Name        string `json:"name"`
 	Preview     string `json:"preview"`
-	ScopeID     uint64 `json:"scope_id"`
 	ScopeModel  string `json:"scope_model"`
+	AppID       uint64 `json:"app_id"`
+	ID          uint64 `json:"id"`
+	ScopeID     uint64 `json:"scope_id"`
 	UserID      uint64 `json:"user_id"`
+	Active      bool   `json:"active"`
 	WriteAccess bool   `json:"write_access"`
 }
 
@@ -241,32 +243,32 @@ type BlockedResults struct {
 //
 // For more information: https://docs.tonicpow.com/#5aca2fc7-b3c8-445b-aa88-f62a681f8e0c
 type Campaign struct {
-	AdvertiserProfile   *AdvertiserProfile    `json:"advertiser_profile"`
-	AdvertiserProfileID uint64                `json:"advertiser_profile_id"`
-	Balance             float64               `json:"balance"`
-	BalanceSatoshis     uint64                `json:"balance_satoshis"`
-	BotProtection       bool                  `json:"bot_protection"`
-	ContributeEnabled   bool                  `json:"contribute_enabled"`
+	Goals               []*Goal               `json:"goals"`
+	Images              []*CampaignImage      `json:"images"`
 	CreatedAt           string                `json:"created_at"`
 	Currency            string                `json:"currency"`
 	Description         string                `json:"description"`
-	DomainVerified      bool                  `json:"domain_verified"`
 	ExpiresAt           string                `json:"expires_at"`
 	FundingAddress      string                `json:"funding_address"`
-	Goals               []*Goal               `json:"goals"`
-	ID                  uint64                `json:"id,omitempty"`
-	Images              []*CampaignImage      `json:"images"`
 	ImageURL            string                `json:"image_url"`
-	LinksCreated        uint64                `json:"links_created"`
-	MatchDomain         bool                  `json:"match_domain"`
-	PaidClicks          uint64                `json:"paid_clicks"`
-	PayPerClickRate     float64               `json:"pay_per_click_rate"`
 	PublicGUID          string                `json:"public_guid"`
-	Requirements        *CampaignRequirements `json:"requirements"`
 	Slug                string                `json:"slug"`
 	TargetURL           string                `json:"target_url"`
 	Title               string                `json:"title"`
 	TxID                string                `json:"-"`
+	AdvertiserProfile   *AdvertiserProfile    `json:"advertiser_profile"`
+	AdvertiserProfileID uint64                `json:"advertiser_profile_id"`
+	PayPerClickRate     float64               `json:"pay_per_click_rate"`
+	Balance             float64               `json:"balance"`
+	PaidClicks          uint64                `json:"paid_clicks"`
+	LinksCreated        uint64                `json:"links_created"`
+	ID                  uint64                `json:"id,omitempty"`
+	BalanceSatoshis     uint64                `json:"balance_satoshis"`
+	Requirements        *CampaignRequirements `json:"requirements"`
+	DomainVerified      bool                  `json:"domain_verified"`
+	MatchDomain         bool                  `json:"match_domain"`
+	BotProtection       bool                  `json:"bot_protection"`
+	ContributeEnabled   bool                  `json:"contribute_enabled"`
 }
 
 // CampaignApplication is the structure of the campaign application data
@@ -441,38 +443,41 @@ type ReferralResults struct {
 
 // User is the user model
 //
+// DO NOT CHANGE ORDER - Optimized for memory (malign
+//
 // For more information: https://docs.tonicpow.com/#50b3c130-7254-4a05-b312-b14647736e38
 type User struct {
-	AvatarURL          string `json:"avatar_url"`
-	Balance            uint64 `json:"balance"`
+	AvatarURL string `json:"avatar_url"`
+
 	Bio                string `json:"bio"`
-	Country            string `json:"country"`
-	Earned             uint64 `json:"earned"`
 	Email              string `json:"email"`
-	EmailVerified      bool   `json:"email_verified"`
+	Country            string `json:"country"`
 	FirstName          string `json:"first_name"`
-	HandCashAuth       bool   `json:"handcash_auth"`
-	ID                 uint64 `json:"id,omitempty"`
 	InternalAddress    string `json:"internal_address"`
 	LastName           string `json:"last_name"`
 	MiddleName         string `json:"middle_name"`
-	MoneyButtonAuth    bool   `json:"moneybutton_auth"`
 	NewPassword        string `json:"new_password,omitempty"`
 	NewPasswordConfirm string `json:"new_password_confirm,omitempty"`
 	Password           string `json:"password,omitempty"`
 	PayoutAddress      string `json:"payout_address"`
 	Phone              string `json:"phone"`
-	PhoneVerified      bool   `json:"phone_verified"`
-	ReferralLinkID     uint64 `json:"referral_link_id"`
-	Referrals          uint   `json:"referrals"`
-	ReferralsAccepted  uint   `json:"referrals_accepted"`
 	ReferralURL        string `json:"referral_url"`
-	ReferredByUserID   uint64 `json:"referred_by_user_id"`
-	RelayAuth          bool   `json:"relay_auth"`
 	Status             string `json:"status"`
 	TncpwSession       string `json:"tncpw_session,omitempty"`
-	TwitterAuth        bool   `json:"twitter_auth"`
 	Username           string `json:"username"`
+	Balance            uint64 `json:"balance"`
+	Earned             uint64 `json:"earned"`
+	ID                 uint64 `json:"id,omitempty"`
+	ReferralLinkID     uint64 `json:"referral_link_id"`
+	ReferredByUserID   uint64 `json:"referred_by_user_id"`
+	Referrals          uint   `json:"referrals"`
+	ReferralsAccepted  uint   `json:"referrals_accepted"`
+	EmailVerified      bool   `json:"email_verified"`
+	HandCashAuth       bool   `json:"handcash_auth"`
+	MoneyButtonAuth    bool   `json:"moneybutton_auth"`
+	PhoneVerified      bool   `json:"phone_verified"`
+	RelayAuth          bool   `json:"relay_auth"`
+	TwitterAuth        bool   `json:"twitter_auth"`
 }
 
 // UserExists is a slim record of the User model
