@@ -93,7 +93,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.36"
+	defaultUserAgent string = "go-tonicpow: v0.4.37"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -444,12 +444,11 @@ type ReferralResults struct {
 
 // User is the user model
 //
-// DO NOT CHANGE ORDER - Optimized for memory (malign
+// DO NOT CHANGE ORDER - Optimized for memory (malign)
 //
 // For more information: https://docs.tonicpow.com/#50b3c130-7254-4a05-b312-b14647736e38
 type User struct {
-	AvatarURL string `json:"avatar_url"`
-
+	AvatarURL          string `json:"avatar_url"`
 	Bio                string `json:"bio"`
 	Email              string `json:"email"`
 	Country            string `json:"country"`
@@ -468,6 +467,7 @@ type User struct {
 	Username           string `json:"username"`
 	Balance            uint64 `json:"balance"`
 	Earned             uint64 `json:"earned"`
+	ExperiencePoints   uint64 `json:"experience_points"`
 	ID                 uint64 `json:"id,omitempty"`
 	ReferralLinkID     uint64 `json:"referral_link_id"`
 	ReferredByUserID   uint64 `json:"referred_by_user_id"`
