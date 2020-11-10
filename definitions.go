@@ -93,7 +93,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.37"
+	defaultUserAgent string = "go-tonicpow: v0.4.38"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -534,4 +534,27 @@ type WidgetResults struct {
 	Results        int       `json:"results"`
 	ResultsPerPage int       `json:"results_per_page"`
 	Widgets        []*Widget `json:"widgets"`
+}
+
+// Withdrawal is returned after creating a withdrawal
+type Withdrawal struct {
+	Amount               uint64 `json:"amount"`
+	AmountRejected       uint64 `json:"amount_rejected"`
+	Fee                  uint64 `json:"fee"`
+	ID                   uint64 `json:"id"`
+	PayoutAddress        string `json:"payout_address"`
+	UserID               uint64 `json:"user_id"`
+	ProvidedInformation  string `json:"provided_information"`
+	Response             string `json:"response"`
+	Status               string `json:"status"`
+	Transactions         uint32 `json:"transactions"`
+	TransactionsRejected uint32 `json:"transactions_rejected"`
+}
+
+// WithdrawalResults is the page response for listing withdrawals
+type WithdrawalResults struct {
+	CurrentPage    int           `json:"current_page"`
+	Results        int           `json:"results"`
+	ResultsPerPage int           `json:"results_per_page"`
+	Withdrawals    []*Withdrawal `json:"withdrawals"`
 }
