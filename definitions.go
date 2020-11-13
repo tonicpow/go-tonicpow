@@ -310,11 +310,13 @@ type CampaignResults struct {
 
 // CampaignStatistics is what we cache for redis for basic stats
 type CampaignStatistics struct {
-	Active          uint64  `json:"active"`
-	Balance         float64 `json:"balance"`
-	BalanceSatoshis uint64  `json:"balance_satoshis"`
-	Currency        string  `json:"currency"`
-	Total           uint64  `json:"total"`
+	Active              uint64  `json:"active"`
+	Balance             float64 `json:"balance"`
+	BalanceSatoshis     uint64  `json:"balance_satoshis"`
+	Currency            string  `json:"currency"`
+	Total               uint64  `json:"total"`
+	TotalEarned         float64 `json:"total_earned"`
+	TotalEarnedSatoshis uint64  `json:"total_earned_satoshis"`
 }
 
 // Conversion is the response of getting a conversion
