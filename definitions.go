@@ -452,6 +452,7 @@ type User struct {
 	Bio                string `json:"bio"`
 	Email              string `json:"email"`
 	Country            string `json:"country"`
+	DefaultWallet      string `json:"default_wallet"`
 	FirstName          string `json:"first_name"`
 	InternalAddress    string `json:"internal_address"`
 	LastName           string `json:"last_name"`
