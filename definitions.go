@@ -93,7 +93,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.41"
+	defaultUserAgent string = "go-tonicpow: v0.4.42"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -241,8 +241,11 @@ type BlockedResults struct {
 
 // BasicStatistics is the statistics about a given campaign or advertiser
 type BasicStatistics struct {
-	Clicks      []*DataPoint `json:"clicks"`
-	Conversions []*DataPoint `json:"conversions"`
+	Clicks           []*DataPoint `json:"clicks"`
+	Conversions      []*DataPoint `json:"conversions"`
+	TotalClicks      int          `json:"total_clicks"`
+	TotalConversions int          `json:"total_conversions"`
+	TotalSatoshis    int          `json:"total_satoshis"`
 }
 
 // DataPoint a data point to be plotted on the chart
