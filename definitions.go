@@ -93,7 +93,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.43"
+	defaultUserAgent string = "go-tonicpow: v0.4.44"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -391,20 +391,20 @@ type Goal struct {
 //
 // For more information: https://docs.tonicpow.com/#ee74c3ce-b4df-4d57-abf2-ccf3a80e4e1e
 type Link struct {
-	CampaignID        uint64 `json:"campaign_id"`
-	CampaignImageURL  string `json:"campaign_image_url"`
-	CampaignTitle     string `json:"campaign_title"`
-	ClickPayouts      int    `json:"click_payouts"`
-	ConversionPayouts int    `json:"conversion_payouts"`
-	CustomShortCode   string `json:"custom_short_code"`
-	ID                uint64 `json:"id,omitempty"`
-	Label             string `json:"label"`
-	ShortCode         string `json:"short_code"`
-	ShortLinkURL      string `json:"short_link_url"`
-	TargetURL         string `json:"target_url"`
-	TotalClicks       int    `json:"total_clicks"`
-	TotalConversions  int    `json:"total_conversions"`
-	UserID            uint64 `json:"user_id"`
+	CampaignID         uint64 `json:"campaign_id"`
+	CampaignImageURL   string `json:"campaign_image_url"`
+	CampaignTitle      string `json:"campaign_title"`
+	ClickSatoshis      int32  `json:"click_satoshis"`
+	ConversionSatoshis int32  `json:"conversion_satoshis"`
+	CustomShortCode    string `json:"custom_short_code"`
+	ID                 uint64 `json:"id,omitempty"`
+	Label              string `json:"label"`
+	ShortCode          string `json:"short_code"`
+	ShortLinkURL       string `json:"short_link_url"`
+	TargetURL          string `json:"target_url"`
+	TotalClicks        int32  `json:"total_clicks"`
+	TotalConversions   int32  `json:"total_conversions"`
+	UserID             uint64 `json:"user_id"`
 }
 
 // LinkResults is the page response for link results from listing
