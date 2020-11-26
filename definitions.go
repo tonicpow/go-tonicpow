@@ -93,7 +93,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.44"
+	defaultUserAgent string = "go-tonicpow: v0.4.45"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -393,6 +393,7 @@ type Goal struct {
 type Link struct {
 	CampaignID         uint64 `json:"campaign_id"`
 	CampaignImageURL   string `json:"campaign_image_url"`
+	CampaignSlug       string `json:"campaign_slug"`
 	CampaignTitle      string `json:"campaign_title"`
 	ClickSatoshis      int32  `json:"click_satoshis"`
 	ConversionSatoshis int32  `json:"conversion_satoshis"`
