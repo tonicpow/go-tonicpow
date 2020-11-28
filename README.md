@@ -2,12 +2,12 @@
 
 > The official Go implementation for interacting with the [TonicPow API](https://docs.tonicpow.com)
 
-[![Release](https://img.shields.io/github/release-pre/tonicpow/go-tonicpow.svg?logo=github&style=flat)](https://github.com/tonicpow/go-tonicpow/releases)
-[![Build Status](https://travis-ci.com/tonicpow/go-tonicpow.svg?branch=master)](https://travis-ci.com/tonicpow/go-tonicpow)
-[![Report](https://goreportcard.com/badge/github.com/tonicpow/go-tonicpow?style=flat)](https://goreportcard.com/report/github.com/tonicpow/go-tonicpow)
-[![Go](https://img.shields.io/github/go-mod/go-version/tonicpow/go-tonicpow)](https://golang.org/)
-[![Slack](https://img.shields.io/badge/slack-tonicpow-orange.svg?logo=slack&style=flat)](https://atlantistic.slack.com/app_redirect?channel=tonicpow)
-[![GoDoc](https://godoc.org/github.com/tonicpow/go-tonicpow?status.svg&style=flat)](https://pkg.go.dev/github.com/tonicpow/go-tonicpow)
+[![Release](https://img.shields.io/github/release-pre/tonicpow/go-tonicpow.svg?logo=github&style=flat&v=3)](https://github.com/tonicpow/go-tonicpow/releases)
+[![Build Status](https://img.shields.io/github/workflow/status/tonicpow/go-tonicpow/run-go-tests?logo=github&v=3)](https://github.com/tonicpow/go-tonicpow/actions)
+[![Report](https://goreportcard.com/badge/github.com/tonicpow/go-tonicpow?style=flat&v=3)](https://goreportcard.com/report/github.com/tonicpow/go-tonicpow)
+[![Go](https://img.shields.io/github/go-mod/go-version/tonicpow/go-tonicpow?v=3)](https://golang.org/)
+[![Slack](https://img.shields.io/badge/slack-tonicpow-orange.svg?logo=slack&style=flat&v=3)](https://atlantistic.slack.com/app_redirect?channel=tonicpow)
+[![GoDoc](https://godoc.org/github.com/tonicpow/go-tonicpow?status.svg&style=flat&v=3)](https://pkg.go.dev/github.com/tonicpow/go-tonicpow)
 
 <br/>
 
@@ -72,38 +72,40 @@ make help
 
 List of all current commands:
 ```text
-all                    Runs multiple commands
-clean                  Remove previous builds and any test cache data
-clean-mods             Remove all the Go mod cache
-coverage               Shows the test coverage
-godocs                 Sync the latest tag with GoDocs
-help                   Show this help message
-install                Install the application
-install-go             Install the application (Using Native Go)
-lint                   Run the golangci-lint application (install if not found)
-release                Full production release (creates release in Github)
-release                Runs common.release then runs godocs
-release-snap           Test the full release (build binaries)
-release-test           Full production test release (everything except deploy)
-replace-version        Replaces the version in HTML/JS (pre-deploy)
-run-examples           Runs all the examples
-tag                    Generate a new tag and push (tag version=0.0.0)
-tag-remove             Remove a tag if found (tag-remove version=0.0.0)
-tag-update             Update an existing tag to current commit (tag-update version=0.0.0)
-test                   Runs vet, lint and ALL tests
-test-short             Runs vet, lint and tests (excludes integration tests)
-test-travis            Runs all tests via Travis (also exports coverage)
-test-travis-short      Runs unit tests via Travis (also exports coverage)
-uninstall              Uninstall the application (and remove files)
-update-linter          Update the golangci-lint package (macOS only)
-vet                    Run the Go vet application
+all                  Runs multiple commands
+clean                Remove previous builds and any test cache data
+clean-mods           Remove all the Go mod cache
+coverage             Shows the test coverage
+godocs               Sync the latest tag with GoDocs
+help                 Show this help message
+install              Install the application
+install-go           Install the application (Using Native Go)
+lint                 Run the golangci-lint application (install if not found)
+release              Full production release (creates release in Github)
+release              Runs common.release then runs godocs
+release-snap         Test the full release (build binaries)
+release-test         Full production test release (everything except deploy)
+replace-version      Replaces the version in HTML/JS (pre-deploy)
+run-examples         Runs all the examples
+tag                  Generate a new tag and push (tag version=0.0.0)
+tag-remove           Remove a tag if found (tag-remove version=0.0.0)
+tag-update           Update an existing tag to current commit (tag-update version=0.0.0)
+test                 Runs vet, lint and ALL tests
+test-ci              Runs all tests via CI (exports coverage)
+test-ci-no-race      Runs all tests via CI (no race) (exports coverage)
+test-ci-short        Runs unit tests via CI (exports coverage)
+test-short           Runs vet, lint and tests (excludes integration tests)
+uninstall            Uninstall the application (and remove files)
+update-linter        Update the golangci-lint package (macOS only)
+vet                  Run the Go vet application
 ```
 </details>
 
 <br/>
 
 ## Examples & Tests
-All unit tests and [examples](tonicpow_test.go) run via [Travis CI](https://travis-ci.org/tonicpow/go-tonicpow) and uses [Go version 1.15.x](https://golang.org/doc/go1.15). View the [deployment configuration file](.travis.yml).
+All unit tests and [examples](examples) run via [Github Actions](https://github.com/tonicpow/go-tonicpow/actions) and
+uses [Go version 1.15.x](https://golang.org/doc/go1.15). View the [configuration file](.github/workflows/run-tests.yml).
 
 View a [full example application](examples/examples.go).
 
@@ -167,10 +169,10 @@ View the [contributing guidelines](CONTRIBUTING.md) and follow the [code of cond
 
 Support the development of this project 🙏
 
-[![Donate](https://img.shields.io/badge/donate-bitcoin-brightgreen.svg)](https://tonicpow.com/?af=go-tonicpow) [![Twetch](https://img.shields.io/badge/share-twitter-00ACEE.svg)](https://twitter.com/intent/tweet?text=TonicPow%20integration%20with%20Go%20rocks!%20Check%20it%20out:%20https%3A%2F%2Ftncpw.co%2F7ca46e94) [![Twitter](https://img.shields.io/badge/share-twetch-085AF6.svg)](https://twetch.app/compose?description=TonicPow%20integration%20with%20Go%20rocks!%20Check%20it%20out:%20https%3A%2F%2Ftncpw.co%2F7ca46e94)
+[![Donate](https://img.shields.io/badge/donate-bitcoin-brightgreen.svg?v=3)](https://tonicpow.com/?af=go-tonicpow) [![Twetch](https://img.shields.io/badge/share-twitter-00ACEE.svg?v=3)](https://twitter.com/intent/tweet?text=TonicPow%20integration%20with%20Go%20rocks!%20Check%20it%20out:%20https%3A%2F%2Ftncpw.co%2F7ca46e94) [![Twitter](https://img.shields.io/badge/share-twetch-085AF6.svg?v=3)](https://twetch.app/compose?description=TonicPow%20integration%20with%20Go%20rocks!%20Check%20it%20out:%20https%3A%2F%2Ftncpw.co%2F7ca46e94)
 
 <br/>
 
 ## License
 
-[![license](https://img.shields.io/badge/license-Open%20BSV-brightgreen.svg?style=flat)](/LICENSE)
+[![license](https://img.shields.io/badge/license-Open%20BSV-brightgreen.svg?style=flat&v=3)](/LICENSE)
