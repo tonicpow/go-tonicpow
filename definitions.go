@@ -93,7 +93,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.46"
+	defaultUserAgent string = "go-tonicpow: v0.4.47"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -391,6 +391,7 @@ type Goal struct {
 //
 // For more information: https://docs.tonicpow.com/#ee74c3ce-b4df-4d57-abf2-ccf3a80e4e1e
 type Link struct {
+	AvatarURL          string `json:"avatar_url,omitempty"`
 	CampaignID         uint64 `json:"campaign_id"`
 	CampaignImageURL   string `json:"image_url"`
 	CampaignSlug       string `json:"slug"`
@@ -406,6 +407,7 @@ type Link struct {
 	TotalClicks        int32  `json:"total_clicks"`
 	TotalConversions   int32  `json:"total_conversions"`
 	UserID             uint64 `json:"user_id"`
+	Username           string `json:"username,omitempty"`
 }
 
 // LinkResults is the page response for link results from listing
