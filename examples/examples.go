@@ -613,7 +613,7 @@ func getLink(linkID uint64) (link *tonicpow.Link, err error) {
 
 func getLinks(userID uint64) (results *tonicpow.LinkResults, err error) {
 	if results, err = TonicPowAPI.ListLinksByUserID(userID, 1, 20); err != nil {
-		log.Fatalf("get link failed - api error: %s data: %s - local error: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data, err.Error())
+		log.Fatalf("get links failed - api error: %s data: %s - local error: %s", TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data, err.Error())
 	} else {
 		log.Printf("got link(s) %d - page: %d", results.Results, results.CurrentPage)
 	}

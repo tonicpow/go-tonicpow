@@ -151,7 +151,7 @@ func (c *Client) ListLinksByUserID(userID uint64, page, resultsPerPage int) (res
 
 	// Fire the Request
 	var response string
-	if response, err = c.Request(fmt.Sprintf("%s/user/%d?%s=%d&%s=%d", modelLink, userID, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage), http.MethodGet, nil); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/links/?id=%d&%s=%d&%s=%d", modelUser, userID, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage), http.MethodGet, nil); err != nil {
 		return
 	}
 
