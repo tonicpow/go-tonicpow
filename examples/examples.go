@@ -99,7 +99,7 @@ func main() {
 	// Example: Update a user
 	//
 	user.FirstName = "Austin"
-	user.PayoutAddress = "mrz@moneybutton.com"
+	user.PayoutAddress = "austin@moneybutton.com"
 	if user, err = TonicPowAPI.UpdateUser(user); err != nil {
 		log.Fatalf("update user failed error %s - api error: %s data: %s", err.Error(), TonicPowAPI.LastRequest.Error.Message, TonicPowAPI.LastRequest.Error.Data)
 	} else {
