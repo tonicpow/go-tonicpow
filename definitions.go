@@ -93,7 +93,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.49"
+	defaultUserAgent string = "go-tonicpow: v0.4.50"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -424,8 +424,10 @@ type Promoter struct {
 	AvatarURL       string `json:"avatar_url"`
 	Bio             string `json:"bio"`
 	Country         string `json:"country"`
+	CreatedAt       string `json:"created_at"`
 	EmailVerified   bool   `json:"email_verified"`
 	HandCashAuth    bool   `json:"handcash_auth"`
+	LastActiveAt    string `json:"last_active_at"`
 	MoneyButtonAuth bool   `json:"moneybutton_auth"`
 	PhoneVerified   bool   `json:"phone_verified"`
 	RelayAuth       bool   `json:"relay_auth"`
