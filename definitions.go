@@ -420,19 +420,20 @@ type LinkResults struct {
 }
 
 // Promoter is the public promoter response
+// DO NOT CHANGE ORDER - malign
 type Promoter struct {
 	AvatarURL       string `json:"avatar_url"`
 	Bio             string `json:"bio"`
 	Country         string `json:"country"`
 	CreatedAt       string `json:"created_at"`
+	LastActiveAt    string `json:"last_active_at"`
+	Username        string `json:"username"`
 	EmailVerified   bool   `json:"email_verified"`
 	HandCashAuth    bool   `json:"handcash_auth"`
-	LastActiveAt    string `json:"last_active_at"`
 	MoneyButtonAuth bool   `json:"moneybutton_auth"`
 	PhoneVerified   bool   `json:"phone_verified"`
 	RelayAuth       bool   `json:"relay_auth"`
 	TwitterAuth     bool   `json:"twitter_auth"`
-	Username        string `json:"username"`
 }
 
 // PromoterResults is the page response for promoter results from listing
