@@ -93,7 +93,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.48"
+	defaultUserAgent string = "go-tonicpow: v0.4.49"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -146,11 +146,12 @@ type Error struct {
 
 // ActivityItem is the item for a recent activity request
 type ActivityItem struct {
-	Action     string `json:"action"`
-	Amount     uint64 `json:"amount"`
-	CampaignID uint64 `json:"campaign_id"`
-	Date       string `json:"date"`
-	TxID       string `json:"tx_id"`
+	Action       string `json:"action"`
+	Amount       uint64 `json:"amount"`
+	CampaignID   uint64 `json:"campaign_id"`
+	CampaignSlug string `json:"campaign_slug"`
+	Date         string `json:"date"`
+	TxID         string `json:"tx_id"`
 }
 
 // AdvertiserProfile is the advertiser_profile model (child of User)
