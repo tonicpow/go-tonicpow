@@ -93,7 +93,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.51"
+	defaultUserAgent string = "go-tonicpow: v0.4.52"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -533,6 +533,25 @@ type UserReferral struct {
 	Referrals        uint   `json:"referrals"`
 	ReferredByUserID uint64 `json:"referred_by_user_id"`
 	Status           string `json:"status"`
+}
+
+// UserGoalResponse is a goal but as a "challenge" for the user
+type UserGoalResponse struct {
+	CompletedAt    string  `json:"completed_at"`
+	Description    string  `json:"description"`
+	ID             uint64  `json:"id,omitempty"`
+	MaxPerPromoter int16   `json:"max_per_promoter"`
+	Name           string  `json:"name"`
+	PayoutRate     float64 `json:"payout_rate"`
+	Title          string  `json:"title"`
+}
+
+// UserGoalResults is the page response for listing user goals
+type UserGoalResults struct {
+	CurrentPage    int                 `json:"current_page"`
+	UserGoals      []*UserGoalResponse `json:"goals"`
+	Results        int                 `json:"results"`
+	ResultsPerPage int                 `json:"results_per_page"`
 }
 
 // VisitorSession is the session for any visitor or user (related to link and campaign)
