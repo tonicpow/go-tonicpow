@@ -93,7 +93,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.52"
+	defaultUserAgent string = "go-tonicpow: v0.4.53"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -434,6 +434,7 @@ type Promoter struct {
 	MoneyButtonAuth  bool   `json:"moneybutton_auth"`
 	PhoneVerified    bool   `json:"phone_verified"`
 	RelayAuth        bool   `json:"relay_auth"`
+	StarfishAuth     bool   `json:"starfish_auth"`
 	TwitterAuth      bool   `json:"twitter_auth"`
 }
 
@@ -511,6 +512,7 @@ type User struct {
 	MoneyButtonAuth    bool   `json:"moneybutton_auth"`
 	PhoneVerified      bool   `json:"phone_verified"`
 	RelayAuth          bool   `json:"relay_auth"`
+	StarfishAuth       bool   `json:"starfish_auth"`
 	TwitterAuth        bool   `json:"twitter_auth"`
 }
 
