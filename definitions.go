@@ -93,7 +93,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.53"
+	defaultUserAgent string = "go-tonicpow: v0.4.54"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -163,6 +163,7 @@ type AdvertiserProfile struct {
 	IconURL        string `json:"icon_url"`
 	ID             uint64 `json:"id,omitempty"`
 	Name           string `json:"name"`
+	PublicGUID     string `json:"public_guid"`
 	UserID         uint64 `json:"user_id"`
 }
 
@@ -428,6 +429,7 @@ type Promoter struct {
 	CreatedAt        string `json:"created_at"`
 	LastActiveAt     string `json:"last_active_at"`
 	Username         string `json:"username"`
+	PublicGUID       string `json:"public_guid"`
 	ExperiencePoints uint64 `json:"experience_points"`
 	EmailVerified    bool   `json:"email_verified"`
 	HandCashAuth     bool   `json:"handcash_auth"`
@@ -537,8 +539,8 @@ type UserReferral struct {
 	Status           string `json:"status"`
 }
 
-// UserGoalResponse is a goal but as a "challenge" for the user
-type UserGoalResponse struct {
+// UserGoal is a goal but as a "challenge" for the user
+type UserGoal struct {
 	CompletedAt    string  `json:"completed_at"`
 	Description    string  `json:"description"`
 	ID             uint64  `json:"id,omitempty"`
@@ -550,10 +552,10 @@ type UserGoalResponse struct {
 
 // UserGoalResults is the page response for listing user goals
 type UserGoalResults struct {
-	CurrentPage    int                 `json:"current_page"`
-	UserGoals      []*UserGoalResponse `json:"goals"`
-	Results        int                 `json:"results"`
-	ResultsPerPage int                 `json:"results_per_page"`
+	CurrentPage    int         `json:"current_page"`
+	UserGoals      []*UserGoal `json:"goals"`
+	Results        int         `json:"results"`
+	ResultsPerPage int         `json:"results_per_page"`
 }
 
 // VisitorSession is the session for any visitor or user (related to link and campaign)
