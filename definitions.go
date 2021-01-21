@@ -93,7 +93,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.54"
+	defaultUserAgent string = "go-tonicpow: v0.4.55"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -487,6 +487,7 @@ type User struct {
 	Bio                string `json:"bio"`
 	Email              string `json:"email"`
 	Country            string `json:"country"`
+	CreatedAt          string `json:"created_at"`
 	DefaultWallet      string `json:"default_wallet"`
 	FirstName          string `json:"first_name"`
 	InternalAddress    string `json:"internal_address"`
