@@ -173,7 +173,8 @@ func (c *Client) UpdateCampaign(campaign *Campaign) (updatedCampaign *Campaign, 
 // This will return an Error if the campaign is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#c1b17be6-cb10-48b3-a519-4686961ff41c
-func (c *Client) ListCampaigns(page, resultsPerPage int, sortBy, sortOrder, searchQuery string) (results *CampaignResults, err error) {
+func (c *Client) ListCampaigns(page, resultsPerPage int, sortBy, sortOrder, searchQuery string,
+	minimumBalance uint64) (results *CampaignResults, err error) {
 
 	// Do we know this field?
 	if len(sortBy) > 0 {
@@ -188,7 +189,16 @@ func (c *Client) ListCampaigns(page, resultsPerPage int, sortBy, sortOrder, sear
 
 	// Fire the Request
 	var response string
-	if response, err = c.Request(fmt.Sprintf("%s/list?%s=%d&%s=%d&%s=%s&%s=%s&%s=%s", modelCampaign, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder, fieldSearchQuery, searchQuery), http.MethodGet, nil); err != nil {
+	if response, err = c.Request(fmt.Sprintf(
+		"%s/list?%s=%d&%s=%d&%s=%s&%s=%s&%s=%s&%s=%d",
+		modelCampaign,
+		fieldCurrentPage, page,
+		fieldResultsPerPage, resultsPerPage,
+		fieldSortBy, sortBy,
+		fieldSortOrder, sortOrder,
+		fieldSearchQuery, searchQuery,
+		fieldMinimumBalance, minimumBalance,
+	), http.MethodGet, nil); err != nil {
 		return
 	}
 

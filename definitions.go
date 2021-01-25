@@ -22,6 +22,7 @@ const (
 	fieldLabel               = "label"
 	fieldLastBalance         = "last_balance"
 	fieldLinkID              = "link_id"
+	fieldMinimumBalance      = "minimum_balance"
 	fieldName                = "name"
 	fieldPassword            = "password"
 	fieldPasswordConfirm     = "password_confirm"
@@ -93,7 +94,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.55"
+	defaultUserAgent string = "go-tonicpow: v0.4.56"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
