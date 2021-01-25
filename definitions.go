@@ -16,6 +16,7 @@ const (
 	fieldCustomDimensions    = "custom_dimensions"
 	fieldDelayInMinutes      = "delay_in_minutes"
 	fieldEmail               = "email"
+	fieldExpired             = "expired"
 	fieldFeedType            = "feed_type"
 	fieldGoalID              = "goal_id"
 	fieldID                  = "id"
@@ -94,7 +95,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.56"
+	defaultUserAgent string = "go-tonicpow: v0.4.57"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
