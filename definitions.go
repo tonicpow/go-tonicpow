@@ -95,7 +95,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.57"
+	defaultUserAgent string = "go-tonicpow: v0.4.58"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -374,6 +374,12 @@ type DomainResults struct {
 	ResultsPerPage int       `json:"results_per_page"`
 }
 
+// Features is the structure for JSON field "features" under user
+type Features struct {
+	CustomDomains      bool `json:"custom_domains"`
+	PrivateAdvertisers bool `json:"private_advertisers"`
+}
+
 // Goal is the goal model (child of Campaign)
 //
 // For more information: https://docs.tonicpow.com/#316b77ab-4900-4f3d-96a7-e67c00af10ca
@@ -485,40 +491,42 @@ type ReferralResults struct {
 //
 // For more information: https://docs.tonicpow.com/#50b3c130-7254-4a05-b312-b14647736e38
 type User struct {
-	AvatarURL          string `json:"avatar_url"`
-	Bio                string `json:"bio"`
-	Email              string `json:"email"`
-	Country            string `json:"country"`
-	CreatedAt          string `json:"created_at"`
-	DefaultWallet      string `json:"default_wallet"`
-	FirstName          string `json:"first_name"`
-	InternalAddress    string `json:"internal_address"`
-	LastName           string `json:"last_name"`
-	MiddleName         string `json:"middle_name"`
-	NewPassword        string `json:"new_password,omitempty"`
-	NewPasswordConfirm string `json:"new_password_confirm,omitempty"`
-	Password           string `json:"password,omitempty"`
-	PayoutAddress      string `json:"payout_address"`
-	Phone              string `json:"phone"`
-	ReferralURL        string `json:"referral_url"`
-	Status             string `json:"status"`
-	TncpwSession       string `json:"tncpw_session,omitempty"`
-	Username           string `json:"username"`
-	Balance            uint64 `json:"balance"`
-	Earned             uint64 `json:"earned"`
-	ExperiencePoints   uint64 `json:"experience_points"`
-	ID                 uint64 `json:"id,omitempty"`
-	ReferralLinkID     uint64 `json:"referral_link_id"`
-	ReferredByUserID   uint64 `json:"referred_by_user_id"`
-	Referrals          uint   `json:"referrals"`
-	ReferralsAccepted  uint   `json:"referrals_accepted"`
-	EmailVerified      bool   `json:"email_verified"`
-	HandCashAuth       bool   `json:"handcash_auth"`
-	MoneyButtonAuth    bool   `json:"moneybutton_auth"`
-	PhoneVerified      bool   `json:"phone_verified"`
-	RelayAuth          bool   `json:"relay_auth"`
-	StarfishAuth       bool   `json:"starfish_auth"`
-	TwitterAuth        bool   `json:"twitter_auth"`
+	Features           *Features `json:"features"`
+	AvatarURL          string    `json:"avatar_url"`
+	Bio                string    `json:"bio"`
+	Email              string    `json:"email"`
+	Country            string    `json:"country"`
+	CreatedAt          string    `json:"created_at"`
+	DefaultWallet      string    `json:"default_wallet"`
+	FirstName          string    `json:"first_name"`
+	InternalAddress    string    `json:"internal_address"`
+	LastName           string    `json:"last_name"`
+	MiddleName         string    `json:"middle_name"`
+	NewPassword        string    `json:"new_password,omitempty"`
+	NewPasswordConfirm string    `json:"new_password_confirm,omitempty"`
+	Password           string    `json:"password,omitempty"`
+	PayoutAddress      string    `json:"payout_address"`
+	Phone              string    `json:"phone"`
+	ReferralURL        string    `json:"referral_url"`
+	Status             string    `json:"status"`
+	TncpwSession       string    `json:"tncpw_session,omitempty"`
+	Username           string    `json:"username"`
+	Balance            uint64    `json:"balance"`
+	Earned             uint64    `json:"earned"`
+	ExperiencePoints   uint64    `json:"experience_points"`
+	ID                 uint64    `json:"id,omitempty"`
+	ReferralLinkID     uint64    `json:"referral_link_id"`
+	ReferredByUserID   uint64    `json:"referred_by_user_id"`
+	Referrals          uint      `json:"referrals"`
+	ReferralsAccepted  uint      `json:"referrals_accepted"`
+	EmailVerified      bool      `json:"email_verified"`
+	HandCashAuth       bool      `json:"handcash_auth"`
+	MoneyButtonAuth    bool      `json:"moneybutton_auth"`
+	PhoneVerified      bool      `json:"phone_verified"`
+	RelayAuth          bool      `json:"relay_auth"`
+	Sounds             bool      `json:"sounds"`
+	StarfishAuth       bool      `json:"starfish_auth"`
+	TwitterAuth        bool      `json:"twitter_auth"`
 }
 
 // UserExists is a slim record of the User model
