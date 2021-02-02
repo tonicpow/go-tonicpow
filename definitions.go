@@ -95,7 +95,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.58"
+	defaultUserAgent string = "go-tonicpow: v0.4.59"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -357,13 +357,14 @@ type Conversion struct {
 
 // Domain is returned after creating a domain
 type Domain struct {
-	CnameName  string `json:"cname_name"`
-	CnameValue string `json:"cname_value"`
-	DomainName string `json:"domain_name"`
-	ID         uint64 `json:"id"`
-	Label      string `json:"label"`
-	UserID     uint64 `json:"user_id"`
-	Verified   bool   `json:"verified"`
+	CnameName           string `json:"cname_name"`
+	CnameValue          string `json:"cname_value"`
+	DomainName          string `json:"domain_name"`
+	ID                  uint64 `json:"id"`
+	Label               string `json:"label"`
+	UserID              uint64 `json:"user_id"`
+	LinkServiceVerified bool   `json:"link_service_verified"`
+	Verified            bool   `json:"verified"`
 }
 
 // DomainResults is the page response for listing domains
