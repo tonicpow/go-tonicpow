@@ -95,7 +95,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.59"
+	defaultUserAgent string = "go-tonicpow: v0.4.60"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -160,13 +160,15 @@ type ActivityItem struct {
 //
 // For more information: https://docs.tonicpow.com/#2f9ec542-0f88-4671-b47c-d0ee390af5ea
 type AdvertiserProfile struct {
-	DomainVerified bool   `json:"domain_verified"`
-	HomepageURL    string `json:"homepage_url"`
-	IconURL        string `json:"icon_url"`
-	ID             uint64 `json:"id,omitempty"`
-	Name           string `json:"name"`
-	PublicGUID     string `json:"public_guid"`
-	UserID         uint64 `json:"user_id"`
+	HomepageURL         string `json:"homepage_url"`
+	IconURL             string `json:"icon_url"`
+	PublicGUID          string `json:"public_guid"`
+	Name                string `json:"name"`
+	ID                  uint64 `json:"id,omitempty"`
+	LinkServiceDomainID uint64 `json:"link_service_domain_id"`
+	UserID              uint64 `json:"user_id"`
+	DomainVerified      bool   `json:"domain_verified"`
+	IsPrivate           bool   `json:"is_private"`
 }
 
 // AdvertiserResults is the page response for advertiser profile results from listing
@@ -277,18 +279,20 @@ type Campaign struct {
 	Title               string                `json:"title"`
 	TxID                string                `json:"-"`
 	AdvertiserProfile   *AdvertiserProfile    `json:"advertiser_profile"`
-	AdvertiserProfileID uint64                `json:"advertiser_profile_id"`
 	PayPerClickRate     float64               `json:"pay_per_click_rate"`
 	Balance             float64               `json:"balance"`
-	PaidClicks          uint64                `json:"paid_clicks"`
-	LinksCreated        uint64                `json:"links_created"`
-	ID                  uint64                `json:"id,omitempty"`
+	AdvertiserProfileID uint64                `json:"advertiser_profile_id"`
 	BalanceSatoshis     uint64                `json:"balance_satoshis"`
+	ID                  uint64                `json:"id,omitempty"`
+	LinksCreated        uint64                `json:"links_created"`
+	LinkServiceDomainID uint64                `json:"link_service_domain_id"`
+	PaidClicks          uint64                `json:"paid_clicks"`
 	Requirements        *CampaignRequirements `json:"requirements"`
-	DomainVerified      bool                  `json:"domain_verified"`
-	MatchDomain         bool                  `json:"match_domain"`
 	BotProtection       bool                  `json:"bot_protection"`
 	ContributeEnabled   bool                  `json:"contribute_enabled"`
+	DomainVerified      bool                  `json:"domain_verified"`
+	IsPrivate           bool                  `json:"is_private"`
+	MatchDomain         bool                  `json:"match_domain"`
 }
 
 // CampaignApplication is the structure of the campaign application data
