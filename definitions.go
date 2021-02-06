@@ -95,7 +95,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.60"
+	defaultUserAgent string = "go-tonicpow: v0.4.61"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -168,7 +168,7 @@ type AdvertiserProfile struct {
 	LinkServiceDomainID uint64 `json:"link_service_domain_id"`
 	UserID              uint64 `json:"user_id"`
 	DomainVerified      bool   `json:"domain_verified"`
-	IsPrivate           bool   `json:"is_private"`
+	Unlisted            bool   `json:"unlisted"`
 }
 
 // AdvertiserResults is the page response for advertiser profile results from listing
@@ -291,7 +291,7 @@ type Campaign struct {
 	BotProtection       bool                  `json:"bot_protection"`
 	ContributeEnabled   bool                  `json:"contribute_enabled"`
 	DomainVerified      bool                  `json:"domain_verified"`
-	IsPrivate           bool                  `json:"is_private"`
+	Unlisted            bool                  `json:"unlisted"`
 	MatchDomain         bool                  `json:"match_domain"`
 }
 
@@ -381,8 +381,8 @@ type DomainResults struct {
 
 // Features is the structure for JSON field "features" under user
 type Features struct {
-	CustomDomains      bool `json:"custom_domains"`
-	PrivateAdvertisers bool `json:"private_advertisers"`
+	CustomDomains       bool `json:"custom_domains"`
+	UnlistedAdvertisers bool `json:"unlisted_advertisers"`
 }
 
 // Goal is the goal model (child of Campaign)
