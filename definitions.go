@@ -95,7 +95,7 @@ const (
 	apiVersion = "v1"
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.61"
+	defaultUserAgent string = "go-tonicpow: v0.4.62"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -316,12 +316,14 @@ type CampaignImage struct {
 
 // CampaignRequirements is the structure for "requirements"
 type CampaignRequirements struct {
-	Application bool `json:"application"`
-	HandCash    bool `json:"handcash"`
-	KYC         bool `json:"kyc"`
-	MoneyButton bool `json:"moneybutton"`
-	Relay       bool `json:"relay"`
-	Twitter     bool `json:"twitter"`
+	Application         bool     `json:"application"`
+	HandCash            bool     `json:"handcash"`
+	KYC                 bool     `json:"kyc"`
+	MoneyButton         bool     `json:"moneybutton"`
+	Relay               bool     `json:"relay"`
+	Twitter             bool     `json:"twitter"`
+	VisitorCountries    []string `json:"visitor_countries"`
+	VisitorRestrictions bool     `json:"visitor_restrictions"`
 }
 
 // CampaignResults is the page response for campaign results from listing
