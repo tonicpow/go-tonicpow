@@ -315,14 +315,17 @@ type CampaignImage struct {
 }
 
 // CampaignRequirements is the structure for "requirements"
+//
+// DO NOT CHANGE ORDER - malign
+//
 type CampaignRequirements struct {
+	VisitorCountries    []string `json:"visitor_countries"`
 	Application         bool     `json:"application"`
 	HandCash            bool     `json:"handcash"`
 	KYC                 bool     `json:"kyc"`
 	MoneyButton         bool     `json:"moneybutton"`
 	Relay               bool     `json:"relay"`
 	Twitter             bool     `json:"twitter"`
-	VisitorCountries    []string `json:"visitor_countries"`
 	VisitorRestrictions bool     `json:"visitor_restrictions"`
 }
 
