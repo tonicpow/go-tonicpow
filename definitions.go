@@ -5,6 +5,9 @@ type APIEnvironment string
 
 const (
 
+	// defaultUserAgent is the default user agent for all requests
+	defaultUserAgent string = "go-tonicpow: v0.4.63"
+
 	// Field key names for various model requests
 	fieldAdvertiserProfileID = "advertiser_profile_id"
 	fieldAmount              = "amount"
@@ -93,9 +96,6 @@ const (
 
 	// apiVersion current version for all endpoints
 	apiVersion = "v1"
-
-	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.62"
 
 	// LiveEnvironment is the live production environment
 	LiveEnvironment APIEnvironment = "https://api.tonicpow.com/" + apiVersion + "/"
@@ -268,6 +268,7 @@ type Campaign struct {
 	Goals               []*Goal               `json:"goals"`
 	Images              []*CampaignImage      `json:"images"`
 	CreatedAt           string                `json:"created_at"`
+	LastEventAt         string                `json:"last_event_at"`
 	Currency            string                `json:"currency"`
 	Description         string                `json:"description"`
 	ExpiresAt           string                `json:"expires_at"`
