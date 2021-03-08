@@ -6,7 +6,7 @@ type APIEnvironment string
 const (
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.63"
+	defaultUserAgent string = "go-tonicpow: v0.4.64"
 
 	// Field key names for various model requests
 	fieldAdvertiserProfileID = "advertiser_profile_id"
@@ -505,10 +505,10 @@ type User struct {
 	Features           *Features `json:"features"`
 	AvatarURL          string    `json:"avatar_url"`
 	Bio                string    `json:"bio"`
-	Email              string    `json:"email"`
 	Country            string    `json:"country"`
 	CreatedAt          string    `json:"created_at"`
 	DefaultWallet      string    `json:"default_wallet"`
+	Email              string    `json:"email"`
 	FirstName          string    `json:"first_name"`
 	InternalAddress    string    `json:"internal_address"`
 	LastName           string    `json:"last_name"`
@@ -518,6 +518,7 @@ type User struct {
 	Password           string    `json:"password,omitempty"`
 	PayoutAddress      string    `json:"payout_address"`
 	Phone              string    `json:"phone"`
+	ReadTosAt          string    `json:"read_tos_at"`
 	ReferralURL        string    `json:"referral_url"`
 	Status             string    `json:"status"`
 	TncpwSession       string    `json:"tncpw_session,omitempty"`
