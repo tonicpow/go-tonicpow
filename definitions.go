@@ -6,7 +6,7 @@ type APIEnvironment string
 const (
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.64"
+	defaultUserAgent string = "go-tonicpow: v0.4.65"
 
 	// Field key names for various model requests
 	fieldAdvertiserProfileID = "advertiser_profile_id"
@@ -232,6 +232,7 @@ type Blocked struct {
 	AdvertiserProfileID uint64 `json:"advertiser_profile_id"`
 	BlockedUserID       uint64 `json:"blocked_user_id"`
 	CampaignID          uint64 `json:"campaign_id"`
+	CreatedAt           string `json:"created_at"`
 	ID                  uint64 `json:"id"`
 	Reason              string `json:"reason"`
 	UserID              uint64 `json:"user_id"`
