@@ -6,7 +6,7 @@ type APIEnvironment string
 const (
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.67"
+	defaultUserAgent string = "go-tonicpow: v0.4.68"
 
 	// Field key names for various model requests
 	fieldAdvertiserProfileID = "advertiser_profile_id"
@@ -324,6 +324,7 @@ type CampaignImage struct {
 type CampaignRequirements struct {
 	VisitorCountries    []string `json:"visitor_countries"`
 	Application         bool     `json:"application"`
+	Facebook            bool     `json:"facebook"`
 	HandCash            bool     `json:"handcash"`
 	KYC                 bool     `json:"kyc"`
 	MoneyButton         bool     `json:"moneybutton"`
@@ -454,6 +455,7 @@ type Promoter struct {
 	PublicGUID       string `json:"public_guid"`
 	ExperiencePoints uint64 `json:"experience_points"`
 	EmailVerified    bool   `json:"email_verified"`
+	FacebookAuth     bool   `json:"facebook_auth"`
 	HandCashAuth     bool   `json:"handcash_auth"`
 	MoneyButtonAuth  bool   `json:"moneybutton_auth"`
 	PhoneVerified    bool   `json:"phone_verified"`
@@ -535,6 +537,7 @@ type User struct {
 	Referrals          uint      `json:"referrals"`
 	ReferralsAccepted  uint      `json:"referrals_accepted"`
 	EmailVerified      bool      `json:"email_verified"`
+	FacebookAuth       bool      `json:"facebook_auth"`
 	HandCashAuth       bool      `json:"handcash_auth"`
 	MoneyButtonAuth    bool      `json:"moneybutton_auth"`
 	PhoneVerified      bool      `json:"phone_verified"`
