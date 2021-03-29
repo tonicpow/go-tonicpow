@@ -6,7 +6,7 @@ type APIEnvironment string
 const (
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.69"
+	defaultUserAgent string = "go-tonicpow: v0.4.70"
 
 	// Field key names for various model requests
 	fieldAdvertiserProfileID = "advertiser_profile_id"
@@ -551,9 +551,9 @@ type User struct {
 }
 
 // UserExists is a slim record of the User model
-//
-// For more information: https://docs.tonicpow.com/#50b3c130-7254-4a05-b312-b14647736e38
 type UserExists struct {
+	HasEmail    bool   `json:"has_email"`
+	HasPassword bool   `json:"has_password"`
 	ID          uint64 `json:"id"`
 	ReferralURL string `json:"referral_url"`
 	Status      string `json:"status"`
