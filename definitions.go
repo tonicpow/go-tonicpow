@@ -6,7 +6,7 @@ type APIEnvironment string
 const (
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.71"
+	defaultUserAgent string = "go-tonicpow: v0.4.72"
 
 	// Field key names for various model requests
 	fieldAdvertiserProfileID = "advertiser_profile_id"
@@ -399,16 +399,17 @@ type Features struct {
 //
 // For more information: https://docs.tonicpow.com/#316b77ab-4900-4f3d-96a7-e67c00af10ca
 type Goal struct {
-	CampaignID     uint64  `json:"campaign_id"`
-	Description    string  `json:"description"`
-	ID             uint64  `json:"id,omitempty"`
-	MaxPerPromoter int16   `json:"max_per_promoter"`
-	MaxPerVisitor  int16   `json:"max_per_visitor"`
-	Name           string  `json:"name"`
-	PayoutRate     float64 `json:"payout_rate"`
-	Payouts        int     `json:"payouts"`
-	PayoutType     string  `json:"payout_type"`
-	Title          string  `json:"title"`
+	CampaignID      uint64  `json:"campaign_id"`
+	Description     string  `json:"description"`
+	ID              uint64  `json:"id,omitempty"`
+	LastConvertedAt string  `json:"last_converted_at"`
+	MaxPerPromoter  int16   `json:"max_per_promoter"`
+	MaxPerVisitor   int16   `json:"max_per_visitor"`
+	Name            string  `json:"name"`
+	PayoutRate      float64 `json:"payout_rate"`
+	Payouts         int     `json:"payouts"`
+	PayoutType      string  `json:"payout_type"`
+	Title           string  `json:"title"`
 }
 
 // Link is the link model (child of User) (relates Campaign to User)
