@@ -6,7 +6,7 @@ type APIEnvironment string
 const (
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.72"
+	defaultUserAgent string = "go-tonicpow: v0.4.73"
 
 	// Field key names for various model requests
 	fieldAdvertiserProfileID = "advertiser_profile_id"
@@ -290,6 +290,7 @@ type Campaign struct {
 	LinksCreated        uint64                `json:"links_created"`
 	LinkServiceDomainID uint64                `json:"link_service_domain_id"`
 	PaidClicks          uint64                `json:"paid_clicks"`
+	PaidConversions     uint64                `json:"paid_conversions"`
 	Requirements        *CampaignRequirements `json:"requirements"`
 	BotProtection       bool                  `json:"bot_protection"`
 	ContributeEnabled   bool                  `json:"contribute_enabled"`
