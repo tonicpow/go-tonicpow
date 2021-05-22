@@ -6,7 +6,7 @@ type APIEnvironment string
 const (
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.73"
+	defaultUserAgent string = "go-tonicpow: v0.4.74"
 
 	// Field key names for various model requests
 	fieldAdvertiserProfileID = "advertiser_profile_id"
@@ -358,14 +358,15 @@ type CampaignStatistics struct {
 //
 // For more information: https://docs.tonicpow.com/#75c837d5-3336-4d87-a686-d80c6f8938b9
 type Conversion struct {
-	Amount           float64 `json:"amount"`
+	Amount           float64 `json:"amount,omitempty"`
 	CampaignID       uint64  `json:"campaign_id"`
 	CustomDimensions string  `json:"custom_dimensions"`
 	GoalID           uint64  `json:"goal_id"`
-	GoalName         string  `json:"goal_name"`
-	ID               uint64  `json:"ID,omitempty"`
-	PayoutAfter      string  `json:"payout_after"`
+	GoalName         string  `json:"goal_name,omitempty"`
+	ID               uint64  `json:"id,omitempty"`
+	PayoutAfter      string  `json:"payout_after,omitempty"`
 	Status           string  `json:"status"`
+	StatusData       string  `json:"status_data"`
 	TxID             string  `json:"tx_id"`
 	UserID           uint64  `json:"user_id"`
 }

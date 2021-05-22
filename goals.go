@@ -102,3 +102,29 @@ func (c *Client) UpdateGoal(goal *Goal) (updatedGoal *Goal, err error) {
 	}
 	return
 }
+
+// DeleteGoal will delete an existing goal
+//
+// For more information: https://docs.tonicpow.com/
+func (c *Client) DeleteGoal(goal *Goal) (deleted bool, err error) {
+
+	// Basic requirements
+	if goal.ID == 0 {
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
+		return
+	}
+
+	// Fire the Request
+	var response string
+	if response, err = c.Request(modelGoal, http.MethodDelete, goal); err != nil {
+		return
+	}
+
+	// Only a 200 is treated as a success
+	if err = c.Error(http.StatusOK, response); err != nil {
+		return
+	}
+
+	deleted = true
+	return
+}
