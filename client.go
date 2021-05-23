@@ -150,7 +150,7 @@ func (c *Client) Request(endpoint string, method string, payload interface{}) (r
 
 	// Switch on methods
 	switch method {
-	case http.MethodPost, http.MethodPut:
+	case http.MethodPost, http.MethodPut, http.MethodDelete:
 		{
 			if jsonValue, err = json.Marshal(payload); err != nil {
 				err = c.createError("error marshaling data: "+err.Error(), http.StatusBadRequest)

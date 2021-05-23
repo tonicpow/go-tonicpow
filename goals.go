@@ -105,7 +105,7 @@ func (c *Client) UpdateGoal(goal *Goal) (updatedGoal *Goal, err error) {
 
 // DeleteGoal will delete an existing goal
 //
-// For more information: https://docs.tonicpow.com/
+// For more information: https://docs.tonicpow.com/#38605b65-72c9-4fc8-87a7-bc644bc89a96
 func (c *Client) DeleteGoal(goal *Goal) (deleted bool, err error) {
 
 	// Basic requirements
