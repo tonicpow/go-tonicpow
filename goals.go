@@ -116,7 +116,7 @@ func (c *Client) DeleteGoal(goal *Goal) (deleted bool, err error) {
 
 	// Fire the Request
 	var response string
-	if response, err = c.Request(modelGoal, http.MethodDelete, goal); err != nil {
+	if response, err = c.Request(modelGoal+fmt.Sprintf("?id=%d", goal.ID), http.MethodDelete, goal); err != nil {
 		return
 	}
 
