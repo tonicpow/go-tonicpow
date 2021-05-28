@@ -6,7 +6,7 @@ type APIEnvironment string
 const (
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.77"
+	defaultUserAgent string = "go-tonicpow: v0.4.78"
 
 	// Field key names for various model requests
 	fieldAdvertiserProfileID = "advertiser_profile_id"
@@ -267,36 +267,37 @@ type DataPoint struct {
 //
 // For more information: https://docs.tonicpow.com/#5aca2fc7-b3c8-445b-aa88-f62a681f8e0c
 type Campaign struct {
-	Goals               []*Goal               `json:"goals"`
-	Images              []*CampaignImage      `json:"images"`
-	CreatedAt           string                `json:"created_at"`
-	LastEventAt         string                `json:"last_event_at"`
-	Currency            string                `json:"currency"`
-	Description         string                `json:"description"`
-	ExpiresAt           string                `json:"expires_at"`
-	FundingAddress      string                `json:"funding_address"`
-	ImageURL            string                `json:"image_url"`
-	PublicGUID          string                `json:"public_guid"`
-	Slug                string                `json:"slug"`
-	TargetURL           string                `json:"target_url"`
-	Title               string                `json:"title"`
-	TxID                string                `json:"-"`
-	AdvertiserProfile   *AdvertiserProfile    `json:"advertiser_profile"`
-	PayPerClickRate     float64               `json:"pay_per_click_rate"`
-	Balance             float64               `json:"balance"`
-	AdvertiserProfileID uint64                `json:"advertiser_profile_id"`
-	BalanceSatoshis     uint64                `json:"balance_satoshis"`
-	ID                  uint64                `json:"id,omitempty"`
-	LinksCreated        uint64                `json:"links_created"`
-	LinkServiceDomainID uint64                `json:"link_service_domain_id"`
-	PaidClicks          uint64                `json:"paid_clicks"`
-	PaidConversions     uint64                `json:"paid_conversions"`
-	Requirements        *CampaignRequirements `json:"requirements"`
-	BotProtection       bool                  `json:"bot_protection"`
-	ContributeEnabled   bool                  `json:"contribute_enabled"`
-	DomainVerified      bool                  `json:"domain_verified"`
-	Unlisted            bool                  `json:"unlisted"`
-	MatchDomain         bool                  `json:"match_domain"`
+	Goals                 []*Goal               `json:"goals"`
+	Images                []*CampaignImage      `json:"images"`
+	CreatedAt             string                `json:"created_at"`
+	LastEventAt           string                `json:"last_event_at"`
+	Currency              string                `json:"currency"`
+	Description           string                `json:"description"`
+	ExpiresAt             string                `json:"expires_at"`
+	FundingAddress        string                `json:"funding_address"`
+	ImageURL              string                `json:"image_url"`
+	PublicGUID            string                `json:"public_guid"`
+	Slug                  string                `json:"slug"`
+	TargetURL             string                `json:"target_url"`
+	Title                 string                `json:"title"`
+	TxID                  string                `json:"-"`
+	AdvertiserProfile     *AdvertiserProfile    `json:"advertiser_profile"`
+	Balance               float64               `json:"balance"`
+	BalanceAlertThreshold float64               `json:"balance_alert_threshold"`
+	PayPerClickRate       float64               `json:"pay_per_click_rate"`
+	AdvertiserProfileID   uint64                `json:"advertiser_profile_id"`
+	BalanceSatoshis       uint64                `json:"balance_satoshis"`
+	ID                    uint64                `json:"id,omitempty"`
+	LinksCreated          uint64                `json:"links_created"`
+	LinkServiceDomainID   uint64                `json:"link_service_domain_id"`
+	PaidClicks            uint64                `json:"paid_clicks"`
+	PaidConversions       uint64                `json:"paid_conversions"`
+	Requirements          *CampaignRequirements `json:"requirements"`
+	BotProtection         bool                  `json:"bot_protection"`
+	ContributeEnabled     bool                  `json:"contribute_enabled"`
+	DomainVerified        bool                  `json:"domain_verified"`
+	Unlisted              bool                  `json:"unlisted"`
+	MatchDomain           bool                  `json:"match_domain"`
 }
 
 // CampaignApplication is the structure of the campaign application data
