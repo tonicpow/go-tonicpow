@@ -12,7 +12,6 @@ const (
 	fieldAdvertiserProfileID = "advertiser_profile_id"
 	fieldAmount              = "amount"
 	fieldAPIKey              = "api_key"
-	fieldAppID               = "app_id"
 	fieldCampaignID          = "campaign_id"
 	fieldCurrency            = "currency"
 	fieldCurrentPage         = "current_page"
@@ -45,7 +44,6 @@ const (
 
 	// Model names (used for Request endpoints)
 	modelAdvertiser     = "advertisers"
-	modelApp            = "apps"
 	modelCampaign       = "campaigns"
 	modelConversion     = "conversions"
 	modelGoal           = "goals"
