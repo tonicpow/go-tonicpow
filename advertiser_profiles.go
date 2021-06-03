@@ -20,36 +20,33 @@ func (c *Client) GetAdvertiserProfile(profileID uint64) (profile *AdvertiserProf
 
 	// Must have an id
 	if profileID == 0 {
-		err = c.createError(fmt.Sprintf("missing field: %s", fieldID), http.StatusBadRequest)
+		err = fmt.Errorf("missing field: %s", fieldID)
 		return
 	}
 
 	// Fire the Request
-	var response string
-	if response, err = c.Request(fmt.Sprintf("%s/details/%d", modelAdvertiser, profileID), http.MethodGet, nil); err != nil {
-		return
-	}
-
-	// Only a 200 is treated as a success
-	if err = c.Error(http.StatusOK, response); err != nil {
+	var response StandardResponse
+	if response, err = c.Request(
+		http.MethodGet,
+		fmt.Sprintf("%s/details/%d", modelAdvertiser, profileID),
+		nil, http.StatusOK,
+	); err != nil {
 		return
 	}
 
 	// Convert model response
-	if err = json.Unmarshal([]byte(response), &profile); err != nil {
-		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "advertiser"), http.StatusExpectationFailed)
-	}
+	err = json.Unmarshal(response.Body, &profile)
 	return
 }
 
 // UpdateAdvertiserProfile will update an existing profile
 //
 // For more information: https://docs.tonicpow.com/#0cebd1ff-b1ce-4111-aff6-9d586f632a84
-func (c *Client) UpdateAdvertiserProfile(profile *AdvertiserProfile) (updatedProfile *AdvertiserProfile, err error) {
+func (c *Client) UpdateAdvertiserProfile(profile *AdvertiserProfile) (err error) {
 
 	// Basic requirements
 	if profile.ID == 0 {
-		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
+		err = fmt.Errorf("missing required attribute: %s", fieldID)
 		return
 	}
 
@@ -57,20 +54,17 @@ func (c *Client) UpdateAdvertiserProfile(profile *AdvertiserProfile) (updatedPro
 	profile.permitFields()
 
 	// Fire the Request
-	var response string
-	if response, err = c.Request(modelAdvertiser, http.MethodPut, profile); err != nil {
-		return
-	}
-
-	// Only a 200 is treated as a success
-	if err = c.Error(http.StatusOK, response); err != nil {
+	var response StandardResponse
+	if response, err = c.Request(
+		http.MethodPut,
+		modelAdvertiser,
+		profile, http.StatusOK,
+	); err != nil {
 		return
 	}
 
 	// Convert model response
-	if err = json.Unmarshal([]byte(response), &updatedProfile); err != nil {
-		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "advertiser"), http.StatusExpectationFailed)
-	}
+	err = json.Unmarshal(response.Body, &profile)
 	return
 }
 
@@ -83,14 +77,14 @@ func (c *Client) ListCampaignsByAdvertiserProfile(profileID uint64, page, result
 
 	// Basic requirements
 	if profileID == 0 {
-		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldAdvertiserProfileID), http.StatusBadRequest)
+		err = fmt.Errorf("missing required attribute: %s", fieldAdvertiserProfileID)
 		return
 	}
 
 	// Do we know this field?
 	if len(sortBy) > 0 {
 		if !isInList(strings.ToLower(sortBy), campaignSortFields) {
-			err = c.createError(fmt.Sprintf("sort by %s is not valid", sortBy), http.StatusBadRequest)
+			err = fmt.Errorf("sort by %s is not valid", sortBy)
 			return
 		}
 	} else {
@@ -99,40 +93,42 @@ func (c *Client) ListCampaignsByAdvertiserProfile(profileID uint64, page, result
 	}
 
 	// Fire the Request
-	var response string
-	if response, err = c.Request(fmt.Sprintf("%s/campaigns/%d?%s=%d&%s=%d&%s=%s&%s=%s", modelAdvertiser, profileID, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil); err != nil {
-		return
-	}
-
-	// Only a 200 is treated as a success
-	if err = c.Error(http.StatusOK, response); err != nil {
+	var response StandardResponse
+	if response, err = c.Request(
+		http.MethodGet,
+		fmt.Sprintf("%s/%s/%d?%s=%d&%s=%d&%s=%s&%s=%s", modelAdvertiser, modelCampaign, profileID,
+			fieldCurrentPage, page,
+			fieldResultsPerPage, resultsPerPage,
+			fieldSortBy, sortBy,
+			fieldSortOrder, sortOrder,
+		),
+		nil, http.StatusOK,
+	); err != nil {
 		return
 	}
 
 	// Convert model response
-	if err = json.Unmarshal([]byte(response), &results); err != nil {
-		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "advertiser"), http.StatusExpectationFailed)
-	}
+	err = json.Unmarshal(response.Body, &results)
 	return
 }
 
 // ListAppsByAdvertiserProfile will return a list of apps
 // This will return an Error if the campaign is not found (404)
 //
-// For more information: (todo)
+// For more information: https://docs.tonicpow.com/#9c9fa8dc-3017-402e-8059-136b0eb85c2e
 func (c *Client) ListAppsByAdvertiserProfile(profileID uint64, page, resultsPerPage int,
 	sortBy, sortOrder string) (results *AppResults, err error) {
 
 	// Basic requirements
 	if profileID == 0 {
-		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldAdvertiserProfileID), http.StatusBadRequest)
+		err = fmt.Errorf("missing required attribute: %s", fieldAdvertiserProfileID)
 		return
 	}
 
 	// Do we know this field?
 	if len(sortBy) > 0 {
 		if !isInList(strings.ToLower(sortBy), appSortFields) {
-			err = c.createError(fmt.Sprintf("sort by %s is not valid", sortBy), http.StatusBadRequest)
+			err = fmt.Errorf("sort by %s is not valid", sortBy)
 			return
 		}
 	} else {
@@ -141,19 +137,22 @@ func (c *Client) ListAppsByAdvertiserProfile(profileID uint64, page, resultsPerP
 	}
 
 	// Fire the Request
-	var response string
-	if response, err = c.Request(fmt.Sprintf("%s/apps/?id=%d&%s=%d&%s=%d&%s=%s&%s=%s", modelAdvertiser, profileID, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil); err != nil {
-		return
-	}
-
-	// Only a 200 is treated as a success
-	if err = c.Error(http.StatusOK, response); err != nil {
+	var response StandardResponse
+	if response, err = c.Request(
+		http.MethodGet,
+		fmt.Sprintf(
+			"%s/%s/?id=%d&%s=%d&%s=%d&%s=%s&%s=%s", modelAdvertiser, modelApp, profileID,
+			fieldCurrentPage, page,
+			fieldResultsPerPage, resultsPerPage,
+			fieldSortBy, sortBy,
+			fieldSortOrder, sortOrder,
+		),
+		nil, http.StatusOK,
+	); err != nil {
 		return
 	}
 
 	// Convert model response
-	if err = json.Unmarshal([]byte(response), &results); err != nil {
-		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "advertiser"), http.StatusExpectationFailed)
-	}
+	err = json.Unmarshal(response.Body, &results)
 	return
 }
