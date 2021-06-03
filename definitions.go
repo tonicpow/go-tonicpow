@@ -6,7 +6,7 @@ type APIEnvironment string
 const (
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.5.3"
+	defaultUserAgent string = "go-tonicpow: v0.5.4"
 
 	// Field key names for various model requests
 	fieldAdvertiserProfileID = "advertiser_profile_id"
@@ -26,7 +26,6 @@ const (
 	fieldMinimumBalance      = "minimum_balance"
 	fieldName                = "name"
 	fieldPassword            = "password"
-	fieldPasswordConfirm     = "password_confirm"
 	fieldReason              = "reason"
 	fieldResultsPerPage      = "results_per_page"
 	fieldSearchQuery         = "query"
@@ -34,7 +33,6 @@ const (
 	fieldSortBy              = "sort_by"
 	fieldSortOrder           = "sort_order"
 	fieldTargetURL           = "target_url"
-	fieldToken               = "token"
 	fieldUserID              = "user_id"
 	fieldVisitorSessionGUID  = "tncpw_session"
 
@@ -52,9 +50,6 @@ const (
 	// SortByFieldCreatedAt is for sorting results by field: created_at
 	SortByFieldCreatedAt = "created_at"
 
-	// SortByFieldEarned is for sorting results by field: earned
-	SortByFieldEarned = "earned"
-
 	// SortByFieldName is for sorting results by field: name
 	SortByFieldName = "name"
 
@@ -66,9 +61,6 @@ const (
 
 	// SortByFieldPayPerClick is for sorting results by field: pay_per_click_rate
 	SortByFieldPayPerClick = "pay_per_click_rate"
-
-	// SortByFieldReferrals is for sorting results by field: referrals
-	SortByFieldReferrals = "referrals"
 
 	// SortOrderAsc is for returning the results in ascending order
 	SortOrderAsc = "asc"
@@ -113,13 +105,6 @@ var (
 		SortByFieldLinksCreated,
 		SortByFieldPaidClicks,
 		SortByFieldPayPerClick,
-	}
-
-	// referralSortFields is used for allowing specific fields for sorting
-	referralSortFields = []string{
-		SortByFieldCreatedAt,
-		SortByFieldEarned,
-		SortByFieldReferrals,
 	}
 )
 
@@ -302,14 +287,6 @@ type Rate struct {
 	RateLastUpdated     string  `json:"rate_last_updated,omitempty"`
 }
 
-// ReferralResults is the page response for referral results from listing
-type ReferralResults struct {
-	CurrentPage    int             `json:"current_page"`
-	Referrals      []*UserReferral `json:"referrals"`
-	Results        int             `json:"results"`
-	ResultsPerPage int             `json:"results_per_page"`
-}
-
 // User is the user model
 //
 // DO NOT CHANGE ORDER - Optimized for memory (malign)
@@ -357,26 +334,4 @@ type User struct {
 	Sounds             bool      `json:"sounds"`
 	StarfishAuth       bool      `json:"starfish_auth"`
 	TwitterAuth        bool      `json:"twitter_auth"`
-}
-
-// UserExists is a slim record of the User model
-type UserExists struct {
-	Auth        string `json:"auth"`
-	HasEmail    bool   `json:"has_email"`
-	HasPassword bool   `json:"has_password"`
-	ID          uint64 `json:"id"`
-	ReferralURL string `json:"referral_url"`
-	Status      string `json:"status"`
-}
-
-// UserReferral is a slim record of the User model
-//
-// For more information: https://docs.tonicpow.com/#50b3c130-7254-4a05-b312-b14647736e38
-type UserReferral struct {
-	Email            string `json:"email"`
-	ID               uint64 `json:"id"`
-	PayoutAddress    string `json:"payout_address"`
-	Referrals        uint   `json:"referrals"`
-	ReferredByUserID uint64 `json:"referred_by_user_id"`
-	Status           string `json:"status"`
 }
