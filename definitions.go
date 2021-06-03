@@ -6,7 +6,7 @@ type APIEnvironment string
 const (
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.5.2"
+	defaultUserAgent string = "go-tonicpow: v0.5.3"
 
 	// Field key names for various model requests
 	fieldAdvertiserProfileID = "advertiser_profile_id"
@@ -30,7 +30,6 @@ const (
 	fieldReason              = "reason"
 	fieldResultsPerPage      = "results_per_page"
 	fieldSearchQuery         = "query"
-	fieldShortCode           = "short_code"
 	fieldSlug                = "slug"
 	fieldSortBy              = "sort_by"
 	fieldSortOrder           = "sort_order"
@@ -44,7 +43,6 @@ const (
 	modelCampaign   = "campaigns"
 	modelConversion = "conversions"
 	modelGoal       = "goals"
-	modelLink       = "links"
 	modelRates      = "rates"
 	modelUser       = "users"
 
@@ -289,39 +287,6 @@ type Goal struct {
 	Payouts         int     `json:"payouts"`
 	PayoutType      string  `json:"payout_type"`
 	Title           string  `json:"title"`
-}
-
-// Link is the link model (child of User) (relates Campaign to User)
-// Use the CustomShortCode on create for using your own short code
-//
-// For more information: https://docs.tonicpow.com/#ee74c3ce-b4df-4d57-abf2-ccf3a80e4e1e
-type Link struct {
-	AvatarURL          string `json:"avatar_url,omitempty"`
-	CampaignID         uint64 `json:"campaign_id"`
-	CampaignImageURL   string `json:"image_url"`
-	CampaignSlug       string `json:"slug"`
-	CampaignTitle      string `json:"title"`
-	ClickSatoshis      int32  `json:"click_satoshis"`
-	ConversionSatoshis int32  `json:"conversion_satoshis"`
-	Country            string `json:"country"`
-	CustomShortCode    string `json:"custom_short_code"`
-	ID                 uint64 `json:"id,omitempty"`
-	Label              string `json:"label"`
-	ShortCode          string `json:"short_code"`
-	ShortLinkURL       string `json:"short_link_url"`
-	TargetURL          string `json:"target_url"`
-	TotalClicks        int32  `json:"total_clicks"`
-	TotalConversions   int32  `json:"total_conversions"`
-	UserID             uint64 `json:"user_id"`
-	Username           string `json:"username,omitempty"`
-}
-
-// LinkResults is the page response for link results from listing
-type LinkResults struct {
-	CurrentPage    int     `json:"current_page"`
-	Links          []*Link `json:"links"`
-	Results        int     `json:"results"`
-	ResultsPerPage int     `json:"results_per_page"`
 }
 
 // Rate is the rate results
