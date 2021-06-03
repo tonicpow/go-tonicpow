@@ -37,6 +37,10 @@ func newTestClient() (*Client, error) {
 func TestNewClient(t *testing.T) {
 	t.Parallel()
 
+	// todo: test client
+	_, err := newTestClient()
+	assert.NoError(t, err)
+
 	t.Run("default client", func(t *testing.T) {
 		client, err := NewClient(WithAPIKey(testAPIKey))
 		assert.NoError(t, err)
@@ -73,7 +77,7 @@ func TestNewClient(t *testing.T) {
 	})
 
 	t.Run("custom headers", func(t *testing.T) {
-		headers := make(map[string][]string, 0)
+		headers := make(map[string][]string)
 		headers["custom_header_1"] = append(headers["custom_header_1"], "value_1")
 		headers["custom_header_2"] = append(headers["custom_header_2"], "value_1")
 		headers["custom_header_2"] = append(headers["custom_header_2"], "value_2")
