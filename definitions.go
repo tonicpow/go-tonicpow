@@ -6,7 +6,7 @@ type APIEnvironment string
 const (
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.5.4"
+	defaultUserAgent string = "go-tonicpow: v0.5.5"
 
 	// Field key names for various model requests
 	fieldAdvertiserProfileID = "advertiser_profile_id"
@@ -17,15 +17,12 @@ const (
 	fieldCurrentPage         = "current_page"
 	fieldCustomDimensions    = "custom_dimensions"
 	fieldDelayInMinutes      = "delay_in_minutes"
-	fieldEmail               = "email"
 	fieldExpired             = "expired"
 	fieldFeedType            = "feed_type"
 	fieldGoalID              = "goal_id"
 	fieldID                  = "id"
-	fieldLastBalance         = "last_balance"
 	fieldMinimumBalance      = "minimum_balance"
 	fieldName                = "name"
-	fieldPassword            = "password"
 	fieldReason              = "reason"
 	fieldResultsPerPage      = "results_per_page"
 	fieldSearchQuery         = "query"
@@ -42,7 +39,6 @@ const (
 	modelConversion = "conversions"
 	modelGoal       = "goals"
 	modelRates      = "rates"
-	modelUser       = "users"
 
 	// SortByFieldBalance is for sorting results by field: balance
 	SortByFieldBalance = "balance"
@@ -251,12 +247,6 @@ type Conversion struct {
 	UserID           uint64  `json:"user_id"`
 }
 
-// Features is the structure for JSON field "features" under user
-type Features struct {
-	CustomDomains       bool `json:"custom_domains"`
-	UnlistedAdvertisers bool `json:"unlisted_advertisers"`
-}
-
 // Goal is the goal model (child of Campaign)
 //
 // For more information: https://docs.tonicpow.com/#316b77ab-4900-4f3d-96a7-e67c00af10ca
@@ -285,53 +275,4 @@ type Rate struct {
 	Price               float64 `json:"price"`
 	PriceInSatoshis     int64   `json:"price_in_satoshis"`
 	RateLastUpdated     string  `json:"rate_last_updated,omitempty"`
-}
-
-// User is the user model
-//
-// DO NOT CHANGE ORDER - Optimized for memory (malign)
-//
-// For more information: https://docs.tonicpow.com/#50b3c130-7254-4a05-b312-b14647736e38
-type User struct {
-	Features           *Features `json:"features"`
-	AvatarURL          string    `json:"avatar_url"`
-	Bio                string    `json:"bio"`
-	Country            string    `json:"country"`
-	CreatedAt          string    `json:"created_at"`
-	DefaultWallet      string    `json:"default_wallet"`
-	Email              string    `json:"email"`
-	FirstName          string    `json:"first_name"`
-	InternalAddress    string    `json:"internal_address"`
-	LastName           string    `json:"last_name"`
-	MiddleName         string    `json:"middle_name"`
-	NewPassword        string    `json:"new_password,omitempty"`
-	NewPasswordConfirm string    `json:"new_password_confirm,omitempty"`
-	Password           string    `json:"password,omitempty"`
-	PayoutAddress      string    `json:"payout_address"`
-	Phone              string    `json:"phone"`
-	ReadTosAt          string    `json:"read_tos_at"`
-	ReferralURL        string    `json:"referral_url"`
-	Status             string    `json:"status"`
-	TncpwSession       string    `json:"tncpw_session,omitempty"`
-	Username           string    `json:"username"`
-	Balance            uint64    `json:"balance"`
-	Earned             uint64    `json:"earned"`
-	ExperiencePoints   uint64    `json:"experience_points"`
-	ID                 uint64    `json:"id,omitempty"`
-	ReferralLinkID     uint64    `json:"referral_link_id"`
-	ReferredByUserID   uint64    `json:"referred_by_user_id"`
-	Referrals          uint      `json:"referrals"`
-	ReferralsAccepted  uint      `json:"referrals_accepted"`
-	EmailVerified      bool      `json:"email_verified"`
-	FacebookAuth       bool      `json:"facebook_auth"`
-	GoogleAuth         bool      `json:"google_auth"`
-	HandCashAuth       bool      `json:"handcash_auth"`
-	HasAlpha           bool      `json:"has_alpha"`
-	HasBeta            bool      `json:"has_beta"`
-	MoneyButtonAuth    bool      `json:"moneybutton_auth"`
-	PhoneVerified      bool      `json:"phone_verified"`
-	RelayAuth          bool      `json:"relay_auth"`
-	Sounds             bool      `json:"sounds"`
-	StarfishAuth       bool      `json:"starfish_auth"`
-	TwitterAuth        bool      `json:"twitter_auth"`
 }
