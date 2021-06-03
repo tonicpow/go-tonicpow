@@ -12,35 +12,6 @@ func (a *AdvertiserProfile) permitFields() {
 	a.UserID = 0
 }
 
-// CreateAdvertiserProfile will make a new advertiser profile
-//
-// For more information: https://docs.tonicpow.com/#153c0b65-2d4c-4972-9aab-f791db05b37b
-func (c *Client) CreateAdvertiserProfile(profile *AdvertiserProfile) (createdProfile *AdvertiserProfile, err error) {
-
-	// Basic requirements
-	if profile.UserID == 0 {
-		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldUserID), http.StatusBadRequest)
-		return
-	}
-
-	// Fire the Request
-	var response string
-	if response, err = c.Request(modelAdvertiser, http.MethodPost, profile); err != nil {
-		return
-	}
-
-	// Only a 201 is treated as a success
-	if err = c.Error(http.StatusCreated, response); err != nil {
-		return
-	}
-
-	// Convert model response
-	if err = json.Unmarshal([]byte(response), &createdProfile); err != nil {
-		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "advertiser"), http.StatusExpectationFailed)
-	}
-	return
-}
-
 // GetAdvertiserProfile will get an existing advertiser profile
 // This will return an Error if the profile is not found (404)
 //

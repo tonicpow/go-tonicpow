@@ -6,7 +6,7 @@ type APIEnvironment string
 const (
 
 	// defaultUserAgent is the default user agent for all requests
-	defaultUserAgent string = "go-tonicpow: v0.4.78"
+	defaultUserAgent string = "go-tonicpow: v0.5.0"
 
 	// Field key names for various model requests
 	fieldAdvertiserProfileID = "advertiser_profile_id"
@@ -34,6 +34,7 @@ const (
 	fieldResultsPerPage      = "results_per_page"
 	fieldSearchQuery         = "query"
 	fieldShortCode           = "short_code"
+	fieldSlug                = "slug"
 	fieldSortBy              = "sort_by"
 	fieldSortOrder           = "sort_order"
 	fieldTargetURL           = "target_url"

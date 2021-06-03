@@ -61,7 +61,7 @@ func (c *Client) GetCampaign(campaignID uint64) (campaign *Campaign, err error) 
 
 	// Fire the Request
 	var response string
-	if response, err = c.Request(fmt.Sprintf("%s/details/%d", modelCampaign, campaignID), http.MethodGet, nil); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/details/?id=%d", modelCampaign, campaignID), http.MethodGet, nil); err != nil {
 		return
 	}
 
@@ -77,51 +77,21 @@ func (c *Client) GetCampaign(campaignID uint64) (campaign *Campaign, err error) 
 	return
 }
 
-// GetCampaignByShortCode will get an existing campaign via a short code (short link)
+// GetCampaignBySlug will get an existing campaign
 // This will return an Error if the campaign is not found (404)
 //
-// For more information: https://docs.tonicpow.com/#8451b92f-ea74-47aa-8ac1-c96647e2dbfd
-func (c *Client) GetCampaignByShortCode(shortCode string) (campaign *Campaign, err error) {
-
-	// Must have a short code
-	if len(shortCode) == 0 {
-		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldShortCode), http.StatusBadRequest)
-		return
-	}
-
-	// Fire the Request
-	var response string
-	if response, err = c.Request(fmt.Sprintf("%s/link/%s", modelCampaign, shortCode), http.MethodGet, nil); err != nil {
-		return
-	}
-
-	// Only a 200 is treated as a success
-	if err = c.Error(http.StatusOK, response); err != nil {
-		return
-	}
-
-	// Convert model response
-	if err = json.Unmarshal([]byte(response), &campaign); err != nil {
-		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "campaign"), http.StatusExpectationFailed)
-	}
-	return
-}
-
-// GetCampaignBalance will update the model's balance from the chain
-// This will return an Error if the campaign is not found (404)
-//
-// For more information: https://docs.tonicpow.com/#b6c60c63-8ac5-4c74-a4a2-cf3e858e5a8d
-func (c *Client) GetCampaignBalance(campaignID uint64, lastBalance int64) (campaign *Campaign, err error) {
+// For more information: https://docs.tonicpow.com/#b827446b-be34-4678-b347-33c4f63dbf9e
+func (c *Client) GetCampaignBySlug(slug string) (campaign *Campaign, err error) {
 
 	// Must have an id
-	if campaignID == 0 {
-		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
+	if len(slug) == 0 {
+		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldSlug), http.StatusBadRequest)
 		return
 	}
 
 	// Fire the Request
 	var response string
-	if response, err = c.Request(fmt.Sprintf("%s/balance/%d?%s=%d", modelCampaign, campaignID, fieldLastBalance, lastBalance), http.MethodGet, nil); err != nil {
+	if response, err = c.Request(fmt.Sprintf("%s/details/?slug=%s", modelCampaign, slug), http.MethodGet, nil); err != nil {
 		return
 	}
 
@@ -220,7 +190,8 @@ func (c *Client) ListCampaigns(page, resultsPerPage int, sortBy, sortOrder, sear
 //
 // todo: update with list campaigns functionality
 // For more information: https://docs.tonicpow.com/#30a15b69-7912-4e25-ba41-212529fba5ff
-func (c *Client) ListCampaignsByURL(targetURL string, page, resultsPerPage int, sortBy, sortOrder string) (results *CampaignResults, err error) {
+func (c *Client) ListCampaignsByURL(targetURL string, page, resultsPerPage int,
+	sortBy, sortOrder string) (results *CampaignResults, err error) {
 
 	// Must have a value
 	if len(targetURL) == 0 {
@@ -241,7 +212,13 @@ func (c *Client) ListCampaignsByURL(targetURL string, page, resultsPerPage int, 
 
 	// Fire the Request
 	var response string
-	if response, err = c.Request(fmt.Sprintf("%s/find?%s=%s&%s=%d&%s=%d&%s=%s&%s=%s", modelCampaign, fieldTargetURL, targetURL, fieldCurrentPage, page, fieldResultsPerPage, resultsPerPage, fieldSortBy, sortBy, fieldSortOrder, sortOrder), http.MethodGet, nil); err != nil {
+	if response, err = c.Request(
+		fmt.Sprintf("%s/find?%s=%s&%s=%d&%s=%d&%s=%s&%s=%s",
+			modelCampaign, fieldTargetURL, targetURL, fieldCurrentPage,
+			page, fieldResultsPerPage, resultsPerPage,
+			fieldSortBy, sortBy,
+			fieldSortOrder, sortOrder,
+		), http.MethodGet, nil); err != nil {
 		return
 	}
 
@@ -271,35 +248,15 @@ func (c *Client) CampaignsFeed(feedType string) (feed string, err error) {
 	}
 
 	// Fire the Request
-	if feed, err = c.Request(fmt.Sprintf("%s/feed?%s=%s", modelCampaign, fieldFeedType, feedType), http.MethodGet, nil); err != nil {
+	if feed, err = c.Request(
+		fmt.Sprintf("%s/feed?%s=%s", modelCampaign, fieldFeedType, feedType),
+		http.MethodGet, nil,
+	); err != nil {
 		return
 	}
 
 	// Only a 200 is treated as a success
 	err = c.Error(http.StatusOK, feed)
 
-	return
-}
-
-// CampaignStatistics will get basic statistics on all campaigns
-//
-// For more information: https://docs.tonicpow.com/#d3108b14-486e-4e27-8176-57ec63cd49f2
-func (c *Client) CampaignStatistics() (statistics *CampaignStatistics, err error) {
-
-	// Fire the Request
-	var response string
-	if response, err = c.Request(fmt.Sprintf("%s/statistics", modelCampaign), http.MethodGet, nil); err != nil {
-		return
-	}
-
-	// Only a 200 is treated as a success
-	if err = c.Error(http.StatusOK, response); err != nil {
-		return
-	}
-
-	// Convert model response
-	if err = json.Unmarshal([]byte(response), &statistics); err != nil {
-		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "statistics"), http.StatusExpectationFailed)
-	}
 	return
 }
