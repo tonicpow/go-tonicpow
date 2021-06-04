@@ -7,7 +7,8 @@ import (
 )
 
 const (
-	testAPIKey = "TestAPIKey12345678987654321"
+	testAPIKey         = "TestAPIKey12345678987654321"
+	testAdvertiserName = "TonicPow Test"
 )
 
 // TestVersion will test the method Version()

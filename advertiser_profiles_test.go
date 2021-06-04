@@ -32,7 +32,7 @@ func TestClient_GetAdvertiserProfile(t *testing.T) {
 		assert.NotNil(t, client)
 
 		profile := newTestProfile()
-		profile.Name = "TonicPow Test"
+		profile.Name = testAdvertiserName
 
 		endpoint := fmt.Sprintf("%s/%s/details/%d", EnvironmentDevelopment.apiURL, modelAdvertiser, profile.ID)
 
@@ -42,7 +42,7 @@ func TestClient_GetAdvertiserProfile(t *testing.T) {
 		profile, err = client.GetAdvertiserProfile(profile.ID)
 		assert.NoError(t, err)
 		assert.NotNil(t, profile)
-		assert.Equal(t, "TonicPow Test", profile.Name)
+		assert.Equal(t, testAdvertiserName, profile.Name)
 	})
 
 	t.Run("missing advertiser profile id", func(t *testing.T) {
@@ -173,13 +173,13 @@ func TestClient_UpdateAdvertiserProfile(t *testing.T) {
 
 		profile := newTestProfile()
 
-		profile.Name = "TonicPow Test"
+		profile.Name = testAdvertiserName
 		err = mockResponseData(http.MethodPut, endpoint, http.StatusOK, profile)
 		assert.NoError(t, err)
 
 		err = client.UpdateAdvertiserProfile(profile)
 		assert.NoError(t, err)
-		assert.Equal(t, "TonicPow Test", profile.Name)
+		assert.Equal(t, testAdvertiserName, profile.Name)
 	})
 
 	t.Run("missing advertiser profile id", func(t *testing.T) {
@@ -252,7 +252,7 @@ func ExampleClient_UpdateAdvertiserProfile() {
 
 	// Start with an existing profile
 	profile := newTestProfile()
-	profile.Name = "TonicPow Test"
+	profile.Name = testAdvertiserName
 
 	// Mock response (for example only)
 	_ = mockResponseData(
