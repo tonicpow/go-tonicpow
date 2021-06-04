@@ -18,7 +18,7 @@ type Client struct {
 	options    *clientOptions // Options are all the default settings / configuration
 }
 
-// ClientOptions holds all the configuration for client requests and default resources
+// clientOptions holds all the configuration for client requests and default resources
 type clientOptions struct {
 	apiKey         string              // API key
 	apiURL         string              // API endpoint (URL by environment)

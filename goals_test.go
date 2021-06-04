@@ -15,7 +15,7 @@ func newTestGoal() *Goal {
 		Description:    "This is an example goal",
 		ID:             testGoalID,
 		MaxPerPromoter: 1,
-		Name:           "example_goal",
+		Name:           testGoalName,
 		PayoutRate:     0.01,
 		PayoutType:     "flat",
 		Title:          "Example Goal",
