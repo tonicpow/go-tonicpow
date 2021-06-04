@@ -140,7 +140,9 @@ func (c *Client) ListAppsByAdvertiserProfile(profileID uint64, page, resultsPerP
 	if response, err = c.Request(
 		http.MethodGet,
 		fmt.Sprintf(
-			"/%s/%s/?id=%d&%s=%d&%s=%d&%s=%s&%s=%s", modelAdvertiser, modelApp, profileID,
+			"/%s/%s/?%s=%d&%s=%d&%s=%d&%s=%s&%s=%s",
+			modelAdvertiser, modelApp,
+			fieldID, profileID,
 			fieldCurrentPage, page,
 			fieldResultsPerPage, resultsPerPage,
 			fieldSortBy, sortBy,

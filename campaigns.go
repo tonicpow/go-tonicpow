@@ -65,7 +65,7 @@ func (c *Client) GetCampaign(campaignID uint64) (campaign *Campaign, err error) 
 	var response StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
-		fmt.Sprintf("/%s/details/?id=%d", modelCampaign, campaignID),
+		fmt.Sprintf("/%s/details/?%s=%d", modelCampaign, fieldID, campaignID),
 		nil, http.StatusOK,
 	); err != nil {
 		return
@@ -92,7 +92,7 @@ func (c *Client) GetCampaignBySlug(slug string) (campaign *Campaign, err error) 
 	var response StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
-		fmt.Sprintf("/%s/details/?slug=%s", modelCampaign, slug),
+		fmt.Sprintf("/%s/details/?%s=%s", modelCampaign, fieldSlug, slug),
 		nil, http.StatusOK,
 	); err != nil {
 		return

@@ -503,9 +503,10 @@ func TestClient_ListAppsByAdvertiserProfile(t *testing.T) {
 		results := newTestAppResults(1, 25)
 
 		endpoint := fmt.Sprintf(
-			"%s/%s/%s/?id=%d&%s=%d&%s=%d&%s=%s&%s=%s",
+			"%s/%s/%s/?%s=%d&%s=%d&%s=%d&%s=%s&%s=%s",
 			EnvironmentDevelopment.apiURL,
-			modelAdvertiser, modelApp, testAdvertiserID,
+			modelAdvertiser, modelApp,
+			fieldID, testAdvertiserID,
 			fieldCurrentPage, 1,
 			fieldResultsPerPage, 25,
 			fieldSortBy, SortByFieldName,
@@ -536,9 +537,10 @@ func TestClient_ListAppsByAdvertiserProfile(t *testing.T) {
 		results := newTestAppResults(1, 25)
 
 		endpoint := fmt.Sprintf(
-			"%s/%s/%s/?id=%d&%s=%d&%s=%d&%s=%s&%s=%s",
+			"%s/%s/%s/?%s=%d&%s=%d&%s=%d&%s=%s&%s=%s",
 			EnvironmentDevelopment.apiURL,
-			modelAdvertiser, modelApp, testAdvertiserID,
+			modelAdvertiser, modelApp,
+			fieldID, testAdvertiserID,
 			fieldCurrentPage, 1,
 			fieldResultsPerPage, 25,
 			fieldSortBy, SortByFieldCreatedAt,
@@ -567,9 +569,10 @@ func TestClient_ListAppsByAdvertiserProfile(t *testing.T) {
 		results := newTestAppResults(2, 5)
 
 		endpoint := fmt.Sprintf(
-			"%s/%s/%s/?id=%d&%s=%d&%s=%d&%s=%s&%s=%s",
+			"%s/%s/%s/?%s=%d&%s=%d&%s=%d&%s=%s&%s=%s",
 			EnvironmentDevelopment.apiURL,
-			modelAdvertiser, modelApp, testAdvertiserID,
+			modelAdvertiser, modelApp,
+			fieldID, testAdvertiserID,
 			fieldCurrentPage, 2,
 			fieldResultsPerPage, 5,
 			fieldSortBy, SortByFieldName,
@@ -594,9 +597,10 @@ func TestClient_ListAppsByAdvertiserProfile(t *testing.T) {
 		results := newTestAppResults(1, 25)
 
 		endpoint := fmt.Sprintf(
-			"%s/%s/%s/?id=%d&%s=%d&%s=%d&%s=%s&%s=%s",
+			"%s/%s/%s/?%s=%d&%s=%d&%s=%d&%s=%s&%s=%s",
 			EnvironmentDevelopment.apiURL,
-			modelAdvertiser, modelApp, testAdvertiserID,
+			modelAdvertiser, modelApp,
+			fieldID, testAdvertiserID,
 			fieldCurrentPage, 1,
 			fieldResultsPerPage, 25,
 			fieldSortBy, SortByFieldName,
@@ -621,9 +625,10 @@ func TestClient_ListAppsByAdvertiserProfile(t *testing.T) {
 		results := newTestAppResults(1, 25)
 
 		endpoint := fmt.Sprintf(
-			"%s/%s/%s/?id=%d&%s=%d&%s=%d&%s=%s&%s=%s",
+			"%s/%s/%s/?%s=%d&%s=%d&%s=%d&%s=%s&%s=%s",
 			EnvironmentDevelopment.apiURL,
-			modelAdvertiser, modelApp, testAdvertiserID,
+			modelAdvertiser, modelApp,
+			fieldID, testAdvertiserID,
 			fieldCurrentPage, 1,
 			fieldResultsPerPage, 25,
 			fieldSortBy, SortByFieldName,
@@ -648,9 +653,10 @@ func TestClient_ListAppsByAdvertiserProfile(t *testing.T) {
 		results := newTestAppResults(1, 25)
 
 		endpoint := fmt.Sprintf(
-			"%s/%s/%s/?id=%d&%s=%d&%s=%d&%s=%s&%s=%s",
+			"%s/%s/%s/?%s=%d&%s=%d&%s=%d&%s=%s&%s=%s",
 			EnvironmentDevelopment.apiURL,
-			modelAdvertiser, modelApp, testAdvertiserID,
+			modelAdvertiser, modelApp,
+			fieldID, testAdvertiserID,
 			fieldCurrentPage, 1,
 			fieldResultsPerPage, 25,
 			fieldSortBy, SortByFieldName,
