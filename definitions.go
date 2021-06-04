@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	// Config defaults
+	// Package configuration defaults
 	apiVersion         string = "v1"
 	defaultHTTPTimeout        = 10 * time.Second          // Default timeout for all GET requests in seconds
 	defaultRetryCount  int    = 2                         // Default retry count for HTTP requests

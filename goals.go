@@ -9,7 +9,6 @@ import (
 // permitFields will remove fields that cannot be used
 func (g *Goal) permitFields() {
 	g.CampaignID = 0
-	g.Payouts = 0
 }
 
 // CreateGoal will make a new goal
@@ -20,6 +19,9 @@ func (c *Client) CreateGoal(goal *Goal) (err error) {
 	// Basic requirements
 	if goal.CampaignID == 0 {
 		err = fmt.Errorf(fmt.Sprintf("missing required attribute: %s", fieldCampaignID))
+		return
+	} else if len(goal.Name) == 0 {
+		err = fmt.Errorf(fmt.Sprintf("missing required attribute: %s", fieldName))
 		return
 	}
 
@@ -43,7 +45,7 @@ func (c *Client) CreateGoal(goal *Goal) (err error) {
 // For more information: https://docs.tonicpow.com/#48d7bbc8-5d7b-4078-87b7-25f545c3deaf
 func (c *Client) GetGoal(goalID uint64) (goal *Goal, err error) {
 
-	// Must have an id
+	// Must have an ID
 	if goalID == 0 {
 		err = fmt.Errorf("missing required attribute: %s", fieldID)
 		return
