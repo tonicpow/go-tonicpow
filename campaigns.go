@@ -135,7 +135,7 @@ func (c *Client) CampaignsFeed(feedType feedType) (feed string, err error) {
 	var response StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
-		fmt.Sprintf("/%s/feed?%s=%s", modelCampaign, fieldFeedType, feedType),
+		fmt.Sprintf("/%s/feed/?%s=%s", modelCampaign, fieldFeedType, feedType),
 		nil, http.StatusOK,
 	); err != nil {
 		return
@@ -187,10 +187,9 @@ func (c *Client) ListCampaigns(page, resultsPerPage int, sortBy, sortOrder, sear
 	return
 }
 
-// ListCampaignsByURL will return a list of campaigns
+// ListCampaignsByURL will return a list of campaigns using the target url
 // This will return an Error if the url is not found (404)
 //
-// todo: update with list campaigns functionality
 // For more information: https://docs.tonicpow.com/#30a15b69-7912-4e25-ba41-212529fba5ff
 func (c *Client) ListCampaignsByURL(targetURL string, page, resultsPerPage int,
 	sortBy, sortOrder string) (results *CampaignResults, err error) {
@@ -216,9 +215,11 @@ func (c *Client) ListCampaignsByURL(targetURL string, page, resultsPerPage int,
 	var response StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
-		fmt.Sprintf("/%s/find?%s=%s&%s=%d&%s=%d&%s=%s&%s=%s",
-			modelCampaign, fieldTargetURL, targetURL, fieldCurrentPage,
-			page, fieldResultsPerPage, resultsPerPage,
+		fmt.Sprintf("/%s/list?%s=%s&%s=%d&%s=%d&%s=%s&%s=%s",
+			modelCampaign,
+			fieldTargetURL, targetURL,
+			fieldCurrentPage, page,
+			fieldResultsPerPage, resultsPerPage,
 			fieldSortBy, sortBy,
 			fieldSortOrder, sortOrder,
 		),

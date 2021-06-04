@@ -9,13 +9,14 @@ import (
 )
 
 const (
-	testAdvertiserID   uint64 = 23
-	testAdvertiserName string = "TonicPow Test"
-	testAPIKey         string = "TestAPIKey12345678987654321"
-	testAppID          uint64 = 10
-	testCampaignID     uint64 = 23
-	testGoalID         uint64 = 13
-	testUserID         uint64 = 43
+	testAdvertiserID      uint64 = 23
+	testAdvertiserName    string = "TonicPow Test"
+	testAPIKey            string = "TestAPIKey12345678987654321"
+	testAppID             uint64 = 10
+	testCampaignID        uint64 = 23
+	testCampaignTargetURL string = "https://tonicpow.com"
+	testGoalID            uint64 = 13
+	testUserID            uint64 = 43
 )
 
 // TestVersion will test the method Version()

@@ -687,3 +687,324 @@ func BenchmarkClient_UpdateCampaign(b *testing.B) {
 		_ = client.UpdateCampaign(campaign)
 	}
 }
+
+// TestClient_ListCampaigns will test the method ListCampaigns()
+func TestClient_ListCampaigns(t *testing.T) {
+	// t.Parallel() (Cannot run in parallel - issues with overriding the mock client)
+
+	t.Run("list campaigns (success)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		results := newTestCampaignResults(1, 25)
+
+		endpoint := fmt.Sprintf(
+			"%s/%s/list?%s=%d&%s=%d&%s=%s&%s=%s&%s=%s&%s=%d&%s=%t",
+			EnvironmentDevelopment.apiURL, modelCampaign,
+			fieldCurrentPage, 1,
+			fieldResultsPerPage, 25,
+			fieldSortBy, SortByFieldBalance,
+			fieldSortOrder, SortOrderDesc,
+			fieldSearchQuery, "",
+			fieldMinimumBalance, 0,
+			fieldExpired, false,
+		)
+
+		err = mockResponseData(http.MethodGet, endpoint, http.StatusOK, results)
+		assert.NoError(t, err)
+
+		var newResults *CampaignResults
+		newResults, err = client.ListCampaigns(
+			1, 25, SortByFieldBalance, SortOrderDesc, "", 0, false,
+		)
+		assert.NoError(t, err)
+		assert.NotNil(t, newResults)
+		assert.Equal(t, testCampaignID, newResults.Campaigns[0].ID)
+	})
+
+	t.Run("list campaigns (default sorting)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		results := newTestCampaignResults(1, 25)
+
+		endpoint := fmt.Sprintf(
+			"%s/%s/list?%s=%d&%s=%d&%s=%s&%s=%s&%s=%s&%s=%d&%s=%t",
+			EnvironmentDevelopment.apiURL, modelCampaign,
+			fieldCurrentPage, 1,
+			fieldResultsPerPage, 25,
+			fieldSortBy, SortByFieldCreatedAt,
+			fieldSortOrder, SortOrderDesc,
+			fieldSearchQuery, "",
+			fieldMinimumBalance, 0,
+			fieldExpired, false,
+		)
+
+		err = mockResponseData(http.MethodGet, endpoint, http.StatusOK, results)
+		assert.NoError(t, err)
+
+		var newResults *CampaignResults
+		newResults, err = client.ListCampaigns(
+			1, 25, "", "", "", 0, false,
+		)
+		assert.NoError(t, err)
+		assert.NotNil(t, newResults)
+		assert.Equal(t, testCampaignID, newResults.Campaigns[0].ID)
+	})
+
+	t.Run("invalid sort by", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		results := newTestCampaignResults(1, 25)
+
+		endpoint := fmt.Sprintf(
+			"%s/%s/list?%s=%d&%s=%d&%s=%s&%s=%s&%s=%s&%s=%d&%s=%t",
+			EnvironmentDevelopment.apiURL, modelCampaign,
+			fieldCurrentPage, 1,
+			fieldResultsPerPage, 25,
+			fieldSortBy, SortByFieldBalance,
+			fieldSortOrder, SortOrderDesc,
+			fieldSearchQuery, "",
+			fieldMinimumBalance, 0,
+			fieldExpired, false,
+		)
+
+		err = mockResponseData(http.MethodGet, endpoint, http.StatusOK, results)
+		assert.NoError(t, err)
+
+		var newResults *CampaignResults
+		newResults, err = client.ListCampaigns(
+			1, 25, "bad_field", SortOrderDesc, "", 0, false,
+		)
+		assert.Error(t, err)
+		assert.Nil(t, newResults)
+	})
+
+	t.Run("error from api (status code)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		results := newTestCampaignResults(2, 5)
+
+		endpoint := fmt.Sprintf(
+			"%s/%s/list?%s=%d&%s=%d&%s=%s&%s=%s&%s=%s&%s=%d&%s=%t",
+			EnvironmentDevelopment.apiURL, modelCampaign,
+			fieldCurrentPage, 2,
+			fieldResultsPerPage, 5,
+			fieldSortBy, SortByFieldBalance,
+			fieldSortOrder, SortOrderDesc,
+			fieldSearchQuery, "",
+			fieldMinimumBalance, 0,
+			fieldExpired, false,
+		)
+
+		err = mockResponseData(http.MethodGet, endpoint, http.StatusBadRequest, results)
+		assert.NoError(t, err)
+
+		var newResults *CampaignResults
+		newResults, err = client.ListCampaigns(
+			2, 5, SortByFieldBalance, SortOrderDesc, "", 0, false,
+		)
+		assert.Error(t, err)
+		assert.Nil(t, newResults)
+	})
+
+	t.Run("error from api (api error)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		// results := newTestCampaignResults(2, 5)
+
+		endpoint := fmt.Sprintf(
+			"%s/%s/list?%s=%d&%s=%d&%s=%s&%s=%s&%s=%s&%s=%d&%s=%t",
+			EnvironmentDevelopment.apiURL, modelCampaign,
+			fieldCurrentPage, 2,
+			fieldResultsPerPage, 5,
+			fieldSortBy, SortByFieldBalance,
+			fieldSortOrder, SortOrderDesc,
+			fieldSearchQuery, "",
+			fieldMinimumBalance, 0,
+			fieldExpired, false,
+		)
+
+		apiError := &Error{
+			Code:        400,
+			Data:        "field_name",
+			IPAddress:   "127.0.0.1",
+			Message:     "some error message",
+			Method:      http.MethodPut,
+			RequestGUID: "7f3d97a8fd67ff57861904df6118dcc8",
+			StatusCode:  http.StatusBadRequest,
+			URL:         endpoint,
+		}
+
+		err = mockResponseData(http.MethodGet, endpoint, http.StatusBadRequest, apiError)
+		assert.NoError(t, err)
+
+		var newResults *CampaignResults
+		newResults, err = client.ListCampaigns(
+			2, 5, SortByFieldBalance, SortOrderDesc, "", 0, false,
+		)
+		assert.Error(t, err)
+		assert.Nil(t, newResults)
+		assert.Equal(t, apiError.Message, err.Error())
+	})
+}
+
+// TestClient_ListCampaignsByURL will test the method ListCampaignsByURL()
+func TestClient_ListCampaignsByURL(t *testing.T) {
+	// t.Parallel() (Cannot run in parallel - issues with overriding the mock client)
+
+	t.Run("list campaigns by url (success)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		results := newTestCampaignResults(1, 25)
+
+		endpoint := fmt.Sprintf("%s/%s/list?%s=%s&%s=%d&%s=%d&%s=%s&%s=%s",
+			EnvironmentDevelopment.apiURL, modelCampaign,
+			fieldTargetURL, testCampaignTargetURL,
+			fieldCurrentPage, 1,
+			fieldResultsPerPage, 25,
+			fieldSortBy, SortByFieldBalance,
+			fieldSortOrder, SortOrderDesc,
+		)
+
+		err = mockResponseData(http.MethodGet, endpoint, http.StatusOK, results)
+		assert.NoError(t, err)
+
+		var newResults *CampaignResults
+		newResults, err = client.ListCampaignsByURL(
+			testCampaignTargetURL, 1, 25, SortByFieldBalance, SortOrderDesc,
+		)
+		assert.NoError(t, err)
+		assert.NotNil(t, newResults)
+		assert.Equal(t, testCampaignID, newResults.Campaigns[0].ID)
+	})
+
+	t.Run("list campaigns (default sorting)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		results := newTestCampaignResults(2, 5)
+
+		endpoint := fmt.Sprintf("%s/%s/list?%s=%s&%s=%d&%s=%d&%s=%s&%s=%s",
+			EnvironmentDevelopment.apiURL, modelCampaign,
+			fieldTargetURL, testCampaignTargetURL,
+			fieldCurrentPage, 2,
+			fieldResultsPerPage, 5,
+			fieldSortBy, SortByFieldCreatedAt,
+			fieldSortOrder, SortOrderDesc,
+		)
+
+		err = mockResponseData(http.MethodGet, endpoint, http.StatusOK, results)
+		assert.NoError(t, err)
+
+		var newResults *CampaignResults
+		newResults, err = client.ListCampaignsByURL(
+			testCampaignTargetURL, 2, 5, "", "",
+		)
+		assert.NoError(t, err)
+		assert.NotNil(t, newResults)
+		assert.Equal(t, testCampaignID, newResults.Campaigns[0].ID)
+	})
+
+	t.Run("invalid sort by", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		results := newTestCampaignResults(1, 25)
+
+		endpoint := fmt.Sprintf("%s/%s/list?%s=%s&%s=%d&%s=%d&%s=%s&%s=%s",
+			EnvironmentDevelopment.apiURL, modelCampaign,
+			fieldTargetURL, testCampaignTargetURL,
+			fieldCurrentPage, 2,
+			fieldResultsPerPage, 5,
+			fieldSortBy, SortByFieldCreatedAt,
+			fieldSortOrder, SortOrderDesc,
+		)
+
+		err = mockResponseData(http.MethodGet, endpoint, http.StatusOK, results)
+		assert.NoError(t, err)
+
+		var newResults *CampaignResults
+		newResults, err = client.ListCampaignsByURL(
+			testCampaignTargetURL, 2, 5, "bad_field", "",
+		)
+		assert.Error(t, err)
+		assert.Nil(t, newResults)
+	})
+
+	t.Run("error from api (status code)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		results := newTestCampaignResults(2, 5)
+
+		endpoint := fmt.Sprintf("%s/%s/list?%s=%s&%s=%d&%s=%d&%s=%s&%s=%s",
+			EnvironmentDevelopment.apiURL, modelCampaign,
+			fieldTargetURL, testCampaignTargetURL,
+			fieldCurrentPage, 2,
+			fieldResultsPerPage, 5,
+			fieldSortBy, SortByFieldCreatedAt,
+			fieldSortOrder, SortOrderDesc,
+		)
+
+		err = mockResponseData(http.MethodGet, endpoint, http.StatusBadRequest, results)
+		assert.NoError(t, err)
+
+		var newResults *CampaignResults
+		newResults, err = client.ListCampaignsByURL(
+			testCampaignTargetURL, 2, 5, SortByFieldCreatedAt, SortOrderDesc,
+		)
+		assert.Error(t, err)
+		assert.Nil(t, newResults)
+	})
+
+	t.Run("error from api (api error)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		endpoint := fmt.Sprintf("%s/%s/list?%s=%s&%s=%d&%s=%d&%s=%s&%s=%s",
+			EnvironmentDevelopment.apiURL, modelCampaign,
+			fieldTargetURL, testCampaignTargetURL,
+			fieldCurrentPage, 2,
+			fieldResultsPerPage, 5,
+			fieldSortBy, SortByFieldCreatedAt,
+			fieldSortOrder, SortOrderDesc,
+		)
+
+		apiError := &Error{
+			Code:        400,
+			Data:        "field_name",
+			IPAddress:   "127.0.0.1",
+			Message:     "some error message",
+			Method:      http.MethodPut,
+			RequestGUID: "7f3d97a8fd67ff57861904df6118dcc8",
+			StatusCode:  http.StatusBadRequest,
+			URL:         endpoint,
+		}
+
+		err = mockResponseData(http.MethodGet, endpoint, http.StatusBadRequest, apiError)
+		assert.NoError(t, err)
+
+		var newResults *CampaignResults
+		newResults, err = client.ListCampaignsByURL(
+			testCampaignTargetURL, 2, 5, SortByFieldCreatedAt, SortOrderDesc,
+		)
+		assert.Error(t, err)
+		assert.Nil(t, newResults)
+		assert.Equal(t, apiError.Message, err.Error())
+	})
+}
