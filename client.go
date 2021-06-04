@@ -178,8 +178,8 @@ func (c *Client) Request(httpMethod string, requestEndpoint string,
 	// Set the user agent
 	req := c.httpClient.R().SetHeader("User-Agent", c.options.userAgent)
 
-	// Set the body if (PUT || POST || DELETE)
-	if httpMethod != http.MethodGet {
+	// Set the body if (PUT || POST || PATCH)
+	if httpMethod != http.MethodGet && httpMethod != http.MethodDelete {
 		var j []byte
 		if j, err = json.Marshal(data); err != nil {
 			return

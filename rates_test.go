@@ -148,7 +148,7 @@ func ExampleClient_GetCurrentRate() {
 		rates,
 	)
 
-	// Get profile (using mocking response)
+	// Get rate (using mocking response)
 	var currentRate *Rate
 	if currentRate, err = client.GetCurrentRate(testRateCurrency, 0.00); err != nil {
 		fmt.Printf("error getting profile: " + err.Error())

@@ -44,11 +44,16 @@ func TestUserAgent(t *testing.T) {
 // mockResponseData is used for mocking the response
 func mockResponseData(method, endpoint string, statusCode int, model interface{}) error {
 	httpmock.Reset()
-	data, err := json.Marshal(model)
-	if err != nil {
-		return err
+	if model != nil && model != "" {
+		data, err := json.Marshal(model)
+		if err != nil {
+			return err
+		}
+		httpmock.RegisterResponder(method, endpoint, httpmock.NewStringResponder(statusCode, string(data)))
+	} else {
+		httpmock.RegisterResponder(method, endpoint, httpmock.NewStringResponder(statusCode, ""))
 	}
-	httpmock.RegisterResponder(method, endpoint, httpmock.NewStringResponder(statusCode, string(data)))
+
 	return nil
 }
 

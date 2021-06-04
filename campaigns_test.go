@@ -733,7 +733,7 @@ func ExampleClient_UpdateCampaign() {
 		responseCampaign,
 	)
 
-	// Get campaign (using mocking response)
+	// Update campaign (using mocking response)
 	err = client.UpdateCampaign(responseCampaign)
 	if err != nil {
 		fmt.Printf("error updating campaign: " + err.Error())

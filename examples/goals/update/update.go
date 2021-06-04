@@ -18,19 +18,19 @@ func main() {
 		log.Fatalf("error in NewClient: %s", err.Error())
 	}
 
-	// Get campaign first
-	var campaign *tonicpow.Campaign
-	campaign, err = client.GetCampaign(23)
+	// Get goal first
+	var goal *tonicpow.Goal
+	goal, err = client.GetGoal(13)
 	if err != nil {
-		log.Fatalf("error in GetCampaign: %s", err.Error())
+		log.Fatalf("error in GetGoal: %s", err.Error())
 	}
 
-	// Update a campaign
-	campaign.Title = "Updated Title Name"
-	err = client.UpdateCampaign(campaign)
+	// Update a goal
+	goal.Title = "Updated Title Name"
+	err = client.UpdateGoal(goal)
 	if err != nil {
-		log.Fatalf("error in UpdateCampaign: %s", err.Error())
+		log.Fatalf("error in UpdateGoal: %s", err.Error())
 	}
 
-	log.Printf("updated campaign: %s", campaign.Title)
+	log.Printf("updated goal: %s", goal.Title)
 }

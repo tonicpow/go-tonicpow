@@ -320,3 +320,270 @@ func BenchmarkClient_GetGoal(b *testing.B) {
 		_, _ = client.GetGoal(goal.ID)
 	}
 }
+
+// TestClient_UpdateCampaign will test the method UpdateCampaign()
+func TestClient_UpdateGoal(t *testing.T) {
+	// t.Parallel() (Cannot run in parallel - issues with overriding the mock client)
+
+	t.Run("update a goal (success)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		goal := newTestGoal()
+		goal.Title = "Updated Title"
+
+		endpoint := fmt.Sprintf("%s/%s", EnvironmentDevelopment.apiURL, modelGoal)
+
+		err = mockResponseData(http.MethodPut, endpoint, http.StatusOK, goal)
+		assert.NoError(t, err)
+
+		err = client.UpdateGoal(goal)
+		assert.NoError(t, err)
+		assert.NotNil(t, goal)
+		assert.Equal(t, "Updated Title", goal.Title)
+	})
+
+	t.Run("missing id", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		goal := newTestGoal()
+		goal.ID = 0
+
+		endpoint := fmt.Sprintf("%s/%s", EnvironmentDevelopment.apiURL, modelGoal)
+
+		err = mockResponseData(http.MethodPut, endpoint, http.StatusOK, goal)
+		assert.NoError(t, err)
+
+		err = client.UpdateGoal(goal)
+		assert.Error(t, err)
+	})
+
+	t.Run("error from api (status code)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		goal := newTestGoal()
+
+		endpoint := fmt.Sprintf("%s/%s", EnvironmentDevelopment.apiURL, modelGoal)
+
+		err = mockResponseData(http.MethodPut, endpoint, http.StatusBadRequest, goal)
+		assert.NoError(t, err)
+
+		err = client.UpdateGoal(goal)
+		assert.Error(t, err)
+	})
+
+	t.Run("error from api (api error)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		goal := newTestGoal()
+
+		endpoint := fmt.Sprintf("%s/%s", EnvironmentDevelopment.apiURL, modelGoal)
+
+		apiError := &Error{
+			Code:        400,
+			Data:        "field_name",
+			IPAddress:   "127.0.0.1",
+			Message:     "some error message",
+			Method:      http.MethodPut,
+			RequestGUID: "7f3d97a8fd67ff57861904df6118dcc8",
+			StatusCode:  http.StatusBadRequest,
+			URL:         endpoint,
+		}
+
+		err = mockResponseData(http.MethodPut, endpoint, http.StatusBadRequest, apiError)
+		assert.NoError(t, err)
+
+		err = client.UpdateGoal(goal)
+		assert.Error(t, err)
+		assert.Equal(t, apiError.Message, err.Error())
+	})
+}
+
+// ExampleClient_UpdateGoal example using UpdateGoal()
+//
+// See more examples in /examples/
+func ExampleClient_UpdateGoal() {
+
+	// Load the client (using test client for example only)
+	client, err := newTestClient()
+	if err != nil {
+		fmt.Printf("error loading client: %s", err.Error())
+		return
+	}
+
+	// Mock response (for example only)
+	responseGoal := newTestGoal()
+	responseGoal.Title = "Updated Title"
+	_ = mockResponseData(
+		http.MethodPut,
+		fmt.Sprintf("%s/%s", EnvironmentDevelopment.apiURL, modelGoal),
+		http.StatusOK,
+		responseGoal,
+	)
+
+	// Update goal (using mocking response)
+	err = client.UpdateGoal(responseGoal)
+	if err != nil {
+		fmt.Printf("error updating goal: " + err.Error())
+		return
+	}
+	fmt.Printf("goal: %s", responseGoal.Title)
+	// Output:goal: Updated Title
+}
+
+// BenchmarkClient_UpdateGoal benchmarks the method UpdateGoal()
+func BenchmarkClient_UpdateGoal(b *testing.B) {
+	client, _ := newTestClient()
+	goal := newTestGoal()
+	_ = mockResponseData(
+		http.MethodPut,
+		fmt.Sprintf("%s/%s", EnvironmentDevelopment.apiURL, modelGoal),
+		http.StatusOK,
+		goal,
+	)
+	for i := 0; i < b.N; i++ {
+		_ = client.UpdateGoal(goal)
+	}
+}
+
+// TestClient_DeleteGoal will test the method DeleteGoal()
+func TestClient_DeleteGoal(t *testing.T) {
+	// t.Parallel() (Cannot run in parallel - issues with overriding the mock client)
+
+	t.Run("delete a goal (success)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		goal := newTestGoal()
+
+		endpoint := fmt.Sprintf("%s/%s?%s=%d", EnvironmentDevelopment.apiURL, modelGoal, fieldID, goal.ID)
+		err = mockResponseData(http.MethodDelete, endpoint, http.StatusOK, nil)
+		assert.NoError(t, err)
+
+		var deleted bool
+		deleted, err = client.DeleteGoal(goal.ID)
+		assert.NoError(t, err)
+		assert.Equal(t, true, deleted)
+		assert.Equal(t, testGoalID, goal.ID)
+	})
+
+	t.Run("missing goal id", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		goal := newTestGoal()
+		goal.ID = 0
+
+		endpoint := fmt.Sprintf("%s/%s?%s=%d", EnvironmentDevelopment.apiURL, modelGoal, fieldID, goal.ID)
+
+		err = mockResponseData(http.MethodDelete, endpoint, http.StatusOK, nil)
+		assert.NoError(t, err)
+
+		var deleted bool
+		deleted, err = client.DeleteGoal(goal.ID)
+		assert.Error(t, err)
+		assert.Equal(t, false, deleted)
+	})
+
+	t.Run("error from api (status code)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		goal := newTestGoal()
+
+		endpoint := fmt.Sprintf("%s/%s?%s=%d", EnvironmentDevelopment.apiURL, modelGoal, fieldID, goal.ID)
+		err = mockResponseData(http.MethodDelete, endpoint, http.StatusBadRequest, nil)
+		assert.NoError(t, err)
+
+		var deleted bool
+		deleted, err = client.DeleteGoal(goal.ID)
+		assert.Error(t, err)
+		assert.Equal(t, false, deleted)
+	})
+
+	t.Run("error from api (api error)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		goal := newTestGoal()
+
+		endpoint := fmt.Sprintf("%s/%s?%s=%d", EnvironmentDevelopment.apiURL, modelGoal, fieldID, goal.ID)
+
+		apiError := &Error{
+			Code:        400,
+			Data:        "field_name",
+			IPAddress:   "127.0.0.1",
+			Message:     "some error message",
+			Method:      http.MethodPut,
+			RequestGUID: "7f3d97a8fd67ff57861904df6118dcc8",
+			StatusCode:  http.StatusBadRequest,
+			URL:         endpoint,
+		}
+
+		err = mockResponseData(http.MethodDelete, endpoint, http.StatusBadRequest, apiError)
+		assert.NoError(t, err)
+
+		var deleted bool
+		deleted, err = client.DeleteGoal(goal.ID)
+		assert.Error(t, err)
+		assert.Equal(t, false, deleted)
+		assert.Equal(t, apiError.Message, err.Error())
+	})
+}
+
+// ExampleClient_DeleteGoal example using DeleteGoal()
+//
+// See more examples in /examples/
+func ExampleClient_DeleteGoal() {
+
+	// Load the client (using test client for example only)
+	client, err := newTestClient()
+	if err != nil {
+		fmt.Printf("error loading client: %s", err.Error())
+		return
+	}
+
+	// Mock response (for example only)
+	responseGoal := newTestGoal()
+	_ = mockResponseData(
+		http.MethodDelete,
+		fmt.Sprintf("%s/%s?%s=%d", EnvironmentDevelopment.apiURL, modelGoal, fieldID, responseGoal.ID),
+		http.StatusOK,
+		nil,
+	)
+
+	// Delete goal (using mocking response)
+	var deleted bool
+	if deleted, err = client.DeleteGoal(responseGoal.ID); err != nil {
+		fmt.Printf("error deleting goal: " + err.Error())
+		return
+	}
+	fmt.Printf("goal deleted: %t", deleted)
+	// Output:goal deleted: true
+}
+
+// BenchmarkClient_DeleteGoal benchmarks the method DeleteGoal()
+func BenchmarkClient_DeleteGoal(b *testing.B) {
+	client, _ := newTestClient()
+	goal := newTestGoal()
+	_ = mockResponseData(
+		http.MethodDelete,
+		fmt.Sprintf("%s/%s?%s=%d", EnvironmentDevelopment.apiURL, modelGoal, fieldID, goal.ID),
+		http.StatusOK,
+		nil,
+	)
+	for i := 0; i < b.N; i++ {
+		_, _ = client.DeleteGoal(goal.ID)
+	}
+}
