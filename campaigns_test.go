@@ -49,11 +49,11 @@ func newTestCampaignRequirements() *CampaignRequirements {
 }
 
 // newTestCampaignResults will return a dummy example for tests
-func newTestCampaignResults() *CampaignResults {
+func newTestCampaignResults(currentPage, resultsPerPage int) *CampaignResults {
 	return &CampaignResults{
 		Campaigns:      []*Campaign{newTestCampaign()},
-		CurrentPage:    1,
+		CurrentPage:    currentPage,
 		Results:        1,
-		ResultsPerPage: 1,
+		ResultsPerPage: resultsPerPage,
 	}
 }

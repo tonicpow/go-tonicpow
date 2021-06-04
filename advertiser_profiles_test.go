@@ -314,7 +314,7 @@ func TestClient_ListCampaignsByAdvertiserProfile(t *testing.T) {
 		assert.NoError(t, err)
 		assert.NotNil(t, client)
 
-		results := newTestCampaignResults()
+		results := newTestCampaignResults(1, 25)
 
 		endpoint := fmt.Sprintf("%s/%s/%s/%d?%s=%d&%s=%d&%s=%s&%s=%s",
 			EnvironmentDevelopment.apiURL,
@@ -340,7 +340,37 @@ func TestClient_ListCampaignsByAdvertiserProfile(t *testing.T) {
 		assert.Equal(t, testUserID, results.Campaigns[0].AdvertiserProfile.UserID)
 		assert.Equal(t, 1, len(results.Campaigns))
 		assert.Equal(t, 1, results.Results)
-		assert.Equal(t, 1, results.ResultsPerPage)
+		assert.Equal(t, 25, results.ResultsPerPage)
+		assert.Equal(t, 1, results.CurrentPage)
+	})
+
+	t.Run("list campaigns by advertiser (default sorting)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		results := newTestCampaignResults(1, 25)
+
+		endpoint := fmt.Sprintf("%s/%s/%s/%d?%s=%d&%s=%d&%s=%s&%s=%s",
+			EnvironmentDevelopment.apiURL,
+			modelAdvertiser, modelCampaign, results.Campaigns[0].AdvertiserProfileID,
+			fieldCurrentPage, 1,
+			fieldResultsPerPage, 25,
+			fieldSortBy, SortByFieldCreatedAt,
+			fieldSortOrder, SortOrderDesc,
+		)
+
+		err = mockResponseData(http.MethodGet, endpoint, http.StatusOK, results)
+		assert.NoError(t, err)
+
+		results, err = client.ListCampaignsByAdvertiserProfile(
+			results.Campaigns[0].AdvertiserProfileID, 1, 25, "", "",
+		)
+		assert.NoError(t, err)
+		assert.NotNil(t, results)
+		assert.Equal(t, 1, len(results.Campaigns))
+		assert.Equal(t, 1, results.Results)
+		assert.Equal(t, 25, results.ResultsPerPage)
 		assert.Equal(t, 1, results.CurrentPage)
 	})
 
@@ -349,13 +379,13 @@ func TestClient_ListCampaignsByAdvertiserProfile(t *testing.T) {
 		assert.NoError(t, err)
 		assert.NotNil(t, client)
 
-		results := newTestCampaignResults()
+		results := newTestCampaignResults(2, 5)
 
 		endpoint := fmt.Sprintf("%s/%s/%s/%d?%s=%d&%s=%d&%s=%s&%s=%s",
 			EnvironmentDevelopment.apiURL,
 			modelAdvertiser, modelCampaign, results.Campaigns[0].AdvertiserProfileID,
-			fieldCurrentPage, 1,
-			fieldResultsPerPage, 25,
+			fieldCurrentPage, 2,
+			fieldResultsPerPage, 5,
 			fieldSortBy, SortByFieldBalance,
 			fieldSortOrder, SortOrderDesc,
 		)
@@ -364,7 +394,7 @@ func TestClient_ListCampaignsByAdvertiserProfile(t *testing.T) {
 		assert.NoError(t, err)
 
 		results, err = client.ListCampaignsByAdvertiserProfile(
-			0, 1, 25, SortByFieldBalance, SortOrderDesc,
+			0, 2, 5, SortByFieldBalance, SortOrderDesc,
 		)
 		assert.Error(t, err)
 		assert.Nil(t, results)
@@ -375,7 +405,7 @@ func TestClient_ListCampaignsByAdvertiserProfile(t *testing.T) {
 		assert.NoError(t, err)
 		assert.NotNil(t, client)
 
-		results := newTestCampaignResults()
+		results := newTestCampaignResults(1, 25)
 
 		endpoint := fmt.Sprintf("%s/%s/%s/%d?%s=%d&%s=%d&%s=%s&%s=%s",
 			EnvironmentDevelopment.apiURL,
@@ -401,7 +431,7 @@ func TestClient_ListCampaignsByAdvertiserProfile(t *testing.T) {
 		assert.NoError(t, err)
 		assert.NotNil(t, client)
 
-		results := newTestCampaignResults()
+		results := newTestCampaignResults(1, 25)
 
 		endpoint := fmt.Sprintf("%s/%s/%s/%d?%s=%d&%s=%d&%s=%s&%s=%s",
 			EnvironmentDevelopment.apiURL,
@@ -427,7 +457,7 @@ func TestClient_ListCampaignsByAdvertiserProfile(t *testing.T) {
 		assert.NoError(t, err)
 		assert.NotNil(t, client)
 
-		results := newTestCampaignResults()
+		results := newTestCampaignResults(1, 25)
 
 		endpoint := fmt.Sprintf("%s/%s/%s/%d?%s=%d&%s=%d&%s=%s&%s=%s",
 			EnvironmentDevelopment.apiURL,
@@ -492,6 +522,37 @@ func TestClient_ListAppsByAdvertiserProfile(t *testing.T) {
 		assert.NotNil(t, results)
 		assert.Equal(t, "TonicPow App", results.Apps[0].Name)
 		assert.Equal(t, testAppID, results.Apps[0].ID)
+		assert.Equal(t, 1, len(results.Apps))
+		assert.Equal(t, 1, results.Results)
+		assert.Equal(t, 25, results.ResultsPerPage)
+		assert.Equal(t, 1, results.CurrentPage)
+	})
+
+	t.Run("list apps by advertiser (default sorting)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		results := newTestAppResults(1, 25)
+
+		endpoint := fmt.Sprintf(
+			"%s/%s/%s/?id=%d&%s=%d&%s=%d&%s=%s&%s=%s",
+			EnvironmentDevelopment.apiURL,
+			modelAdvertiser, modelApp, testAdvertiserID,
+			fieldCurrentPage, 1,
+			fieldResultsPerPage, 25,
+			fieldSortBy, SortByFieldCreatedAt,
+			fieldSortOrder, SortOrderDesc,
+		)
+
+		err = mockResponseData(http.MethodGet, endpoint, http.StatusOK, results)
+		assert.NoError(t, err)
+
+		results, err = client.ListAppsByAdvertiserProfile(
+			results.Apps[0].AdvertiserProfileID, 1, 25, "", "",
+		)
+		assert.NoError(t, err)
+		assert.NotNil(t, results)
 		assert.Equal(t, 1, len(results.Apps))
 		assert.Equal(t, 1, results.Results)
 		assert.Equal(t, 25, results.ResultsPerPage)
