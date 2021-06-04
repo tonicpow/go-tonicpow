@@ -6,6 +6,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+const (
+	testAPIKey = "TestAPIKey12345678987654321"
+)
+
 // TestVersion will test the method Version()
 func TestVersion(t *testing.T) {
 	t.Parallel()

@@ -37,7 +37,7 @@ func (c *Client) CreateConversionByGoalID(goalID uint64, tncpwSession, customDim
 	var response StandardResponse
 	if response, err = c.Request(
 		http.MethodPost,
-		modelConversion,
+		"/"+modelConversion,
 		data, http.StatusCreated,
 	); err != nil {
 		return
@@ -78,7 +78,7 @@ func (c *Client) CreateConversionByGoalName(goalName, tncpwSession, customDimens
 	var response StandardResponse
 	if response, err = c.Request(
 		http.MethodPost,
-		modelConversion,
+		"/"+modelConversion,
 		data, http.StatusCreated,
 	); err != nil {
 		return
@@ -119,7 +119,7 @@ func (c *Client) CreateConversionByUserID(goalID, tonicPowUserID uint64, customD
 	var response StandardResponse
 	if response, err = c.Request(
 		http.MethodPost,
-		modelConversion,
+		"/"+modelConversion,
 		data, http.StatusCreated,
 	); err != nil {
 		return
@@ -145,7 +145,7 @@ func (c *Client) GetConversion(conversionID uint64) (conversion *Conversion, err
 	var response StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
-		fmt.Sprintf("%s/details/%d", modelConversion, conversionID),
+		fmt.Sprintf("/%s/details/%d", modelConversion, conversionID),
 		nil, http.StatusOK,
 	); err != nil {
 		return
@@ -176,7 +176,7 @@ func (c *Client) CancelConversion(conversionID uint64, cancelReason string) (con
 	var response StandardResponse
 	if response, err = c.Request(
 		http.MethodPut,
-		fmt.Sprintf("%s/cancel", modelConversion),
+		fmt.Sprintf("/%s/cancel", modelConversion),
 		data, http.StatusOK,
 	); err != nil {
 		return

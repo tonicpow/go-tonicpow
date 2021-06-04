@@ -27,7 +27,7 @@ func (c *Client) CreateGoal(goal *Goal) (err error) {
 	var response StandardResponse
 	if response, err = c.Request(
 		http.MethodPost,
-		modelGoal,
+		"/"+modelGoal,
 		goal, http.StatusCreated,
 	); err != nil {
 		return
@@ -53,7 +53,7 @@ func (c *Client) GetGoal(goalID uint64) (goal *Goal, err error) {
 	var response StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
-		fmt.Sprintf("%s/details/%d", modelGoal, goalID),
+		fmt.Sprintf("/%s/details/%d", modelGoal, goalID),
 		nil, http.StatusOK,
 	); err != nil {
 		return
@@ -81,7 +81,7 @@ func (c *Client) UpdateGoal(goal *Goal) (err error) {
 	var response StandardResponse
 	if response, err = c.Request(
 		http.MethodPut,
-		modelGoal,
+		"/"+modelGoal,
 		goal, http.StatusOK,
 	); err != nil {
 		return
@@ -106,7 +106,7 @@ func (c *Client) DeleteGoal(goal *Goal) (deleted bool, err error) {
 	// var response StandardResponse
 	if _, err = c.Request(
 		http.MethodDelete,
-		fmt.Sprintf("%s?id=%d", modelGoal, goal.ID),
+		fmt.Sprintf("/%s?id=%d", modelGoal, goal.ID),
 		goal, http.StatusOK,
 	); err != nil {
 		return

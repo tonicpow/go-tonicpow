@@ -9,6 +9,7 @@ import (
 
 // permitFields will remove fields that cannot be used
 func (a *AdvertiserProfile) permitFields() {
+	a.PublicGUID = ""
 	a.UserID = 0
 }
 
@@ -28,7 +29,7 @@ func (c *Client) GetAdvertiserProfile(profileID uint64) (profile *AdvertiserProf
 	var response StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
-		fmt.Sprintf("%s/details/%d", modelAdvertiser, profileID),
+		fmt.Sprintf("/%s/details/%d", modelAdvertiser, profileID),
 		nil, http.StatusOK,
 	); err != nil {
 		return
@@ -57,7 +58,7 @@ func (c *Client) UpdateAdvertiserProfile(profile *AdvertiserProfile) (err error)
 	var response StandardResponse
 	if response, err = c.Request(
 		http.MethodPut,
-		modelAdvertiser,
+		"/"+modelAdvertiser,
 		profile, http.StatusOK,
 	); err != nil {
 		return
@@ -96,7 +97,7 @@ func (c *Client) ListCampaignsByAdvertiserProfile(profileID uint64, page, result
 	var response StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
-		fmt.Sprintf("%s/%s/%d?%s=%d&%s=%d&%s=%s&%s=%s", modelAdvertiser, modelCampaign, profileID,
+		fmt.Sprintf("/%s/%s/%d?%s=%d&%s=%d&%s=%s&%s=%s", modelAdvertiser, modelCampaign, profileID,
 			fieldCurrentPage, page,
 			fieldResultsPerPage, resultsPerPage,
 			fieldSortBy, sortBy,
@@ -141,7 +142,7 @@ func (c *Client) ListAppsByAdvertiserProfile(profileID uint64, page, resultsPerP
 	if response, err = c.Request(
 		http.MethodGet,
 		fmt.Sprintf(
-			"%s/%s/?id=%d&%s=%d&%s=%d&%s=%s&%s=%s", modelAdvertiser, modelApp, profileID,
+			"/%s/%s/?id=%d&%s=%d&%s=%d&%s=%s&%s=%s", modelAdvertiser, modelApp, profileID,
 			fieldCurrentPage, page,
 			fieldResultsPerPage, resultsPerPage,
 			fieldSortBy, sortBy,

@@ -6,6 +6,7 @@ import (
 
 const (
 	// Config defaults
+	apiVersion         = "v1"
 	defaultHTTPTimeout = 10 * time.Second          // Default timeout for all GET requests in seconds
 	defaultRetryCount  = 2                         // Default retry count for HTTP requests
 	defaultUserAgent   = "go-tonicpow: " + version // Default user agent
@@ -84,9 +85,6 @@ const (
 
 	// FeedTypeRSS is for using the feed type: RSS
 	FeedTypeRSS feedType = "rss"
-
-	// apiVersion current version for all endpoints
-	apiVersion = "v1"
 )
 
 var (

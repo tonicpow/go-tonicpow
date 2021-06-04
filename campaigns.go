@@ -33,7 +33,7 @@ func (c *Client) CreateCampaign(campaign *Campaign) (err error) {
 	var response StandardResponse
 	if response, err = c.Request(
 		http.MethodPost,
-		modelCampaign,
+		"/"+modelCampaign,
 		nil, http.StatusCreated,
 	); err != nil {
 		return
@@ -60,7 +60,7 @@ func (c *Client) GetCampaign(campaignID uint64) (campaign *Campaign, err error) 
 	var response StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
-		fmt.Sprintf("%s/details/?id=%d", modelCampaign, campaignID),
+		fmt.Sprintf("/%s/details/?id=%d", modelCampaign, campaignID),
 		nil, http.StatusOK,
 	); err != nil {
 		return
@@ -87,7 +87,7 @@ func (c *Client) GetCampaignBySlug(slug string) (campaign *Campaign, err error) 
 	var response StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
-		fmt.Sprintf("%s/details/?slug=%s", modelCampaign, slug),
+		fmt.Sprintf("/%s/details/?slug=%s", modelCampaign, slug),
 		nil, http.StatusOK,
 	); err != nil {
 		return
@@ -116,7 +116,7 @@ func (c *Client) UpdateCampaign(campaign *Campaign) (err error) {
 	var response StandardResponse
 	if response, err = c.Request(
 		http.MethodPut,
-		modelCampaign,
+		"/"+modelCampaign,
 		campaign, http.StatusOK,
 	); err != nil {
 		return
@@ -149,7 +149,7 @@ func (c *Client) ListCampaigns(page, resultsPerPage int, sortBy, sortOrder, sear
 	if response, err = c.Request(
 		http.MethodGet,
 		fmt.Sprintf(
-			"%s/list?%s=%d&%s=%d&%s=%s&%s=%s&%s=%s&%s=%d&%s=%t",
+			"/%s/list?%s=%d&%s=%d&%s=%s&%s=%s&%s=%s&%s=%d&%s=%t",
 			modelCampaign,
 			fieldCurrentPage, page,
 			fieldResultsPerPage, resultsPerPage,
@@ -197,7 +197,7 @@ func (c *Client) ListCampaignsByURL(targetURL string, page, resultsPerPage int,
 	var response StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
-		fmt.Sprintf("%s/find?%s=%s&%s=%d&%s=%d&%s=%s&%s=%s",
+		fmt.Sprintf("/%s/find?%s=%s&%s=%d&%s=%d&%s=%s&%s=%s",
 			modelCampaign, fieldTargetURL, targetURL, fieldCurrentPage,
 			page, fieldResultsPerPage, resultsPerPage,
 			fieldSortBy, sortBy,
@@ -222,7 +222,7 @@ func (c *Client) CampaignsFeed(feedType feedType) (feed string, err error) {
 	var response StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
-		fmt.Sprintf("%s/feed?%s=%s", modelCampaign, fieldFeedType, feedType),
+		fmt.Sprintf("/%s/feed?%s=%s", modelCampaign, fieldFeedType, feedType),
 		nil, http.StatusOK,
 	); err != nil {
 		return

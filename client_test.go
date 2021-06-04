@@ -10,10 +10,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const (
-	testAPIKey = "TestAPIKey1234567"
-)
-
 // newTestClient will return a client for testing purposes
 func newTestClient() (*Client, error) {
 	// Create a Resty Client
@@ -23,7 +19,11 @@ func newTestClient() (*Client, error) {
 	httpmock.ActivateNonDefault(client.GetClient())
 
 	// Create a new client
-	newClient, err := NewClient(WithRequestTracing(), WithAPIKey(testAPIKey))
+	newClient, err := NewClient(
+		WithRequestTracing(),
+		WithAPIKey(testAPIKey),
+		WithEnvironment(EnvironmentDevelopment),
+	)
 	if err != nil {
 		return nil, err
 	}
@@ -193,9 +193,11 @@ func TestDefaultClientOptions(t *testing.T) {
 	options := defaultClientOptions()
 	assert.NotNil(t, options)
 
-	assert.Equal(t, defaultUserAgent, options.userAgent)
 	assert.Equal(t, defaultHTTPTimeout, options.httpTimeout)
 	assert.Equal(t, defaultRetryCount, options.retryCount)
+	assert.Equal(t, defaultUserAgent, options.userAgent)
+	assert.Equal(t, EnvironmentLive.apiURL, options.apiURL)
+	assert.Equal(t, EnvironmentLive.name, options.environment)
 	assert.Equal(t, false, options.requestTracing)
 }
 
