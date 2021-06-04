@@ -1,12 +1,10 @@
 package tonicpow
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"testing"
 
-	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -17,8 +15,28 @@ func newTestAdvertiserProfile() *AdvertiserProfile {
 		IconURL:     "https://i.imgur.com/HvVmeWI.png",
 		PublicGUID:  "a4503e16b25c29b9cf58eee3ad353410",
 		Name:        "TonicPow",
-		ID:          23,
-		UserID:      43,
+		ID:          testAdvertiserID,
+		UserID:      testUserID,
+	}
+}
+
+// newTestAppResults creates a dummy profile for testing
+func newTestAppResults(currentPage, resultsPerPage int) *AppResults {
+	return &AppResults{
+		Apps:           []*App{newTestApp()},
+		CurrentPage:    currentPage,
+		Results:        1,
+		ResultsPerPage: resultsPerPage,
+	}
+}
+
+// newTestApp creates a dummy profile for testing
+func newTestApp() *App {
+	return &App{
+		AdvertiserProfileID: testAdvertiserID,
+		ID:                  testAppID,
+		Name:                "TonicPow App",
+		UserID:              testUserID,
 	}
 }
 
@@ -91,7 +109,7 @@ func TestClient_GetAdvertiserProfile(t *testing.T) {
 		endpoint := fmt.Sprintf("%s/%s/details/%d", EnvironmentDevelopment.apiURL, modelAdvertiser, profile.ID)
 
 		apiError := &Error{
-			Code:        123,
+			Code:        400,
 			Data:        "field_name",
 			IPAddress:   "127.0.0.1",
 			Message:     "some error message",
@@ -137,7 +155,7 @@ func ExampleClient_GetAdvertiserProfile() {
 
 	// Get profile (using mocking response)
 	var profile *AdvertiserProfile
-	if profile, err = client.GetAdvertiserProfile(23); err != nil {
+	if profile, err = client.GetAdvertiserProfile(testAdvertiserID); err != nil {
 		fmt.Printf("error getting profile: " + err.Error())
 		return
 	}
@@ -219,7 +237,7 @@ func TestClient_UpdateAdvertiserProfile(t *testing.T) {
 		profile := newTestAdvertiserProfile()
 
 		apiError := &Error{
-			Code:        123,
+			Code:        400,
 			Data:        "field_name",
 			IPAddress:   "127.0.0.1",
 			Message:     "some error message",
@@ -316,6 +334,10 @@ func TestClient_ListCampaignsByAdvertiserProfile(t *testing.T) {
 		assert.NoError(t, err)
 		assert.NotNil(t, results)
 		assert.Equal(t, "TonicPow", results.Campaigns[0].AdvertiserProfile.Name)
+		assert.Equal(t, testCampaignID, results.Campaigns[0].ID)
+		assert.Equal(t, testGoalID, results.Campaigns[0].Goals[0].ID)
+		assert.Equal(t, testAdvertiserID, results.Campaigns[0].AdvertiserProfileID)
+		assert.Equal(t, testUserID, results.Campaigns[0].AdvertiserProfile.UserID)
 		assert.Equal(t, 1, len(results.Campaigns))
 		assert.Equal(t, 1, results.Results)
 		assert.Equal(t, 1, results.ResultsPerPage)
@@ -417,7 +439,7 @@ func TestClient_ListCampaignsByAdvertiserProfile(t *testing.T) {
 		)
 
 		apiError := &Error{
-			Code:        123,
+			Code:        400,
 			Data:        "field_name",
 			IPAddress:   "127.0.0.1",
 			Message:     "some error message",
@@ -439,13 +461,160 @@ func TestClient_ListCampaignsByAdvertiserProfile(t *testing.T) {
 	})
 }
 
-// mockResponseData is used for mocking the response
-func mockResponseData(method, endpoint string, statusCode int, model interface{}) error {
-	httpmock.Reset()
-	data, err := json.Marshal(model)
-	if err != nil {
-		return err
-	}
-	httpmock.RegisterResponder(method, endpoint, httpmock.NewStringResponder(statusCode, string(data)))
-	return nil
+// TestClient_ListAppsByAdvertiserProfile will test the method ListAppsByAdvertiserProfile()
+func TestClient_ListAppsByAdvertiserProfile(t *testing.T) {
+	// t.Parallel() (Cannot run in parallel - issues with overriding the mock client)
+
+	t.Run("list apps by advertiser (success)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		results := newTestAppResults(1, 25)
+
+		endpoint := fmt.Sprintf(
+			"%s/%s/%s/?id=%d&%s=%d&%s=%d&%s=%s&%s=%s",
+			EnvironmentDevelopment.apiURL,
+			modelAdvertiser, modelApp, testAdvertiserID,
+			fieldCurrentPage, 1,
+			fieldResultsPerPage, 25,
+			fieldSortBy, SortByFieldName,
+			fieldSortOrder, SortOrderDesc,
+		)
+
+		err = mockResponseData(http.MethodGet, endpoint, http.StatusOK, results)
+		assert.NoError(t, err)
+
+		results, err = client.ListAppsByAdvertiserProfile(
+			results.Apps[0].AdvertiserProfileID, 1, 25, SortByFieldName, SortOrderDesc,
+		)
+		assert.NoError(t, err)
+		assert.NotNil(t, results)
+		assert.Equal(t, "TonicPow App", results.Apps[0].Name)
+		assert.Equal(t, testAppID, results.Apps[0].ID)
+		assert.Equal(t, 1, len(results.Apps))
+		assert.Equal(t, 1, results.Results)
+		assert.Equal(t, 25, results.ResultsPerPage)
+		assert.Equal(t, 1, results.CurrentPage)
+	})
+
+	t.Run("missing profile id", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		results := newTestAppResults(2, 5)
+
+		endpoint := fmt.Sprintf(
+			"%s/%s/%s/?id=%d&%s=%d&%s=%d&%s=%s&%s=%s",
+			EnvironmentDevelopment.apiURL,
+			modelAdvertiser, modelApp, testAdvertiserID,
+			fieldCurrentPage, 2,
+			fieldResultsPerPage, 5,
+			fieldSortBy, SortByFieldName,
+			fieldSortOrder, SortOrderDesc,
+		)
+
+		err = mockResponseData(http.MethodGet, endpoint, http.StatusOK, results)
+		assert.NoError(t, err)
+
+		results, err = client.ListAppsByAdvertiserProfile(
+			0, 2, 5, SortByFieldName, SortOrderDesc,
+		)
+		assert.Error(t, err)
+		assert.Nil(t, results)
+	})
+
+	t.Run("invalid sort by field", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		results := newTestAppResults(1, 25)
+
+		endpoint := fmt.Sprintf(
+			"%s/%s/%s/?id=%d&%s=%d&%s=%d&%s=%s&%s=%s",
+			EnvironmentDevelopment.apiURL,
+			modelAdvertiser, modelApp, testAdvertiserID,
+			fieldCurrentPage, 1,
+			fieldResultsPerPage, 25,
+			fieldSortBy, SortByFieldName,
+			fieldSortOrder, SortOrderDesc,
+		)
+
+		err = mockResponseData(http.MethodGet, endpoint, http.StatusOK, results)
+		assert.NoError(t, err)
+
+		results, err = client.ListAppsByAdvertiserProfile(
+			results.Apps[0].AdvertiserProfileID, 1, 25, "bad_field", SortOrderDesc,
+		)
+		assert.Error(t, err)
+		assert.Nil(t, results)
+	})
+
+	t.Run("unexpected status code", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		results := newTestAppResults(1, 25)
+
+		endpoint := fmt.Sprintf(
+			"%s/%s/%s/?id=%d&%s=%d&%s=%d&%s=%s&%s=%s",
+			EnvironmentDevelopment.apiURL,
+			modelAdvertiser, modelApp, testAdvertiserID,
+			fieldCurrentPage, 1,
+			fieldResultsPerPage, 25,
+			fieldSortBy, SortByFieldName,
+			fieldSortOrder, SortOrderDesc,
+		)
+
+		err = mockResponseData(http.MethodGet, endpoint, http.StatusBadRequest, results)
+		assert.NoError(t, err)
+
+		results, err = client.ListAppsByAdvertiserProfile(
+			results.Apps[0].AdvertiserProfileID, 1, 25, SortByFieldName, SortOrderDesc,
+		)
+		assert.Error(t, err)
+		assert.Nil(t, results)
+	})
+
+	t.Run("api error", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		results := newTestAppResults(1, 25)
+
+		endpoint := fmt.Sprintf(
+			"%s/%s/%s/?id=%d&%s=%d&%s=%d&%s=%s&%s=%s",
+			EnvironmentDevelopment.apiURL,
+			modelAdvertiser, modelApp, testAdvertiserID,
+			fieldCurrentPage, 1,
+			fieldResultsPerPage, 25,
+			fieldSortBy, SortByFieldName,
+			fieldSortOrder, SortOrderDesc,
+		)
+
+		apiError := &Error{
+			Code:        400,
+			Data:        "field_name",
+			IPAddress:   "127.0.0.1",
+			Message:     "some error message",
+			Method:      http.MethodPut,
+			RequestGUID: "7f3d97a8fd67ff57861904df6118dcc8",
+			StatusCode:  http.StatusBadRequest,
+			URL:         endpoint,
+		}
+
+		err = mockResponseData(http.MethodGet, endpoint, http.StatusBadRequest, apiError)
+		assert.NoError(t, err)
+
+		results, err = client.ListAppsByAdvertiserProfile(
+			results.Apps[0].AdvertiserProfileID, 1, 25, SortByFieldName, SortOrderDesc,
+		)
+		assert.Error(t, err)
+		assert.Nil(t, results)
+		assert.Equal(t, apiError.Message, err.Error())
+	})
 }

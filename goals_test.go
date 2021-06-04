@@ -3,9 +3,9 @@ package tonicpow
 // newTestGoal will return a dummy example for tests
 func newTestGoal() *Goal {
 	return &Goal{
-		CampaignID:     23,
+		CampaignID:     testCampaignID,
 		Description:    "This is an example goal",
-		ID:             1,
+		ID:             testGoalID,
 		MaxPerPromoter: 1,
 		Name:           "example_goal",
 		PayoutRate:     1,

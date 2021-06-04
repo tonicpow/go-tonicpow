@@ -6,11 +6,11 @@ import (
 
 const (
 	// Config defaults
-	apiVersion         = "v1"
-	defaultHTTPTimeout = 10 * time.Second          // Default timeout for all GET requests in seconds
-	defaultRetryCount  = 2                         // Default retry count for HTTP requests
-	defaultUserAgent   = "go-tonicpow: " + version // Default user agent
-	version            = "v0.6.0"                  // go-tonicpow version
+	apiVersion         string = "v1"
+	defaultHTTPTimeout        = 10 * time.Second          // Default timeout for all GET requests in seconds
+	defaultRetryCount  int    = 2                         // Default retry count for HTTP requests
+	defaultUserAgent          = "go-tonicpow: " + version // Default user agent
+	version            string = "v0.6.0"                  // go-tonicpow version
 
 	// Field key names for various model requests
 	fieldAdvertiserProfileID = "advertiser_profile_id"
@@ -38,44 +38,44 @@ const (
 	fieldVisitorSessionGUID  = "tncpw_session"
 
 	// Model names (used for Request endpoints)
-	modelAdvertiser = "advertisers"
-	modelApp        = "apps"
-	modelCampaign   = "campaigns"
-	modelConversion = "conversions"
-	modelGoal       = "goals"
-	modelRates      = "rates"
+	modelAdvertiser string = "advertisers"
+	modelApp        string = "apps"
+	modelCampaign   string = "campaigns"
+	modelConversion string = "conversions"
+	modelGoal       string = "goals"
+	modelRates      string = "rates"
 
 	// Environment names
-	environmentDevelopmentAlias = "local"
-	environmentDevelopmentName  = "development"
-	environmentLiveAlias        = "production"
-	environmentLiveName         = "live"
-	environmentStagingAlias     = "beta"
-	environmentStagingName      = "staging"
+	environmentDevelopmentAlias string = "local"
+	environmentDevelopmentName  string = "development"
+	environmentLiveAlias        string = "production"
+	environmentLiveName         string = "live"
+	environmentStagingAlias     string = "beta"
+	environmentStagingName      string = "staging"
 
 	// SortByFieldBalance is for sorting results by field: balance
-	SortByFieldBalance = "balance"
+	SortByFieldBalance string = "balance"
 
 	// SortByFieldCreatedAt is for sorting results by field: created_at
-	SortByFieldCreatedAt = "created_at"
+	SortByFieldCreatedAt string = "created_at"
 
 	// SortByFieldName is for sorting results by field: name
-	SortByFieldName = "name"
+	SortByFieldName string = "name"
 
 	// SortByFieldLinksCreated is for sorting results by field: links_created
-	SortByFieldLinksCreated = "links_created"
+	SortByFieldLinksCreated string = "links_created"
 
 	// SortByFieldPaidClicks is for sorting results by field: paid_clicks
-	SortByFieldPaidClicks = "paid_clicks"
+	SortByFieldPaidClicks string = "paid_clicks"
 
 	// SortByFieldPayPerClick is for sorting results by field: pay_per_click_rate
-	SortByFieldPayPerClick = "pay_per_click_rate"
+	SortByFieldPayPerClick string = "pay_per_click_rate"
 
 	// SortOrderAsc is for returning the results in ascending order
-	SortOrderAsc = "asc"
+	SortOrderAsc string = "asc"
 
 	// SortOrderDesc is for returning the results in descending order
-	SortOrderDesc = "desc"
+	SortOrderDesc string = "desc"
 
 	// FeedTypeAtom is for using the feed type: Atom
 	FeedTypeAtom feedType = "atom"
