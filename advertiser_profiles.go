@@ -70,11 +70,10 @@ func (c *Client) UpdateAdvertiserProfile(profile *AdvertiserProfile) (err error)
 }
 
 // ListCampaignsByAdvertiserProfile will return a list of campaigns
-// This will return an Error if the campaign is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#98017e9a-37dd-4810-9483-b6c400572e0c
 func (c *Client) ListCampaignsByAdvertiserProfile(profileID uint64, page, resultsPerPage int,
-	sortBy, sortOrder string) (results *CampaignResults, err error) {
+	sortBy, sortOrder string) (campaigns *CampaignResults, err error) {
 
 	// Basic requirements
 	if profileID == 0 {
@@ -109,16 +108,15 @@ func (c *Client) ListCampaignsByAdvertiserProfile(profileID uint64, page, result
 	}
 
 	// Convert model response
-	err = json.Unmarshal(response.Body, &results)
+	err = json.Unmarshal(response.Body, &campaigns)
 	return
 }
 
 // ListAppsByAdvertiserProfile will return a list of apps
-// This will return an Error if the campaign is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#9c9fa8dc-3017-402e-8059-136b0eb85c2e
 func (c *Client) ListAppsByAdvertiserProfile(profileID uint64, page, resultsPerPage int,
-	sortBy, sortOrder string) (results *AppResults, err error) {
+	sortBy, sortOrder string) (apps *AppResults, err error) {
 
 	// Basic requirements
 	if profileID == 0 {
@@ -154,6 +152,6 @@ func (c *Client) ListAppsByAdvertiserProfile(profileID uint64, page, resultsPerP
 	}
 
 	// Convert model response
-	err = json.Unmarshal(response.Body, &results)
+	err = json.Unmarshal(response.Body, &apps)
 	return
 }
