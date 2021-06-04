@@ -18,11 +18,16 @@ func newTestClient() (*Client, error) {
 	// Get the underlying HTTP Client and set it to Mock
 	httpmock.ActivateNonDefault(client.GetClient())
 
+	// Add custom headers in request
+	headers := make(map[string][]string)
+	headers["custom_header_1"] = append(headers["custom_header_1"], "value_1")
+
 	// Create a new client
 	newClient, err := NewClient(
 		WithRequestTracing(),
 		WithAPIKey(testAPIKey),
 		WithEnvironment(EnvironmentDevelopment),
+		WithCustomHeaders(headers),
 	)
 	if err != nil {
 		return nil, err
@@ -37,10 +42,6 @@ func newTestClient() (*Client, error) {
 func TestNewClient(t *testing.T) {
 	t.Parallel()
 
-	// todo: test client
-	_, err := newTestClient()
-	assert.NoError(t, err)
-
 	t.Run("default client", func(t *testing.T) {
 		client, err := NewClient(WithAPIKey(testAPIKey))
 		assert.NoError(t, err)
@@ -51,6 +52,12 @@ func TestNewClient(t *testing.T) {
 		assert.Equal(t, false, client.options.requestTracing)
 		assert.Equal(t, EnvironmentLive.apiURL, client.options.apiURL)
 		assert.Equal(t, EnvironmentLive.name, client.options.environment)
+	})
+
+	t.Run("missing api key", func(t *testing.T) {
+		client, err := NewClient(WithAPIKey(""))
+		assert.Error(t, err)
+		assert.Nil(t, client)
 	})
 
 	t.Run("custom http client", func(t *testing.T) {
@@ -121,6 +128,14 @@ func TestNewClient(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, client.options.apiURL, EnvironmentDevelopment.apiURL)
 		assert.Equal(t, client.options.environment, environmentDevelopmentName)
+	})
+
+	t.Run("default no environment", func(t *testing.T) {
+		client, err := NewClient(WithAPIKey(testAPIKey), WithEnvironmentString(""))
+		assert.NotNil(t, client)
+		assert.NoError(t, err)
+		assert.Equal(t, client.options.apiURL, EnvironmentLive.apiURL)
+		assert.Equal(t, client.options.environment, environmentLiveName)
 	})
 }
 
