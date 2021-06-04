@@ -18,39 +18,44 @@ func (c *Campaign) permitFields() {
 	c.PublicGUID = ""
 }
 
-// CreateCampaign will make a new campaign
+// CreateCampaign will make a new campaign for the associated advertiser profile
 //
 // For more information: https://docs.tonicpow.com/#b67e92bf-a481-44f6-a31d-26e6e0c521b1
-func (c *Client) CreateCampaign(campaign *Campaign) (err error) {
+func (c *Client) CreateCampaign(campaign *Campaign) error {
 
 	// Basic requirements
 	if campaign.AdvertiserProfileID == 0 {
-		err = fmt.Errorf("missing required attribute: %s", fieldAdvertiserProfileID)
-		return
+		return fmt.Errorf("missing required attribute: %s", fieldAdvertiserProfileID)
+	} else if len(campaign.Title) == 0 {
+		return fmt.Errorf("missing required attribute: %s", fieldTitle)
+	} else if len(campaign.Description) == 0 {
+		return fmt.Errorf("missing required attribute: %s", fieldDescription)
+	} else if len(campaign.TargetURL) == 0 {
+		return fmt.Errorf("missing required attribute: %s", fieldTargetURL)
 	}
 
 	// Fire the Request
 	var response StandardResponse
+	var err error
 	if response, err = c.Request(
 		http.MethodPost,
 		"/"+modelCampaign,
-		nil, http.StatusCreated,
+		campaign, http.StatusCreated,
 	); err != nil {
-		return
+		return err
 	}
 
 	// Convert model response
-	err = json.Unmarshal(response.Body, &campaign)
-	return
+	return json.Unmarshal(response.Body, &campaign)
 }
 
-// GetCampaign will get an existing campaign
+// GetCampaign will get an existing campaign by ID
 // This will return an Error if the campaign is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#b827446b-be34-4678-b347-33c4f63dbf9e
 func (c *Client) GetCampaign(campaignID uint64) (campaign *Campaign, err error) {
 
-	// Must have an id
+	// Must have an ID
 	if campaignID == 0 {
 		err = fmt.Errorf("missing required attribute: %s", fieldID)
 		return
@@ -71,13 +76,13 @@ func (c *Client) GetCampaign(campaignID uint64) (campaign *Campaign, err error) 
 	return
 }
 
-// GetCampaignBySlug will get an existing campaign
+// GetCampaignBySlug will get an existing campaign by slug
 // This will return an Error if the campaign is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#b827446b-be34-4678-b347-33c4f63dbf9e
 func (c *Client) GetCampaignBySlug(slug string) (campaign *Campaign, err error) {
 
-	// Must have an id
+	// Must have a slug
 	if len(slug) == 0 {
 		err = fmt.Errorf("missing required attribute: %s", fieldSlug)
 		return
@@ -126,7 +131,27 @@ func (c *Client) UpdateCampaign(campaign *Campaign) (err error) {
 	return
 }
 
-// ListCampaigns will return a list of active campaigns
+// CampaignsFeed will return a feed of active campaigns
+// This will return an Error if no campaigns are found (404)
+//
+// For more information: https://docs.tonicpow.com/#b3fe69d3-24ba-4c2a-a485-affbb0a738de
+func (c *Client) CampaignsFeed(feedType feedType) (feed string, err error) {
+
+	// Fire the Request
+	var response StandardResponse
+	if response, err = c.Request(
+		http.MethodGet,
+		fmt.Sprintf("/%s/feed?%s=%s", modelCampaign, fieldFeedType, feedType),
+		nil, http.StatusOK,
+	); err != nil {
+		return
+	}
+
+	feed = string(response.Body)
+	return
+}
+
+// ListCampaigns will return a list of campaigns
 // This will return an Error if the campaign is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#c1b17be6-cb10-48b3-a519-4686961ff41c
@@ -168,7 +193,7 @@ func (c *Client) ListCampaigns(page, resultsPerPage int, sortBy, sortOrder, sear
 	return
 }
 
-// ListCampaignsByURL will return a list of active campaigns
+// ListCampaignsByURL will return a list of campaigns
 // This will return an Error if the url is not found (404)
 //
 // todo: update with list campaigns functionality
@@ -209,25 +234,5 @@ func (c *Client) ListCampaignsByURL(targetURL string, page, resultsPerPage int,
 	}
 
 	err = json.Unmarshal(response.Body, &results)
-	return
-}
-
-// CampaignsFeed will return a feed of active campaigns
-// This will return an Error if no campaigns are found (404)
-//
-// For more information: https://docs.tonicpow.com/#b3fe69d3-24ba-4c2a-a485-affbb0a738de
-func (c *Client) CampaignsFeed(feedType feedType) (feed string, err error) {
-
-	// Fire the Request
-	var response StandardResponse
-	if response, err = c.Request(
-		http.MethodGet,
-		fmt.Sprintf("/%s/feed?%s=%s", modelCampaign, fieldFeedType, feedType),
-		nil, http.StatusOK,
-	); err != nil {
-		return
-	}
-
-	feed = string(response.Body)
 	return
 }

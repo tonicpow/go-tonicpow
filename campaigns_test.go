@@ -1,5 +1,13 @@
 package tonicpow
 
+import (
+	"fmt"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
 // newTestCampaign will return a dummy example for tests
 func newTestCampaign() *Campaign {
 	return &Campaign{
@@ -55,5 +63,187 @@ func newTestCampaignResults(currentPage, resultsPerPage int) *CampaignResults {
 		CurrentPage:    currentPage,
 		Results:        1,
 		ResultsPerPage: resultsPerPage,
+	}
+}
+
+// TestClient_CreateCampaign will test the method CreateCampaign()
+func TestClient_CreateCampaign(t *testing.T) {
+	// t.Parallel() (Cannot run in parallel - issues with overriding the mock client)
+
+	t.Run("create a campaign (success)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		campaign := newTestCampaign()
+
+		endpoint := fmt.Sprintf("%s/%s", EnvironmentDevelopment.apiURL, modelCampaign)
+
+		err = mockResponseData(http.MethodPost, endpoint, http.StatusCreated, campaign)
+		assert.NoError(t, err)
+
+		err = client.CreateCampaign(campaign)
+		assert.NoError(t, err)
+		assert.NotNil(t, campaign)
+		assert.Equal(t, testCampaignID, campaign.ID)
+	})
+
+	t.Run("missing advertiser profile id", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		campaign := newTestCampaign()
+		campaign.AdvertiserProfileID = 0
+
+		endpoint := fmt.Sprintf("%s/%s", EnvironmentDevelopment.apiURL, modelCampaign)
+
+		err = mockResponseData(http.MethodPost, endpoint, http.StatusCreated, campaign)
+		assert.NoError(t, err)
+
+		err = client.CreateCampaign(campaign)
+		assert.Error(t, err)
+	})
+
+	t.Run("missing campaign title", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		campaign := newTestCampaign()
+		campaign.Title = ""
+
+		endpoint := fmt.Sprintf("%s/%s", EnvironmentDevelopment.apiURL, modelCampaign)
+
+		err = mockResponseData(http.MethodPost, endpoint, http.StatusCreated, campaign)
+		assert.NoError(t, err)
+
+		err = client.CreateCampaign(campaign)
+		assert.Error(t, err)
+	})
+
+	t.Run("missing campaign description", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		campaign := newTestCampaign()
+		campaign.Description = ""
+
+		endpoint := fmt.Sprintf("%s/%s", EnvironmentDevelopment.apiURL, modelCampaign)
+
+		err = mockResponseData(http.MethodPost, endpoint, http.StatusCreated, campaign)
+		assert.NoError(t, err)
+
+		err = client.CreateCampaign(campaign)
+		assert.Error(t, err)
+	})
+
+	t.Run("missing campaign target url", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		campaign := newTestCampaign()
+		campaign.TargetURL = ""
+
+		endpoint := fmt.Sprintf("%s/%s", EnvironmentDevelopment.apiURL, modelCampaign)
+
+		err = mockResponseData(http.MethodPost, endpoint, http.StatusCreated, campaign)
+		assert.NoError(t, err)
+
+		err = client.CreateCampaign(campaign)
+		assert.Error(t, err)
+	})
+
+	t.Run("error from api (status code)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		campaign := newTestCampaign()
+
+		endpoint := fmt.Sprintf("%s/%s", EnvironmentDevelopment.apiURL, modelCampaign)
+
+		err = mockResponseData(http.MethodPost, endpoint, http.StatusBadRequest, campaign)
+		assert.NoError(t, err)
+
+		err = client.CreateCampaign(campaign)
+		assert.Error(t, err)
+	})
+
+	t.Run("error from api (api error)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		campaign := newTestCampaign()
+
+		endpoint := fmt.Sprintf("%s/%s", EnvironmentDevelopment.apiURL, modelCampaign)
+
+		apiError := &Error{
+			Code:        400,
+			Data:        "field_name",
+			IPAddress:   "127.0.0.1",
+			Message:     "some error message",
+			Method:      http.MethodPut,
+			RequestGUID: "7f3d97a8fd67ff57861904df6118dcc8",
+			StatusCode:  http.StatusBadRequest,
+			URL:         endpoint,
+		}
+
+		err = mockResponseData(http.MethodPost, endpoint, http.StatusBadRequest, apiError)
+		assert.NoError(t, err)
+
+		err = client.CreateCampaign(campaign)
+		assert.Error(t, err)
+		assert.Equal(t, apiError.Message, err.Error())
+	})
+}
+
+// ExampleClient_CreateCampaign example using CreateCampaign()
+//
+// See more examples in /examples/
+func ExampleClient_CreateCampaign() {
+
+	// Load the client (using test client for example only)
+	client, err := newTestClient()
+	if err != nil {
+		fmt.Printf("error loading client: %s", err.Error())
+		return
+	}
+
+	// For mocking
+	responseCampaign := newTestCampaign()
+
+	// Mock response (for example only)
+	_ = mockResponseData(
+		http.MethodPost,
+		fmt.Sprintf("%s/%s", EnvironmentDevelopment.apiURL, modelCampaign),
+		http.StatusCreated,
+		responseCampaign,
+	)
+
+	// Create campaign (using mocking response)
+	if err = client.CreateCampaign(responseCampaign); err != nil {
+		fmt.Printf("error creating campaign: " + err.Error())
+		return
+	}
+	fmt.Printf("created campaign: %s", responseCampaign.Title)
+	// Output:created campaign: TonicPow
+}
+
+// BenchmarkClient_CreateCampaign benchmarks the method CreateCampaign()
+func BenchmarkClient_CreateCampaign(b *testing.B) {
+	client, _ := newTestClient()
+	campaign := newTestCampaign()
+	_ = mockResponseData(
+		http.MethodPost,
+		fmt.Sprintf("%s/%s", EnvironmentDevelopment.apiURL, modelCampaign),
+		http.StatusCreated,
+		campaign,
+	)
+	for i := 0; i < b.N; i++ {
+		_ = client.CreateCampaign(campaign)
 	}
 }

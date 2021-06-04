@@ -21,6 +21,7 @@ const (
 	fieldCurrentPage         = "current_page"
 	fieldCustomDimensions    = "custom_dimensions"
 	fieldDelayInMinutes      = "delay_in_minutes"
+	fieldDescription         = "description"
 	fieldExpired             = "expired"
 	fieldFeedType            = "feed_type"
 	fieldGoalID              = "goal_id"
@@ -34,6 +35,7 @@ const (
 	fieldSortBy              = "sort_by"
 	fieldSortOrder           = "sort_order"
 	fieldTargetURL           = "target_url"
+	fieldTitle               = "title"
 	fieldUserID              = "user_id"
 	fieldVisitorSessionGUID  = "tncpw_session"
 

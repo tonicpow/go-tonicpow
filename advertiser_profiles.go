@@ -19,7 +19,7 @@ func (a *AdvertiserProfile) permitFields() {
 // For more information: https://docs.tonicpow.com/#b3a62d35-7778-4314-9321-01f5266c3b51
 func (c *Client) GetAdvertiserProfile(profileID uint64) (profile *AdvertiserProfile, err error) {
 
-	// Must have an id
+	// Must have an ID
 	if profileID == 0 {
 		err = fmt.Errorf("missing field: %s", fieldID)
 		return
