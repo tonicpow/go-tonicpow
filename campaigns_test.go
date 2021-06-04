@@ -66,6 +66,76 @@ func newTestCampaignResults(currentPage, resultsPerPage int) *CampaignResults {
 	}
 }
 
+// newTestCampaignFeedRSS will return a dummy example for tests
+func newTestCampaignFeedRSS() string {
+	return `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>TonicPow</title>
+    <link>https://tonicpow.com</link>
+    <description>List of active campaigns, ordered by newest first</description>
+    <managingEditor>support@tonicpow.com (tonicpow)</managingEditor>
+    <pubDate>Fri, 04 Jun 2021 17:20:28 +0000</pubDate>
+    <item>
+      <title>TonicPow</title>
+      <link>https://tonicpow.com/campaign/tonicpow</link>
+      <description>Earn BSV for sharing things you like. Offer BSV for sharing your product or service.</description>
+      <author>TonicPow</author>
+      <pubDate>Thu, 05 Sep 2019 01:50:06 +0000</pubDate>
+    </item>
+  </channel>
+</rss>`
+}
+
+// newTestCampaignFeedAtom will return a dummy example for tests
+func newTestCampaignFeedAtom() string {
+	return `<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
+  <title>TonicPow</title>
+  <id>https://tonicpow.com</id>
+  <updated>2021-06-04T17:23:38Z</updated>
+  <subtitle>List of active campaigns, ordered by newest first</subtitle>
+  <link href="https://tonicpow.com"></link>
+  <author>
+    <name>tonicpow</name>
+    <email>support@tonicpow.com</email>
+  </author>
+  <entry>
+    <title>TonicPow</title>
+    <updated>2019-09-05T01:50:06Z</updated>
+    <id>tag:tonicpow.com,2019-09-05:/campaign/tonicpow</id>
+    <link href="https://tonicpow.com/campaign/tonicpow" rel="alternate"></link>
+    <summary type="html">Earn BSV for sharing things you like. Offer BSV for sharing your product or service.</summary>
+    <author>
+      <name>TonicPow</name>
+    </author>
+  </entry>
+</feed>`
+}
+
+// newTestCampaignFeedJSON will return a dummy example for tests
+func newTestCampaignFeedJSON() string {
+	return `{
+  "version": "https://jsonfeed.org/version/1",
+  "title": "TonicPow",
+  "home_page_url": "https://tonicpow.com",
+  "description": "List of active campaigns, ordered by newest first",
+  "author": {
+    "name": "tonicpow"
+  },
+  "items": [
+    {
+      "id": "",
+      "url": "https://tonicpow.com/campaign/tonicpow",
+      "title": "TonicPow",
+      "summary": "Earn BSV for sharing things you like. Offer BSV for sharing your product or service.",
+      "date_published": "2019-09-05T01:50:06Z",
+      "author": {
+        "name": "TonicPow"
+      }
+    }
+  ]
+}`
+}
+
 // TestClient_CreateCampaign will test the method CreateCampaign()
 func TestClient_CreateCampaign(t *testing.T) {
 	// t.Parallel() (Cannot run in parallel - issues with overriding the mock client)
@@ -944,6 +1014,33 @@ func TestClient_ListCampaignsByURL(t *testing.T) {
 		assert.Nil(t, newResults)
 	})
 
+	t.Run("invalid target url", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		results := newTestCampaignResults(1, 25)
+
+		endpoint := fmt.Sprintf("%s/%s/list?%s=%s&%s=%d&%s=%d&%s=%s&%s=%s",
+			EnvironmentDevelopment.apiURL, modelCampaign,
+			fieldTargetURL, testCampaignTargetURL,
+			fieldCurrentPage, 2,
+			fieldResultsPerPage, 5,
+			fieldSortBy, SortByFieldCreatedAt,
+			fieldSortOrder, SortOrderDesc,
+		)
+
+		err = mockResponseData(http.MethodGet, endpoint, http.StatusOK, results)
+		assert.NoError(t, err)
+
+		var newResults *CampaignResults
+		newResults, err = client.ListCampaignsByURL(
+			"", 2, 5, SortByFieldCreatedAt, SortOrderDesc,
+		)
+		assert.Error(t, err)
+		assert.Nil(t, newResults)
+	})
+
 	t.Run("error from api (status code)", func(t *testing.T) {
 		client, err := newTestClient()
 		assert.NoError(t, err)
@@ -1005,6 +1102,124 @@ func TestClient_ListCampaignsByURL(t *testing.T) {
 		)
 		assert.Error(t, err)
 		assert.Nil(t, newResults)
+		assert.Equal(t, apiError.Message, err.Error())
+	})
+}
+
+// TestClient_CampaignsFeed will test the method CampaignsFeed()
+func TestClient_CampaignsFeed(t *testing.T) {
+	// t.Parallel() (Cannot run in parallel - issues with overriding the mock client)
+
+	t.Run("campaigns feeds (rss success)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		results := newTestCampaignFeedRSS()
+
+		endpoint := fmt.Sprintf(
+			"%s/%s/feed/?%s=%s", EnvironmentDevelopment.apiURL,
+			modelCampaign, fieldFeedType, FeedTypeRSS,
+		)
+
+		mockResponseFeed(endpoint, http.StatusOK, results)
+
+		var feedResults string
+		feedResults, err = client.CampaignsFeed(FeedTypeRSS)
+		assert.NoError(t, err)
+		assert.Equal(t, results, feedResults)
+	})
+
+	t.Run("campaigns feeds (atom success)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		results := newTestCampaignFeedAtom()
+
+		endpoint := fmt.Sprintf(
+			"%s/%s/feed/?%s=%s", EnvironmentDevelopment.apiURL,
+			modelCampaign, fieldFeedType, FeedTypeAtom,
+		)
+
+		mockResponseFeed(endpoint, http.StatusOK, results)
+
+		var feedResults string
+		feedResults, err = client.CampaignsFeed(FeedTypeAtom)
+		assert.NoError(t, err)
+		assert.Equal(t, results, feedResults)
+	})
+
+	t.Run("campaigns feeds (json success)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		results := newTestCampaignFeedJSON()
+
+		endpoint := fmt.Sprintf(
+			"%s/%s/feed/?%s=%s", EnvironmentDevelopment.apiURL,
+			modelCampaign, fieldFeedType, FeedTypeJSON,
+		)
+
+		mockResponseFeed(endpoint, http.StatusOK, results)
+
+		var feedResults string
+		feedResults, err = client.CampaignsFeed(FeedTypeJSON)
+		assert.NoError(t, err)
+		assert.Equal(t, results, feedResults)
+	})
+
+	t.Run("error from api (status code)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		results := newTestCampaignFeedJSON()
+
+		endpoint := fmt.Sprintf(
+			"%s/%s/feed/?%s=%s", EnvironmentDevelopment.apiURL,
+			modelCampaign, fieldFeedType, FeedTypeJSON,
+		)
+
+		mockResponseFeed(endpoint, http.StatusBadRequest, results)
+
+		var feedResults string
+		feedResults, err = client.CampaignsFeed(FeedTypeJSON)
+		assert.Error(t, err)
+		assert.Equal(t, "", feedResults)
+	})
+
+	t.Run("error from api (api error)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		// results := newTestCampaignFeedJSON()
+
+		endpoint := fmt.Sprintf(
+			"%s/%s/feed/?%s=%s", EnvironmentDevelopment.apiURL,
+			modelCampaign, fieldFeedType, FeedTypeJSON,
+		)
+
+		apiError := &Error{
+			Code:        400,
+			Data:        "field_name",
+			IPAddress:   "127.0.0.1",
+			Message:     "some error message",
+			Method:      http.MethodPut,
+			RequestGUID: "7f3d97a8fd67ff57861904df6118dcc8",
+			StatusCode:  http.StatusBadRequest,
+			URL:         endpoint,
+		}
+
+		err = mockResponseData(http.MethodGet, endpoint, http.StatusBadRequest, apiError)
+		assert.NoError(t, err)
+
+		var feedResults string
+		feedResults, err = client.CampaignsFeed(FeedTypeJSON)
+		assert.Error(t, err)
+		assert.Equal(t, "", feedResults)
 		assert.Equal(t, apiError.Message, err.Error())
 	})
 }

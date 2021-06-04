@@ -2,6 +2,7 @@ package tonicpow
 
 import (
 	"encoding/json"
+	"net/http"
 	"testing"
 
 	"github.com/jarcoal/httpmock"
@@ -48,4 +49,10 @@ func mockResponseData(method, endpoint string, statusCode int, model interface{}
 	}
 	httpmock.RegisterResponder(method, endpoint, httpmock.NewStringResponder(statusCode, string(data)))
 	return nil
+}
+
+// mockResponseFeed is used for mocking the response
+func mockResponseFeed(endpoint string, statusCode int, feedResults string) {
+	httpmock.Reset()
+	httpmock.RegisterResponder(http.MethodGet, endpoint, httpmock.NewStringResponder(statusCode, feedResults))
 }
