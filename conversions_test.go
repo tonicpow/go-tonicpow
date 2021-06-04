@@ -407,3 +407,133 @@ func BenchmarkClient_GetConversion(b *testing.B) {
 		_, _ = client.GetConversion(conversion.ID)
 	}
 }
+
+// TestClient_CancelConversion will test the method CancelConversion()
+func TestClient_CancelConversion(t *testing.T) {
+	// t.Parallel() (Cannot run in parallel - issues with overriding the mock client)
+
+	t.Run("cancel a conversion (success)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		conversion := newTestConversion()
+
+		endpoint := fmt.Sprintf("%s/%s/cancel", EnvironmentDevelopment.apiURL, modelConversion)
+
+		err = mockResponseData(http.MethodPut, endpoint, http.StatusOK, conversion)
+		assert.NoError(t, err)
+
+		conversion, err = client.CancelConversion(conversion.ID, "my reason")
+		assert.NoError(t, err)
+		assert.NotNil(t, conversion)
+	})
+
+	t.Run("missing conversion id", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		conversion := newTestConversion()
+		conversion.ID = 0
+
+		endpoint := fmt.Sprintf("%s/%s/cancel", EnvironmentDevelopment.apiURL, modelConversion)
+
+		err = mockResponseData(http.MethodPut, endpoint, http.StatusOK, conversion)
+		assert.NoError(t, err)
+
+		_, err = client.CancelConversion(conversion.ID, "my reason")
+		assert.Error(t, err)
+	})
+
+	t.Run("error from api (status code)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		conversion := newTestConversion()
+
+		endpoint := fmt.Sprintf("%s/%s/cancel", EnvironmentDevelopment.apiURL, modelConversion)
+
+		err = mockResponseData(http.MethodPut, endpoint, http.StatusBadRequest, conversion)
+		assert.NoError(t, err)
+
+		_, err = client.CancelConversion(conversion.ID, "my reason")
+		assert.Error(t, err)
+	})
+
+	t.Run("error from api (api error)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		conversion := newTestConversion()
+
+		endpoint := fmt.Sprintf("%s/%s/cancel", EnvironmentDevelopment.apiURL, modelConversion)
+
+		apiError := &Error{
+			Code:        400,
+			Data:        "field_name",
+			IPAddress:   "127.0.0.1",
+			Message:     "some error message",
+			Method:      http.MethodPut,
+			RequestGUID: "7f3d97a8fd67ff57861904df6118dcc8",
+			StatusCode:  http.StatusBadRequest,
+			URL:         endpoint,
+		}
+
+		err = mockResponseData(http.MethodPut, endpoint, http.StatusBadRequest, apiError)
+		assert.NoError(t, err)
+
+		_, err = client.CancelConversion(conversion.ID, "my reason")
+		assert.Error(t, err)
+		assert.Equal(t, apiError.Message, err.Error())
+	})
+}
+
+// ExampleClient_CancelConversion example using CancelConversion()
+//
+// See more examples in /examples/
+func ExampleClient_CancelConversion() {
+
+	// Load the client (using test client for example only)
+	client, err := newTestClient()
+	if err != nil {
+		fmt.Printf("error loading client: %s", err.Error())
+		return
+	}
+
+	// Mock response (for example only)
+	responseConversion := newTestConversion()
+	responseConversion.Status = "processed"
+	_ = mockResponseData(
+		http.MethodPut,
+		fmt.Sprintf("%s/%s/cancel", EnvironmentDevelopment.apiURL, modelConversion),
+		http.StatusOK,
+		responseConversion,
+	)
+
+	// Update campaign (using mocking response)
+	_, err = client.CancelConversion(responseConversion.ID, "my reason")
+	if err != nil {
+		fmt.Printf("error canceling conversion: " + err.Error())
+		return
+	}
+	fmt.Printf("conversion: %s", responseConversion.Status)
+	// Output:conversion: processed
+}
+
+// BenchmarkClient_CancelConversion benchmarks the method CancelConversion()
+func BenchmarkClient_CancelConversion(b *testing.B) {
+	client, _ := newTestClient()
+	conversion := newTestConversion()
+	_ = mockResponseData(
+		http.MethodPut,
+		fmt.Sprintf("%s/%s/cancel", EnvironmentDevelopment.apiURL, modelConversion),
+		http.StatusOK,
+		conversion,
+	)
+	for i := 0; i < b.N; i++ {
+		_, _ = client.CancelConversion(conversion.ID, "my reason")
+	}
+}

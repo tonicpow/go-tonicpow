@@ -190,18 +190,16 @@ func (c *Client) CancelConversion(conversionID uint64, cancelReason string) (con
 		return
 	}
 
-	// Start the post data
-	data := map[string]string{
-		fieldID:     fmt.Sprintf("%d", conversionID),
-		fieldReason: cancelReason,
-	}
-
 	// Fire the Request
 	var response StandardResponse
 	if response, err = c.Request(
 		http.MethodPut,
 		fmt.Sprintf("/%s/cancel", modelConversion),
-		data, http.StatusOK,
+		map[string]string{
+			fieldID:     fmt.Sprintf("%d", conversionID),
+			fieldReason: cancelReason,
+		},
+		http.StatusOK,
 	); err != nil {
 		return
 	}
