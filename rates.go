@@ -11,7 +11,7 @@ import (
 // For more information: https://docs.tonicpow.com/#71b8b7fc-317a-4e68-bd2a-5b0da012361c
 func (c *Client) GetCurrentRate(currency string, customAmount float64) (rate *Rate, err error) {
 
-	// Must have an currency
+	// Currency is required
 	if len(currency) == 0 {
 		err = fmt.Errorf("missing required attribute: %s", fieldCurrency)
 		return

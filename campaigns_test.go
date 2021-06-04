@@ -555,3 +555,135 @@ func BenchmarkClient_GetCampaignBySlug(b *testing.B) {
 		_, _ = client.GetCampaignBySlug(campaign.Slug)
 	}
 }
+
+// TestClient_UpdateCampaign will test the method UpdateCampaign()
+func TestClient_UpdateCampaign(t *testing.T) {
+	// t.Parallel() (Cannot run in parallel - issues with overriding the mock client)
+
+	t.Run("update a campaign (success)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		campaign := newTestCampaign()
+		campaign.Title = "TonicPow Title"
+
+		endpoint := fmt.Sprintf("%s/%s", EnvironmentDevelopment.apiURL, modelCampaign)
+
+		err = mockResponseData(http.MethodPut, endpoint, http.StatusOK, campaign)
+		assert.NoError(t, err)
+
+		err = client.UpdateCampaign(campaign)
+		assert.NoError(t, err)
+		assert.NotNil(t, campaign)
+		assert.Equal(t, "TonicPow Title", campaign.Title)
+	})
+
+	t.Run("missing campaign id", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		campaign := newTestCampaign()
+		campaign.ID = 0
+
+		endpoint := fmt.Sprintf("%s/%s", EnvironmentDevelopment.apiURL, modelCampaign)
+
+		err = mockResponseData(http.MethodPut, endpoint, http.StatusOK, campaign)
+		assert.NoError(t, err)
+
+		err = client.UpdateCampaign(campaign)
+		assert.Error(t, err)
+	})
+
+	t.Run("error from api (status code)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		campaign := newTestCampaign()
+
+		endpoint := fmt.Sprintf("%s/%s", EnvironmentDevelopment.apiURL, modelCampaign)
+
+		err = mockResponseData(http.MethodPut, endpoint, http.StatusBadRequest, campaign)
+		assert.NoError(t, err)
+
+		err = client.UpdateCampaign(campaign)
+		assert.Error(t, err)
+	})
+
+	t.Run("error from api (api error)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		campaign := newTestCampaign()
+
+		endpoint := fmt.Sprintf("%s/%s", EnvironmentDevelopment.apiURL, modelCampaign)
+
+		apiError := &Error{
+			Code:        400,
+			Data:        "field_name",
+			IPAddress:   "127.0.0.1",
+			Message:     "some error message",
+			Method:      http.MethodPut,
+			RequestGUID: "7f3d97a8fd67ff57861904df6118dcc8",
+			StatusCode:  http.StatusBadRequest,
+			URL:         endpoint,
+		}
+
+		err = mockResponseData(http.MethodPut, endpoint, http.StatusBadRequest, apiError)
+		assert.NoError(t, err)
+
+		err = client.UpdateCampaign(campaign)
+		assert.Error(t, err)
+		assert.Equal(t, apiError.Message, err.Error())
+	})
+}
+
+// ExampleClient_UpdateCampaign example using UpdateCampaign()
+//
+// See more examples in /examples/
+func ExampleClient_UpdateCampaign() {
+
+	// Load the client (using test client for example only)
+	client, err := newTestClient()
+	if err != nil {
+		fmt.Printf("error loading client: %s", err.Error())
+		return
+	}
+
+	// Mock response (for example only)
+	responseCampaign := newTestCampaign()
+	responseCampaign.Title = "TonicPow Title"
+	_ = mockResponseData(
+		http.MethodPut,
+		fmt.Sprintf("%s/%s", EnvironmentDevelopment.apiURL, modelCampaign),
+		http.StatusOK,
+		responseCampaign,
+	)
+
+	// Get campaign (using mocking response)
+	err = client.UpdateCampaign(responseCampaign)
+	if err != nil {
+		fmt.Printf("error updating campaign: " + err.Error())
+		return
+	}
+	fmt.Printf("campaign: %s", responseCampaign.Title)
+	// Output:campaign: TonicPow Title
+}
+
+// BenchmarkClient_UpdateCampaign benchmarks the method UpdateCampaign()
+func BenchmarkClient_UpdateCampaign(b *testing.B) {
+	client, _ := newTestClient()
+	campaign := newTestCampaign()
+	_ = mockResponseData(
+		http.MethodPut,
+		fmt.Sprintf("%s/%s", EnvironmentDevelopment.apiURL, modelCampaign),
+		http.StatusOK,
+		campaign,
+	)
+	for i := 0; i < b.N; i++ {
+		_ = client.UpdateCampaign(campaign)
+	}
+}
