@@ -269,3 +269,141 @@ func BenchmarkClient_CreateConversion(b *testing.B) {
 		)
 	}
 }
+
+// TestClient_GetConversion will test the method GetConversion()
+func TestClient_GetConversion(t *testing.T) {
+	// t.Parallel() (Cannot run in parallel - issues with overriding the mock client)
+
+	t.Run("get a conversion (success)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		conversion := newTestConversion()
+
+		endpoint := fmt.Sprintf("%s/%s/details/%d", EnvironmentDevelopment.apiURL, modelConversion, conversion.ID)
+
+		err = mockResponseData(http.MethodGet, endpoint, http.StatusOK, conversion)
+		assert.NoError(t, err)
+
+		var newConversion *Conversion
+		newConversion, err = client.GetConversion(conversion.ID)
+		assert.NoError(t, err)
+		assert.NotNil(t, newConversion)
+		assert.Equal(t, testConversionID, newConversion.ID)
+	})
+
+	t.Run("missing conversion id", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		conversion := newTestConversion()
+		conversion.ID = 0
+
+		endpoint := fmt.Sprintf("%s/%s/details/%d", EnvironmentDevelopment.apiURL, modelConversion, conversion.ID)
+
+		err = mockResponseData(http.MethodGet, endpoint, http.StatusOK, conversion)
+		assert.NoError(t, err)
+
+		var newConversion *Conversion
+		newConversion, err = client.GetConversion(conversion.ID)
+		assert.Error(t, err)
+		assert.Nil(t, newConversion)
+	})
+
+	t.Run("error from api (status code)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		conversion := newTestConversion()
+
+		endpoint := fmt.Sprintf("%s/%s/details/%d", EnvironmentDevelopment.apiURL, modelConversion, conversion.ID)
+
+		err = mockResponseData(http.MethodGet, endpoint, http.StatusBadRequest, conversion)
+		assert.NoError(t, err)
+
+		var newConversion *Conversion
+		newConversion, err = client.GetConversion(conversion.ID)
+		assert.Error(t, err)
+		assert.Nil(t, newConversion)
+	})
+
+	t.Run("error from api (api error)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		conversion := newTestConversion()
+
+		endpoint := fmt.Sprintf("%s/%s/details/%d", EnvironmentDevelopment.apiURL, modelConversion, conversion.ID)
+
+		apiError := &Error{
+			Code:        400,
+			Data:        "field_name",
+			IPAddress:   "127.0.0.1",
+			Message:     "some error message",
+			Method:      http.MethodPut,
+			RequestGUID: "7f3d97a8fd67ff57861904df6118dcc8",
+			StatusCode:  http.StatusBadRequest,
+			URL:         endpoint,
+		}
+
+		err = mockResponseData(http.MethodGet, endpoint, http.StatusBadRequest, apiError)
+		assert.NoError(t, err)
+
+		var newConversion *Conversion
+		newConversion, err = client.GetConversion(conversion.ID)
+		assert.Error(t, err)
+		assert.Nil(t, newConversion)
+		assert.Equal(t, apiError.Message, err.Error())
+	})
+}
+
+// ExampleClient_GetConversion example using GetConversion()
+//
+// See more examples in /examples/
+func ExampleClient_GetConversion() {
+
+	// Load the client (using test client for example only)
+	client, err := newTestClient()
+	if err != nil {
+		fmt.Printf("error loading client: %s", err.Error())
+		return
+	}
+
+	// Mock response (for example only)
+	responseConversion := newTestConversion()
+	_ = mockResponseData(
+		http.MethodGet,
+		fmt.Sprintf("%s/%s/details/%d", EnvironmentDevelopment.apiURL, modelConversion, responseConversion.ID),
+		http.StatusOK,
+		responseConversion,
+	)
+
+	// Create conversion (using mocking response)
+	var conversion *Conversion
+	conversion, err = client.GetConversion(responseConversion.ID)
+	if err != nil {
+		fmt.Printf("error getting conversion: " + err.Error())
+		return
+	}
+	fmt.Printf("conversion: %d", conversion.ID)
+	// Output:conversion: 99
+}
+
+// BenchmarkClient_GetConversion benchmarks the method GetConversion()
+func BenchmarkClient_GetConversion(b *testing.B) {
+	client, _ := newTestClient()
+	conversion := newTestConversion()
+	_ = mockResponseData(
+		http.MethodGet,
+		fmt.Sprintf("%s/%s/details/%d", EnvironmentDevelopment.apiURL, modelConversion, conversion.ID),
+		http.StatusOK,
+		conversion,
+	)
+	for i := 0; i < b.N; i++ {
+		_, _ = client.GetConversion(conversion.ID)
+	}
+}

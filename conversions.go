@@ -159,7 +159,7 @@ func (c *Client) CreateConversion(opts ...ConversionOps) (conversion *Conversion
 // For more information: https://docs.tonicpow.com/#fce465a1-d8d5-442d-be22-95169170167e
 func (c *Client) GetConversion(conversionID uint64) (conversion *Conversion, err error) {
 
-	// Must have an id
+	// Must have an ID
 	if conversionID == 0 {
 		err = fmt.Errorf("missing required attribute: %s", fieldID)
 		return
@@ -184,7 +184,7 @@ func (c *Client) GetConversion(conversionID uint64) (conversion *Conversion, err
 // For more information: https://docs.tonicpow.com/#e650b083-bbb4-4ff7-9879-c14b1ab3f753
 func (c *Client) CancelConversion(conversionID uint64, cancelReason string) (conversion *Conversion, err error) {
 
-	// Must have an id
+	// Must have an ID
 	if conversionID == 0 {
 		err = fmt.Errorf("missing required attribute: %s", fieldID)
 		return
