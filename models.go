@@ -150,11 +150,7 @@ type Goal struct {
 //
 // For more information: https://docs.tonicpow.com/#fb00736e-61b9-4ec9-acaf-e3f9bb046c89
 type Rate struct {
-	Currency            string  `json:"currency"`
-	CurrencyAmount      float64 `json:"currency_amount"`
-	CurrencyLastUpdated string  `json:"currency_last_updated,omitempty"`
-	CurrencyName        string  `json:"currency_name,omitempty"`
-	Price               float64 `json:"price"`
-	PriceInSatoshis     int64   `json:"price_in_satoshis"`
-	RateLastUpdated     string  `json:"rate_last_updated,omitempty"`
+	Currency        string  `json:"currency"`
+	CurrencyAmount  float64 `json:"currency_amount"`
+	PriceInSatoshis int64   `json:"price_in_satoshis"`
 }

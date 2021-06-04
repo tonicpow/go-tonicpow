@@ -17,6 +17,7 @@ const (
 	testCampaignID        uint64 = 23
 	testCampaignTargetURL string = "https://tonicpow.com"
 	testGoalID            uint64 = 13
+	testRateCurrency      string = "usd"
 	testUserID            uint64 = 43
 )
 
