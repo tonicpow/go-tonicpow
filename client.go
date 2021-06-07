@@ -125,7 +125,7 @@ func (c *Client) GetEnvironment() string {
 	return c.options.environment
 }
 
-// defaultClientOptions will return an Options struct with the default settings
+// defaultClientOptions will return a clientOptions struct with the default settings
 //
 // Useful for starting with the default and then modifying as needed
 func defaultClientOptions() (opts *clientOptions) {
@@ -144,7 +144,7 @@ func defaultClientOptions() (opts *clientOptions) {
 // NewClient creates a new client for all TonicPow requests
 //
 // If no options are given, it will use the DefaultClientOptions()
-// If no client is supplied it will use a default Resty HTTP client
+// If there is no client is supplied, it will use a default Resty HTTP client.
 func NewClient(opts ...ClientOps) (*Client, error) {
 	defaults := defaultClientOptions()
 
@@ -178,7 +178,7 @@ func (c *Client) Request(httpMethod string, requestEndpoint string,
 	// Set the user agent
 	req := c.httpClient.R().SetHeader("User-Agent", c.options.userAgent)
 
-	// Set the body if (PUT || POST || PATCH)
+	// Set the body if (PUT || POST)
 	if httpMethod != http.MethodGet && httpMethod != http.MethodDelete {
 		var j []byte
 		if j, err = json.Marshal(data); err != nil {
@@ -208,21 +208,16 @@ func (c *Client) Request(httpMethod string, requestEndpoint string,
 	var resp *resty.Response
 	switch httpMethod {
 	case http.MethodPost:
-		if resp, err = req.Post(c.options.apiURL + requestEndpoint); err != nil {
-			return
-		}
+		resp, err = req.Post(c.options.apiURL + requestEndpoint)
 	case http.MethodPut:
-		if resp, err = req.Put(c.options.apiURL + requestEndpoint); err != nil {
-			return
-		}
+		resp, err = req.Put(c.options.apiURL + requestEndpoint)
 	case http.MethodDelete:
-		if resp, err = req.Delete(c.options.apiURL + requestEndpoint); err != nil {
-			return
-		}
+		resp, err = req.Delete(c.options.apiURL + requestEndpoint)
 	case http.MethodGet:
-		if resp, err = req.Get(c.options.apiURL + requestEndpoint); err != nil {
-			return
-		}
+		resp, err = req.Get(c.options.apiURL + requestEndpoint)
+	}
+	if err != nil {
+		return
 	}
 
 	// Tracing enabled?

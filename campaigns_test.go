@@ -775,7 +775,7 @@ func TestClient_ListCampaigns(t *testing.T) {
 			fieldCurrentPage, 1,
 			fieldResultsPerPage, 25,
 			fieldSortBy, SortByFieldBalance,
-			fieldSortOrder, SortOrderDesc,
+			fieldSortOrder, SortOrderAsc,
 			fieldSearchQuery, "",
 			fieldMinimumBalance, 0,
 			fieldExpired, false,
@@ -786,7 +786,7 @@ func TestClient_ListCampaigns(t *testing.T) {
 
 		var newResults *CampaignResults
 		newResults, err = client.ListCampaigns(
-			1, 25, SortByFieldBalance, SortOrderDesc, "", 0, false,
+			1, 25, SortByFieldBalance, SortOrderAsc, "", 0, false,
 		)
 		assert.NoError(t, err)
 		assert.NotNil(t, newResults)
