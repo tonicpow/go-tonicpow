@@ -38,9 +38,11 @@ func TestClient_CreateGoal(t *testing.T) {
 		err = mockResponseData(http.MethodPost, endpoint, http.StatusCreated, goal)
 		assert.NoError(t, err)
 
-		err = client.CreateGoal(goal)
+		var response *StandardResponse
+		response, err = client.CreateGoal(goal)
 		assert.NoError(t, err)
 		assert.NotNil(t, goal)
+		assert.NotNil(t, response)
 		assert.Equal(t, testGoalID, goal.ID)
 	})
 
@@ -57,8 +59,10 @@ func TestClient_CreateGoal(t *testing.T) {
 		err = mockResponseData(http.MethodPost, endpoint, http.StatusCreated, goal)
 		assert.NoError(t, err)
 
-		err = client.CreateGoal(goal)
+		var response *StandardResponse
+		response, err = client.CreateGoal(goal)
 		assert.Error(t, err)
+		assert.Nil(t, response)
 	})
 
 	t.Run("missing goal name", func(t *testing.T) {
@@ -74,8 +78,10 @@ func TestClient_CreateGoal(t *testing.T) {
 		err = mockResponseData(http.MethodPost, endpoint, http.StatusCreated, goal)
 		assert.NoError(t, err)
 
-		err = client.CreateGoal(goal)
+		var response *StandardResponse
+		response, err = client.CreateGoal(goal)
 		assert.Error(t, err)
+		assert.Nil(t, response)
 	})
 
 	t.Run("error from api (status code)", func(t *testing.T) {
@@ -90,8 +96,10 @@ func TestClient_CreateGoal(t *testing.T) {
 		err = mockResponseData(http.MethodPost, endpoint, http.StatusBadRequest, goal)
 		assert.NoError(t, err)
 
-		err = client.CreateGoal(goal)
+		var response *StandardResponse
+		response, err = client.CreateGoal(goal)
 		assert.Error(t, err)
+		assert.NotNil(t, response)
 	})
 
 	t.Run("error from api (api error)", func(t *testing.T) {
@@ -117,9 +125,11 @@ func TestClient_CreateGoal(t *testing.T) {
 		err = mockResponseData(http.MethodPost, endpoint, http.StatusBadRequest, apiError)
 		assert.NoError(t, err)
 
-		err = client.CreateGoal(goal)
+		var response *StandardResponse
+		response, err = client.CreateGoal(goal)
 		assert.Error(t, err)
 		assert.Equal(t, apiError.Message, err.Error())
+		assert.NotNil(t, response)
 	})
 }
 
@@ -145,7 +155,7 @@ func ExampleClient_CreateGoal() {
 	)
 
 	// Create goal (using mocking response)
-	if err = client.CreateGoal(responseGoal); err != nil {
+	if _, err = client.CreateGoal(responseGoal); err != nil {
 		fmt.Printf("error creating goal: " + err.Error())
 		return
 	}
@@ -164,7 +174,7 @@ func BenchmarkClient_CreateGoal(b *testing.B) {
 		goal,
 	)
 	for i := 0; i < b.N; i++ {
-		_ = client.CreateGoal(goal)
+		_, _ = client.CreateGoal(goal)
 	}
 }
 
@@ -188,9 +198,11 @@ func TestClient_GetGoal(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newGoal *Goal
-		newGoal, err = client.GetGoal(goal.ID)
+		var response *StandardResponse
+		newGoal, response, err = client.GetGoal(goal.ID)
 		assert.NoError(t, err)
 		assert.NotNil(t, newGoal)
+		assert.NotNil(t, response)
 		assert.Equal(t, testGoalID, goal.ID)
 	})
 
@@ -211,9 +223,11 @@ func TestClient_GetGoal(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newGoal *Goal
-		newGoal, err = client.GetGoal(goal.ID)
+		var response *StandardResponse
+		newGoal, response, err = client.GetGoal(goal.ID)
 		assert.Error(t, err)
 		assert.Nil(t, newGoal)
+		assert.Nil(t, response)
 	})
 
 	t.Run("error from api (status code)", func(t *testing.T) {
@@ -231,9 +245,11 @@ func TestClient_GetGoal(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newGoal *Goal
-		newGoal, err = client.GetGoal(goal.ID)
+		var response *StandardResponse
+		newGoal, response, err = client.GetGoal(goal.ID)
 		assert.Error(t, err)
 		assert.Nil(t, newGoal)
+		assert.NotNil(t, response)
 	})
 
 	t.Run("error from api (api error)", func(t *testing.T) {
@@ -263,9 +279,11 @@ func TestClient_GetGoal(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newGoal *Goal
-		newGoal, err = client.GetGoal(goal.ID)
+		var response *StandardResponse
+		newGoal, response, err = client.GetGoal(goal.ID)
 		assert.Error(t, err)
 		assert.Nil(t, newGoal)
+		assert.NotNil(t, response)
 		assert.Equal(t, apiError.Message, err.Error())
 	})
 }
@@ -295,7 +313,7 @@ func ExampleClient_GetGoal() {
 	)
 
 	// Get goal (using mocking response)
-	if responseGoal, err = client.GetGoal(responseGoal.ID); err != nil {
+	if responseGoal, _, err = client.GetGoal(responseGoal.ID); err != nil {
 		fmt.Printf("error getting goal: " + err.Error())
 		return
 	}
@@ -317,7 +335,7 @@ func BenchmarkClient_GetGoal(b *testing.B) {
 		goal,
 	)
 	for i := 0; i < b.N; i++ {
-		_, _ = client.GetGoal(goal.ID)
+		_, _, _ = client.GetGoal(goal.ID)
 	}
 }
 
@@ -338,9 +356,11 @@ func TestClient_UpdateGoal(t *testing.T) {
 		err = mockResponseData(http.MethodPut, endpoint, http.StatusOK, goal)
 		assert.NoError(t, err)
 
-		err = client.UpdateGoal(goal)
+		var response *StandardResponse
+		response, err = client.UpdateGoal(goal)
 		assert.NoError(t, err)
 		assert.NotNil(t, goal)
+		assert.NotNil(t, response)
 		assert.Equal(t, "Updated Title", goal.Title)
 	})
 
@@ -357,8 +377,10 @@ func TestClient_UpdateGoal(t *testing.T) {
 		err = mockResponseData(http.MethodPut, endpoint, http.StatusOK, goal)
 		assert.NoError(t, err)
 
-		err = client.UpdateGoal(goal)
+		var response *StandardResponse
+		response, err = client.UpdateGoal(goal)
 		assert.Error(t, err)
+		assert.Nil(t, response)
 	})
 
 	t.Run("error from api (status code)", func(t *testing.T) {
@@ -373,8 +395,10 @@ func TestClient_UpdateGoal(t *testing.T) {
 		err = mockResponseData(http.MethodPut, endpoint, http.StatusBadRequest, goal)
 		assert.NoError(t, err)
 
-		err = client.UpdateGoal(goal)
+		var response *StandardResponse
+		response, err = client.UpdateGoal(goal)
 		assert.Error(t, err)
+		assert.NotNil(t, response)
 	})
 
 	t.Run("error from api (api error)", func(t *testing.T) {
@@ -400,9 +424,11 @@ func TestClient_UpdateGoal(t *testing.T) {
 		err = mockResponseData(http.MethodPut, endpoint, http.StatusBadRequest, apiError)
 		assert.NoError(t, err)
 
-		err = client.UpdateGoal(goal)
+		var response *StandardResponse
+		response, err = client.UpdateGoal(goal)
 		assert.Error(t, err)
 		assert.Equal(t, apiError.Message, err.Error())
+		assert.NotNil(t, response)
 	})
 }
 
@@ -429,7 +455,7 @@ func ExampleClient_UpdateGoal() {
 	)
 
 	// Update goal (using mocking response)
-	err = client.UpdateGoal(responseGoal)
+	_, err = client.UpdateGoal(responseGoal)
 	if err != nil {
 		fmt.Printf("error updating goal: " + err.Error())
 		return
@@ -449,7 +475,7 @@ func BenchmarkClient_UpdateGoal(b *testing.B) {
 		goal,
 	)
 	for i := 0; i < b.N; i++ {
-		_ = client.UpdateGoal(goal)
+		_, _ = client.UpdateGoal(goal)
 	}
 }
 
@@ -469,10 +495,12 @@ func TestClient_DeleteGoal(t *testing.T) {
 		assert.NoError(t, err)
 
 		var deleted bool
-		deleted, err = client.DeleteGoal(goal.ID)
+		var response *StandardResponse
+		deleted, response, err = client.DeleteGoal(goal.ID)
 		assert.NoError(t, err)
 		assert.Equal(t, true, deleted)
 		assert.Equal(t, testGoalID, goal.ID)
+		assert.NotNil(t, response)
 	})
 
 	t.Run("missing goal id", func(t *testing.T) {
@@ -489,9 +517,11 @@ func TestClient_DeleteGoal(t *testing.T) {
 		assert.NoError(t, err)
 
 		var deleted bool
-		deleted, err = client.DeleteGoal(goal.ID)
+		var response *StandardResponse
+		deleted, response, err = client.DeleteGoal(goal.ID)
 		assert.Error(t, err)
 		assert.Equal(t, false, deleted)
+		assert.Nil(t, response)
 	})
 
 	t.Run("error from api (status code)", func(t *testing.T) {
@@ -506,8 +536,10 @@ func TestClient_DeleteGoal(t *testing.T) {
 		assert.NoError(t, err)
 
 		var deleted bool
-		deleted, err = client.DeleteGoal(goal.ID)
+		var response *StandardResponse
+		deleted, response, err = client.DeleteGoal(goal.ID)
 		assert.Error(t, err)
+		assert.NotNil(t, response)
 		assert.Equal(t, false, deleted)
 	})
 
@@ -535,8 +567,10 @@ func TestClient_DeleteGoal(t *testing.T) {
 		assert.NoError(t, err)
 
 		var deleted bool
-		deleted, err = client.DeleteGoal(goal.ID)
+		var response *StandardResponse
+		deleted, response, err = client.DeleteGoal(goal.ID)
 		assert.Error(t, err)
+		assert.NotNil(t, response)
 		assert.Equal(t, false, deleted)
 		assert.Equal(t, apiError.Message, err.Error())
 	})
@@ -565,7 +599,7 @@ func ExampleClient_DeleteGoal() {
 
 	// Delete goal (using mocking response)
 	var deleted bool
-	if deleted, err = client.DeleteGoal(responseGoal.ID); err != nil {
+	if deleted, _, err = client.DeleteGoal(responseGoal.ID); err != nil {
 		fmt.Printf("error deleting goal: " + err.Error())
 		return
 	}
@@ -584,6 +618,6 @@ func BenchmarkClient_DeleteGoal(b *testing.B) {
 		nil,
 	)
 	for i := 0; i < b.N; i++ {
-		_, _ = client.DeleteGoal(goal.ID)
+		_, _, _ = client.DeleteGoal(goal.ID)
 	}
 }

@@ -38,9 +38,11 @@ func TestClient_GetCurrentRate(t *testing.T) {
 		assert.NoError(t, err)
 
 		var currentRate *Rate
-		currentRate, err = client.GetCurrentRate(testRateCurrency, 0.00)
+		var response *StandardResponse
+		currentRate, response, err = client.GetCurrentRate(testRateCurrency, 0.00)
 		assert.NoError(t, err)
 		assert.NotNil(t, currentRate)
+		assert.NotNil(t, response)
 		assert.Equal(t, testRateCurrency, currentRate.Currency)
 	})
 
@@ -61,9 +63,11 @@ func TestClient_GetCurrentRate(t *testing.T) {
 		assert.NoError(t, err)
 
 		var currentRate *Rate
-		currentRate, err = client.GetCurrentRate("", 0.00)
+		var response *StandardResponse
+		currentRate, response, err = client.GetCurrentRate("", 0.00)
 		assert.Error(t, err)
 		assert.Nil(t, currentRate)
+		assert.Nil(t, response)
 	})
 
 	t.Run("error from api (status code)", func(t *testing.T) {
@@ -83,9 +87,11 @@ func TestClient_GetCurrentRate(t *testing.T) {
 		assert.NoError(t, err)
 
 		var currentRate *Rate
-		currentRate, err = client.GetCurrentRate(testRateCurrency, 0.00)
+		var response *StandardResponse
+		currentRate, response, err = client.GetCurrentRate(testRateCurrency, 0.00)
 		assert.Error(t, err)
 		assert.Nil(t, currentRate)
+		assert.NotNil(t, response)
 	})
 
 	t.Run("error from api (status code)", func(t *testing.T) {
@@ -114,9 +120,11 @@ func TestClient_GetCurrentRate(t *testing.T) {
 		assert.NoError(t, err)
 
 		var currentRate *Rate
-		currentRate, err = client.GetCurrentRate(testRateCurrency, 0.00)
+		var response *StandardResponse
+		currentRate, response, err = client.GetCurrentRate(testRateCurrency, 0.00)
 		assert.Error(t, err)
 		assert.Nil(t, currentRate)
+		assert.NotNil(t, response)
 		assert.Equal(t, apiError.Message, err.Error())
 	})
 }
@@ -150,7 +158,9 @@ func ExampleClient_GetCurrentRate() {
 
 	// Get rate (using mocking response)
 	var currentRate *Rate
-	if currentRate, err = client.GetCurrentRate(testRateCurrency, 0.00); err != nil {
+	if currentRate, _, err = client.GetCurrentRate(
+		testRateCurrency, 0.00,
+	); err != nil {
 		fmt.Printf("error getting profile: " + err.Error())
 		return
 	}
@@ -173,6 +183,6 @@ func BenchmarkClient_GetCurrentRate(b *testing.B) {
 		rate,
 	)
 	for i := 0; i < b.N; i++ {
-		_, _ = client.GetCurrentRate(testRateCurrency, 0.00)
+		_, _, _ = client.GetCurrentRate(testRateCurrency, 0.00)
 	}
 }

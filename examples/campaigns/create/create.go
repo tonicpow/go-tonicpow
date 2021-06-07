@@ -28,7 +28,7 @@ func main() {
 	}
 
 	// Create a campaign
-	err = client.CreateCampaign(campaign)
+	_, err = client.CreateCampaign(campaign)
 	if err != nil {
 		log.Fatalf("error in CreateCampaign: %s", err.Error())
 	}

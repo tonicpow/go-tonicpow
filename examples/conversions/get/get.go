@@ -20,7 +20,7 @@ func main() {
 
 	// Get a conversion
 	var conversion *tonicpow.Conversion
-	conversion, err = client.GetConversion(99)
+	conversion, _, err = client.GetConversion(99)
 	if err != nil {
 		log.Fatalf("error in GetConversion: %s", err.Error())
 	}

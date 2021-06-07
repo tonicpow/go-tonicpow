@@ -20,9 +20,9 @@ func main() {
 
 	// Get a RSS feed
 	var results string
-	// results, err = client.CampaignsFeed(tonicpow.FeedTypeRSS)
-	// results, err = client.CampaignsFeed(tonicpow.FeedTypeAtom)
-	results, err = client.CampaignsFeed(tonicpow.FeedTypeJSON)
+	// results, _, err = client.CampaignsFeed(tonicpow.FeedTypeRSS)
+	// results, _, err = client.CampaignsFeed(tonicpow.FeedTypeAtom)
+	results, _, err = client.CampaignsFeed(tonicpow.FeedTypeJSON)
 	if err != nil {
 		log.Fatalf("error in CampaignsFeed: %s", err.Error())
 	}

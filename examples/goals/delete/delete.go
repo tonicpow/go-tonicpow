@@ -20,7 +20,7 @@ func main() {
 
 	// Delete a goal
 	var deleted bool
-	deleted, err = client.DeleteGoal(63)
+	deleted, _, err = client.DeleteGoal(63)
 	if err != nil {
 		log.Fatalf("error in DeleteGoal: %s", err.Error())
 	}

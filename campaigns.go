@@ -15,17 +15,17 @@ func (c *Campaign) permitFields() {
 // CreateCampaign will make a new campaign for the associated advertiser profile
 //
 // For more information: https://docs.tonicpow.com/#b67e92bf-a481-44f6-a31d-26e6e0c521b1
-func (c *Client) CreateCampaign(campaign *Campaign) error {
+func (c *Client) CreateCampaign(campaign *Campaign) (*StandardResponse, error) {
 
 	// Basic requirements
 	if campaign.AdvertiserProfileID == 0 {
-		return fmt.Errorf("missing required attribute: %s", fieldAdvertiserProfileID)
+		return nil, fmt.Errorf("missing required attribute: %s", fieldAdvertiserProfileID)
 	} else if len(campaign.Title) == 0 {
-		return fmt.Errorf("missing required attribute: %s", fieldTitle)
+		return nil, fmt.Errorf("missing required attribute: %s", fieldTitle)
 	} else if len(campaign.Description) == 0 {
-		return fmt.Errorf("missing required attribute: %s", fieldDescription)
+		return nil, fmt.Errorf("missing required attribute: %s", fieldDescription)
 	} else if len(campaign.TargetURL) == 0 {
-		return fmt.Errorf("missing required attribute: %s", fieldTargetURL)
+		return nil, fmt.Errorf("missing required attribute: %s", fieldTargetURL)
 	}
 
 	// Fire the Request
@@ -36,18 +36,19 @@ func (c *Client) CreateCampaign(campaign *Campaign) error {
 		"/"+modelCampaign,
 		campaign, http.StatusCreated,
 	); err != nil {
-		return err
+		return response, err
 	}
 
 	// Convert model response
-	return json.Unmarshal(response.Body, &campaign)
+	return response, json.Unmarshal(response.Body, &campaign)
 }
 
 // GetCampaign will get an existing campaign by ID
 // This will return an Error if the campaign is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#b827446b-be34-4678-b347-33c4f63dbf9e
-func (c *Client) GetCampaign(campaignID uint64) (campaign *Campaign, err error) {
+func (c *Client) GetCampaign(campaignID uint64) (campaign *Campaign,
+	response *StandardResponse, err error) {
 
 	// Must have an ID
 	if campaignID == 0 {
@@ -56,7 +57,6 @@ func (c *Client) GetCampaign(campaignID uint64) (campaign *Campaign, err error) 
 	}
 
 	// Fire the Request
-	var response *StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
 		fmt.Sprintf("/%s/details/?%s=%d", modelCampaign, fieldID, campaignID),
@@ -74,7 +74,8 @@ func (c *Client) GetCampaign(campaignID uint64) (campaign *Campaign, err error) 
 // This will return an Error if the campaign is not found (404)
 //
 // For more information: https://docs.tonicpow.com/#b827446b-be34-4678-b347-33c4f63dbf9e
-func (c *Client) GetCampaignBySlug(slug string) (campaign *Campaign, err error) {
+func (c *Client) GetCampaignBySlug(slug string) (campaign *Campaign,
+	response *StandardResponse, err error) {
 
 	// Must have a slug
 	if len(slug) == 0 {
@@ -83,7 +84,6 @@ func (c *Client) GetCampaignBySlug(slug string) (campaign *Campaign, err error) 
 	}
 
 	// Fire the Request
-	var response *StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
 		fmt.Sprintf("/%s/details/?%s=%s", modelCampaign, fieldSlug, slug),
@@ -100,7 +100,7 @@ func (c *Client) GetCampaignBySlug(slug string) (campaign *Campaign, err error) 
 // UpdateCampaign will update an existing campaign
 //
 // For more information: https://docs.tonicpow.com/#665eefd6-da42-4ca9-853c-fd8ca1bf66b2
-func (c *Client) UpdateCampaign(campaign *Campaign) (err error) {
+func (c *Client) UpdateCampaign(campaign *Campaign) (response *StandardResponse, err error) {
 
 	// Basic requirements
 	if campaign.ID == 0 {
@@ -112,7 +112,6 @@ func (c *Client) UpdateCampaign(campaign *Campaign) (err error) {
 	campaign.permitFields()
 
 	// Fire the Request
-	var response *StandardResponse
 	if response, err = c.Request(
 		http.MethodPut,
 		"/"+modelCampaign,
@@ -129,10 +128,9 @@ func (c *Client) UpdateCampaign(campaign *Campaign) (err error) {
 // This will return an Error if no campaigns are found (404)
 //
 // For more information: https://docs.tonicpow.com/#b3fe69d3-24ba-4c2a-a485-affbb0a738de
-func (c *Client) CampaignsFeed(feedType feedType) (feed string, err error) {
+func (c *Client) CampaignsFeed(feedType feedType) (feed string, response *StandardResponse, err error) {
 
 	// Fire the Request
-	var response *StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
 		fmt.Sprintf("/%s/feed/?%s=%s", modelCampaign, fieldFeedType, feedType),
@@ -150,7 +148,7 @@ func (c *Client) CampaignsFeed(feedType feedType) (feed string, err error) {
 //
 // For more information: https://docs.tonicpow.com/#c1b17be6-cb10-48b3-a519-4686961ff41c
 func (c *Client) ListCampaigns(page, resultsPerPage int, sortBy, sortOrder, searchQuery string,
-	minimumBalance uint64, includeExpired bool) (results *CampaignResults, err error) {
+	minimumBalance uint64, includeExpired bool) (results *CampaignResults, response *StandardResponse, err error) {
 
 	// Do we know this field?
 	if len(sortBy) > 0 {
@@ -164,7 +162,6 @@ func (c *Client) ListCampaigns(page, resultsPerPage int, sortBy, sortOrder, sear
 	}
 
 	// Fire the Request
-	var response *StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
 		fmt.Sprintf(
@@ -192,7 +189,7 @@ func (c *Client) ListCampaigns(page, resultsPerPage int, sortBy, sortOrder, sear
 //
 // For more information: https://docs.tonicpow.com/#30a15b69-7912-4e25-ba41-212529fba5ff
 func (c *Client) ListCampaignsByURL(targetURL string, page, resultsPerPage int,
-	sortBy, sortOrder string) (results *CampaignResults, err error) {
+	sortBy, sortOrder string) (results *CampaignResults, response *StandardResponse, err error) {
 
 	// Must have a value
 	if len(targetURL) == 0 {
@@ -212,7 +209,6 @@ func (c *Client) ListCampaignsByURL(targetURL string, page, resultsPerPage int,
 	}
 
 	// Fire the Request
-	var response *StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
 		fmt.Sprintf("/%s/list?%s=%s&%s=%d&%s=%d&%s=%s&%s=%s",

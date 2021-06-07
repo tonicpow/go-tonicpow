@@ -37,13 +37,15 @@ func TestClient_CreateConversion(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newConversion *Conversion
-		newConversion, err = client.CreateConversion(
+		var response *StandardResponse
+		newConversion, response, err = client.CreateConversion(
 			WithGoalID(testGoalID),
 			WithTncpwSession(testTncpwSession),
 		)
 
 		assert.NoError(t, err)
 		assert.NotNil(t, newConversion)
+		assert.NotNil(t, response)
 		assert.Equal(t, testConversionID, newConversion.ID)
 		assert.Equal(t, testGoalID, newConversion.GoalID)
 	})
@@ -61,13 +63,15 @@ func TestClient_CreateConversion(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newConversion *Conversion
-		newConversion, err = client.CreateConversion(
+		var response *StandardResponse
+		newConversion, response, err = client.CreateConversion(
 			WithGoalName(testGoalName),
 			WithTncpwSession(testTncpwSession),
 		)
 
 		assert.NoError(t, err)
 		assert.NotNil(t, newConversion)
+		assert.NotNil(t, response)
 		assert.Equal(t, testConversionID, newConversion.ID)
 		assert.Equal(t, testGoalName, newConversion.GoalName)
 	})
@@ -85,7 +89,8 @@ func TestClient_CreateConversion(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newConversion *Conversion
-		newConversion, err = client.CreateConversion(
+		var response *StandardResponse
+		newConversion, response, err = client.CreateConversion(
 			WithGoalID(testGoalID),
 			WithTncpwSession(testTncpwSession),
 			WithPurchaseAmount(120.00),
@@ -95,6 +100,7 @@ func TestClient_CreateConversion(t *testing.T) {
 
 		assert.NoError(t, err)
 		assert.NotNil(t, newConversion)
+		assert.NotNil(t, response)
 		assert.Equal(t, testConversionID, newConversion.ID)
 	})
 
@@ -111,13 +117,15 @@ func TestClient_CreateConversion(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newConversion *Conversion
-		newConversion, err = client.CreateConversion(
+		var response *StandardResponse
+		newConversion, response, err = client.CreateConversion(
 			WithGoalID(testGoalID),
 			WithUserID(testUserID),
 		)
 
 		assert.NoError(t, err)
 		assert.NotNil(t, newConversion)
+		assert.NotNil(t, response)
 		assert.Equal(t, testConversionID, newConversion.ID)
 		assert.Equal(t, testGoalID, newConversion.GoalID)
 	})
@@ -135,12 +143,14 @@ func TestClient_CreateConversion(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newConversion *Conversion
-		newConversion, err = client.CreateConversion(
+		var response *StandardResponse
+		newConversion, response, err = client.CreateConversion(
 			WithDelay(1),
 		)
 
 		assert.Error(t, err)
 		assert.Nil(t, newConversion)
+		assert.Nil(t, response)
 	})
 
 	t.Run("missing tncpw_session", func(t *testing.T) {
@@ -156,12 +166,14 @@ func TestClient_CreateConversion(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newConversion *Conversion
-		newConversion, err = client.CreateConversion(
+		var response *StandardResponse
+		newConversion, response, err = client.CreateConversion(
 			WithGoalID(testGoalID),
 		)
 
 		assert.Error(t, err)
 		assert.Nil(t, newConversion)
+		assert.Nil(t, response)
 	})
 
 	t.Run("missing goal ID", func(t *testing.T) {
@@ -177,13 +189,15 @@ func TestClient_CreateConversion(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newConversion *Conversion
-		newConversion, err = client.CreateConversion(
+		var response *StandardResponse
+		newConversion, response, err = client.CreateConversion(
 			WithUserID(testUserID),
 			WithGoalName(testGoalName),
 		)
 
 		assert.Error(t, err)
 		assert.Nil(t, newConversion)
+		assert.Nil(t, response)
 	})
 
 	t.Run("error from api (status code)", func(t *testing.T) {
@@ -199,13 +213,15 @@ func TestClient_CreateConversion(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newConversion *Conversion
-		newConversion, err = client.CreateConversion(
+		var response *StandardResponse
+		newConversion, response, err = client.CreateConversion(
 			WithGoalID(testGoalID),
 			WithTncpwSession(testTncpwSession),
 		)
 
 		assert.Error(t, err)
 		assert.Nil(t, newConversion)
+		assert.NotNil(t, response)
 	})
 
 	t.Run("error from api (status code)", func(t *testing.T) {
@@ -230,13 +246,15 @@ func TestClient_CreateConversion(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newConversion *Conversion
-		newConversion, err = client.CreateConversion(
+		var response *StandardResponse
+		newConversion, response, err = client.CreateConversion(
 			WithGoalID(testGoalID),
 			WithTncpwSession(testTncpwSession),
 		)
 
 		assert.Error(t, err)
 		assert.Nil(t, newConversion)
+		assert.NotNil(t, response)
 		assert.Equal(t, apiError.Message, err.Error())
 	})
 }
@@ -264,7 +282,7 @@ func ExampleClient_CreateConversion() {
 
 	// Create conversion (using mocking response)
 	var newConversion *Conversion
-	newConversion, err = client.CreateConversion(
+	newConversion, _, err = client.CreateConversion(
 		WithGoalID(testGoalID),
 		WithTncpwSession(testTncpwSession),
 	)
@@ -288,7 +306,7 @@ func BenchmarkClient_CreateConversion(b *testing.B) {
 		conversion,
 	)
 	for i := 0; i < b.N; i++ {
-		_, _ = client.CreateConversion(
+		_, _, _ = client.CreateConversion(
 			WithGoalID(testGoalID),
 			WithTncpwSession(testTncpwSession),
 		)
@@ -312,9 +330,11 @@ func TestClient_GetConversion(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newConversion *Conversion
-		newConversion, err = client.GetConversion(conversion.ID)
+		var response *StandardResponse
+		newConversion, response, err = client.GetConversion(conversion.ID)
 		assert.NoError(t, err)
 		assert.NotNil(t, newConversion)
+		assert.NotNil(t, response)
 		assert.Equal(t, testConversionID, newConversion.ID)
 	})
 
@@ -332,9 +352,11 @@ func TestClient_GetConversion(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newConversion *Conversion
-		newConversion, err = client.GetConversion(conversion.ID)
+		var response *StandardResponse
+		newConversion, response, err = client.GetConversion(conversion.ID)
 		assert.Error(t, err)
 		assert.Nil(t, newConversion)
+		assert.Nil(t, response)
 	})
 
 	t.Run("error from api (status code)", func(t *testing.T) {
@@ -350,9 +372,11 @@ func TestClient_GetConversion(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newConversion *Conversion
-		newConversion, err = client.GetConversion(conversion.ID)
+		var response *StandardResponse
+		newConversion, response, err = client.GetConversion(conversion.ID)
 		assert.Error(t, err)
 		assert.Nil(t, newConversion)
+		assert.NotNil(t, response)
 	})
 
 	t.Run("error from api (api error)", func(t *testing.T) {
@@ -379,10 +403,12 @@ func TestClient_GetConversion(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newConversion *Conversion
-		newConversion, err = client.GetConversion(conversion.ID)
+		var response *StandardResponse
+		newConversion, response, err = client.GetConversion(conversion.ID)
 		assert.Error(t, err)
 		assert.Nil(t, newConversion)
 		assert.Equal(t, apiError.Message, err.Error())
+		assert.NotNil(t, response)
 	})
 }
 
@@ -409,7 +435,7 @@ func ExampleClient_GetConversion() {
 
 	// Create conversion (using mocking response)
 	var conversion *Conversion
-	conversion, err = client.GetConversion(responseConversion.ID)
+	conversion, _, err = client.GetConversion(responseConversion.ID)
 	if err != nil {
 		fmt.Printf("error getting conversion: " + err.Error())
 		return
@@ -429,7 +455,7 @@ func BenchmarkClient_GetConversion(b *testing.B) {
 		conversion,
 	)
 	for i := 0; i < b.N; i++ {
-		_, _ = client.GetConversion(conversion.ID)
+		_, _, _ = client.GetConversion(conversion.ID)
 	}
 }
 
@@ -449,9 +475,11 @@ func TestClient_CancelConversion(t *testing.T) {
 		err = mockResponseData(http.MethodPut, endpoint, http.StatusOK, conversion)
 		assert.NoError(t, err)
 
-		conversion, err = client.CancelConversion(conversion.ID, "my reason")
+		var response *StandardResponse
+		conversion, response, err = client.CancelConversion(conversion.ID, "my reason")
 		assert.NoError(t, err)
 		assert.NotNil(t, conversion)
+		assert.NotNil(t, response)
 	})
 
 	t.Run("missing conversion id", func(t *testing.T) {
@@ -467,8 +495,12 @@ func TestClient_CancelConversion(t *testing.T) {
 		err = mockResponseData(http.MethodPut, endpoint, http.StatusOK, conversion)
 		assert.NoError(t, err)
 
-		_, err = client.CancelConversion(conversion.ID, "my reason")
+		var response *StandardResponse
+		var newConversion *Conversion
+		newConversion, response, err = client.CancelConversion(conversion.ID, "my reason")
 		assert.Error(t, err)
+		assert.Nil(t, newConversion)
+		assert.Nil(t, response)
 	})
 
 	t.Run("error from api (status code)", func(t *testing.T) {
@@ -483,8 +515,12 @@ func TestClient_CancelConversion(t *testing.T) {
 		err = mockResponseData(http.MethodPut, endpoint, http.StatusBadRequest, conversion)
 		assert.NoError(t, err)
 
-		_, err = client.CancelConversion(conversion.ID, "my reason")
+		var response *StandardResponse
+		var newConversion *Conversion
+		newConversion, response, err = client.CancelConversion(conversion.ID, "my reason")
 		assert.Error(t, err)
+		assert.Nil(t, newConversion)
+		assert.NotNil(t, response)
 	})
 
 	t.Run("error from api (api error)", func(t *testing.T) {
@@ -510,9 +546,13 @@ func TestClient_CancelConversion(t *testing.T) {
 		err = mockResponseData(http.MethodPut, endpoint, http.StatusBadRequest, apiError)
 		assert.NoError(t, err)
 
-		_, err = client.CancelConversion(conversion.ID, "my reason")
+		var response *StandardResponse
+		var newConversion *Conversion
+		newConversion, response, err = client.CancelConversion(conversion.ID, "my reason")
 		assert.Error(t, err)
 		assert.Equal(t, apiError.Message, err.Error())
+		assert.Nil(t, newConversion)
+		assert.NotNil(t, response)
 	})
 }
 
@@ -538,8 +578,8 @@ func ExampleClient_CancelConversion() {
 		responseConversion,
 	)
 
-	// Update campaign (using mocking response)
-	_, err = client.CancelConversion(responseConversion.ID, "my reason")
+	// Cancel conversion (using mocking response)
+	_, _, err = client.CancelConversion(responseConversion.ID, "your custom reason")
 	if err != nil {
 		fmt.Printf("error canceling conversion: " + err.Error())
 		return
@@ -559,6 +599,6 @@ func BenchmarkClient_CancelConversion(b *testing.B) {
 		conversion,
 	)
 	for i := 0; i < b.N; i++ {
-		_, _ = client.CancelConversion(conversion.ID, "my reason")
+		_, _, _ = client.CancelConversion(conversion.ID, "my reason")
 	}
 }

@@ -20,7 +20,7 @@ func main() {
 
 	// Get the apps
 	var results *tonicpow.AppResults
-	if results, err = client.ListAppsByAdvertiserProfile(
+	if results, _, err = client.ListAppsByAdvertiserProfile(
 		23, 1, 5, "", "",
 	); err != nil {
 		log.Fatalf("error in ListAppsByAdvertiserProfile: %s", err.Error())

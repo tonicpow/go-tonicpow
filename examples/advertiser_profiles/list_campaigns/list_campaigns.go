@@ -20,7 +20,7 @@ func main() {
 
 	// Get the campaigns
 	var results *tonicpow.CampaignResults
-	if results, err = client.ListCampaignsByAdvertiserProfile(
+	if results, _, err = client.ListCampaignsByAdvertiserProfile(
 		23, 1, 5, "", "",
 	); err != nil {
 		log.Fatalf("error in ListCampaignsByAdvertiserProfile: %s", err.Error())

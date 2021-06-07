@@ -20,13 +20,13 @@ func main() {
 
 	// Get a conversion
 	var conversion *tonicpow.Conversion
-	if conversion, err = client.GetConversion(99); err != nil {
+	if conversion, _, err = client.GetConversion(99); err != nil {
 		log.Fatalf("error in GetConversion: %s", err.Error())
 	}
 
 	// Cancel a conversion
-	if conversion, err = client.CancelConversion(
-		conversion.ID, "my reason",
+	if conversion, _, err = client.CancelConversion(
+		conversion.ID, "my custom reason",
 	); err != nil {
 		log.Fatalf("error in CancelConversion: %s", err.Error())
 	}

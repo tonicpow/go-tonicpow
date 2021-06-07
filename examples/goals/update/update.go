@@ -20,14 +20,14 @@ func main() {
 
 	// Get goal first
 	var goal *tonicpow.Goal
-	goal, err = client.GetGoal(13)
+	goal, _, err = client.GetGoal(13)
 	if err != nil {
 		log.Fatalf("error in GetGoal: %s", err.Error())
 	}
 
 	// Update a goal
 	goal.Title = "Updated Title Name"
-	err = client.UpdateGoal(goal)
+	_, err = client.UpdateGoal(goal)
 	if err != nil {
 		log.Fatalf("error in UpdateGoal: %s", err.Error())
 	}

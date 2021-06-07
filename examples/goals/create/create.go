@@ -30,7 +30,7 @@ func main() {
 	}
 
 	// Create a goal
-	err = client.CreateGoal(goal)
+	_, err = client.CreateGoal(goal)
 	if err != nil {
 		log.Fatalf("error in CreateGoal: %s", err.Error())
 	}

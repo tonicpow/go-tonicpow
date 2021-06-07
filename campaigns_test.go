@@ -152,9 +152,11 @@ func TestClient_CreateCampaign(t *testing.T) {
 		err = mockResponseData(http.MethodPost, endpoint, http.StatusCreated, campaign)
 		assert.NoError(t, err)
 
-		err = client.CreateCampaign(campaign)
+		var response *StandardResponse
+		response, err = client.CreateCampaign(campaign)
 		assert.NoError(t, err)
 		assert.NotNil(t, campaign)
+		assert.NotNil(t, response)
 		assert.Equal(t, testCampaignID, campaign.ID)
 	})
 
@@ -171,8 +173,10 @@ func TestClient_CreateCampaign(t *testing.T) {
 		err = mockResponseData(http.MethodPost, endpoint, http.StatusCreated, campaign)
 		assert.NoError(t, err)
 
-		err = client.CreateCampaign(campaign)
+		var response *StandardResponse
+		response, err = client.CreateCampaign(campaign)
 		assert.Error(t, err)
+		assert.Nil(t, response)
 	})
 
 	t.Run("missing campaign title", func(t *testing.T) {
@@ -188,8 +192,10 @@ func TestClient_CreateCampaign(t *testing.T) {
 		err = mockResponseData(http.MethodPost, endpoint, http.StatusCreated, campaign)
 		assert.NoError(t, err)
 
-		err = client.CreateCampaign(campaign)
+		var response *StandardResponse
+		response, err = client.CreateCampaign(campaign)
 		assert.Error(t, err)
+		assert.Nil(t, response)
 	})
 
 	t.Run("missing campaign description", func(t *testing.T) {
@@ -205,8 +211,10 @@ func TestClient_CreateCampaign(t *testing.T) {
 		err = mockResponseData(http.MethodPost, endpoint, http.StatusCreated, campaign)
 		assert.NoError(t, err)
 
-		err = client.CreateCampaign(campaign)
+		var response *StandardResponse
+		response, err = client.CreateCampaign(campaign)
 		assert.Error(t, err)
+		assert.Nil(t, response)
 	})
 
 	t.Run("missing campaign target url", func(t *testing.T) {
@@ -222,8 +230,10 @@ func TestClient_CreateCampaign(t *testing.T) {
 		err = mockResponseData(http.MethodPost, endpoint, http.StatusCreated, campaign)
 		assert.NoError(t, err)
 
-		err = client.CreateCampaign(campaign)
+		var response *StandardResponse
+		response, err = client.CreateCampaign(campaign)
 		assert.Error(t, err)
+		assert.Nil(t, response)
 	})
 
 	t.Run("error from api (status code)", func(t *testing.T) {
@@ -238,8 +248,10 @@ func TestClient_CreateCampaign(t *testing.T) {
 		err = mockResponseData(http.MethodPost, endpoint, http.StatusBadRequest, campaign)
 		assert.NoError(t, err)
 
-		err = client.CreateCampaign(campaign)
+		var response *StandardResponse
+		response, err = client.CreateCampaign(campaign)
 		assert.Error(t, err)
+		assert.NotNil(t, response)
 	})
 
 	t.Run("error from api (api error)", func(t *testing.T) {
@@ -265,9 +277,11 @@ func TestClient_CreateCampaign(t *testing.T) {
 		err = mockResponseData(http.MethodPost, endpoint, http.StatusBadRequest, apiError)
 		assert.NoError(t, err)
 
-		err = client.CreateCampaign(campaign)
+		var response *StandardResponse
+		response, err = client.CreateCampaign(campaign)
 		assert.Error(t, err)
 		assert.Equal(t, apiError.Message, err.Error())
+		assert.NotNil(t, response)
 	})
 }
 
@@ -293,7 +307,7 @@ func ExampleClient_CreateCampaign() {
 	)
 
 	// Create campaign (using mocking response)
-	if err = client.CreateCampaign(responseCampaign); err != nil {
+	if _, err = client.CreateCampaign(responseCampaign); err != nil {
 		fmt.Printf("error creating campaign: " + err.Error())
 		return
 	}
@@ -312,7 +326,7 @@ func BenchmarkClient_CreateCampaign(b *testing.B) {
 		campaign,
 	)
 	for i := 0; i < b.N; i++ {
-		_ = client.CreateCampaign(campaign)
+		_, _ = client.CreateCampaign(campaign)
 	}
 }
 
@@ -336,9 +350,11 @@ func TestClient_GetCampaign(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newCampaign *Campaign
-		newCampaign, err = client.GetCampaign(campaign.ID)
+		var response *StandardResponse
+		newCampaign, response, err = client.GetCampaign(campaign.ID)
 		assert.NoError(t, err)
 		assert.NotNil(t, newCampaign)
+		assert.NotNil(t, response)
 		assert.Equal(t, testCampaignID, newCampaign.ID)
 	})
 
@@ -359,9 +375,11 @@ func TestClient_GetCampaign(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newCampaign *Campaign
-		newCampaign, err = client.GetCampaign(campaign.ID)
+		var response *StandardResponse
+		newCampaign, response, err = client.GetCampaign(campaign.ID)
 		assert.Error(t, err)
 		assert.Nil(t, newCampaign)
+		assert.Nil(t, response)
 	})
 
 	t.Run("error from api (status code)", func(t *testing.T) {
@@ -380,7 +398,7 @@ func TestClient_GetCampaign(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newCampaign *Campaign
-		newCampaign, err = client.GetCampaign(campaign.ID)
+		newCampaign, _, err = client.GetCampaign(campaign.ID)
 		assert.Error(t, err)
 		assert.Nil(t, newCampaign)
 	})
@@ -412,7 +430,7 @@ func TestClient_GetCampaign(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newCampaign *Campaign
-		newCampaign, err = client.GetCampaign(campaign.ID)
+		newCampaign, _, err = client.GetCampaign(campaign.ID)
 		assert.Error(t, err)
 		assert.Nil(t, newCampaign)
 		assert.Equal(t, apiError.Message, err.Error())
@@ -444,7 +462,7 @@ func ExampleClient_GetCampaign() {
 	)
 
 	// Get campaign (using mocking response)
-	if responseCampaign, err = client.GetCampaign(responseCampaign.ID); err != nil {
+	if responseCampaign, _, err = client.GetCampaign(responseCampaign.ID); err != nil {
 		fmt.Printf("error getting campaign: " + err.Error())
 		return
 	}
@@ -466,7 +484,7 @@ func BenchmarkClient_GetCampaign(b *testing.B) {
 		campaign,
 	)
 	for i := 0; i < b.N; i++ {
-		_, _ = client.GetCampaign(campaign.ID)
+		_, _, _ = client.GetCampaign(campaign.ID)
 	}
 }
 
@@ -490,9 +508,11 @@ func TestClient_GetCampaignBySlug(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newCampaign *Campaign
-		newCampaign, err = client.GetCampaignBySlug(campaign.Slug)
+		var response *StandardResponse
+		newCampaign, response, err = client.GetCampaignBySlug(campaign.Slug)
 		assert.NoError(t, err)
 		assert.NotNil(t, newCampaign)
+		assert.NotNil(t, response)
 		assert.Equal(t, testCampaignID, newCampaign.ID)
 	})
 
@@ -513,9 +533,11 @@ func TestClient_GetCampaignBySlug(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newCampaign *Campaign
-		newCampaign, err = client.GetCampaignBySlug(campaign.Slug)
+		var response *StandardResponse
+		newCampaign, response, err = client.GetCampaignBySlug(campaign.Slug)
 		assert.Error(t, err)
 		assert.Nil(t, newCampaign)
+		assert.Nil(t, response)
 	})
 
 	t.Run("error from api (status code)", func(t *testing.T) {
@@ -534,7 +556,7 @@ func TestClient_GetCampaignBySlug(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newCampaign *Campaign
-		newCampaign, err = client.GetCampaignBySlug(campaign.Slug)
+		newCampaign, _, err = client.GetCampaignBySlug(campaign.Slug)
 		assert.Error(t, err)
 		assert.Nil(t, newCampaign)
 	})
@@ -566,7 +588,7 @@ func TestClient_GetCampaignBySlug(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newCampaign *Campaign
-		newCampaign, err = client.GetCampaignBySlug(campaign.Slug)
+		newCampaign, _, err = client.GetCampaignBySlug(campaign.Slug)
 		assert.Error(t, err)
 		assert.Nil(t, newCampaign)
 		assert.Equal(t, apiError.Message, err.Error())
@@ -598,7 +620,7 @@ func ExampleClient_GetCampaignBySlug() {
 	)
 
 	// Get campaign (using mocking response)
-	if responseCampaign, err = client.GetCampaignBySlug(
+	if responseCampaign, _, err = client.GetCampaignBySlug(
 		responseCampaign.Slug,
 	); err != nil {
 		fmt.Printf("error getting campaign: " + err.Error())
@@ -622,7 +644,7 @@ func BenchmarkClient_GetCampaignBySlug(b *testing.B) {
 		campaign,
 	)
 	for i := 0; i < b.N; i++ {
-		_, _ = client.GetCampaignBySlug(campaign.Slug)
+		_, _, _ = client.GetCampaignBySlug(campaign.Slug)
 	}
 }
 
@@ -643,9 +665,11 @@ func TestClient_UpdateCampaign(t *testing.T) {
 		err = mockResponseData(http.MethodPut, endpoint, http.StatusOK, campaign)
 		assert.NoError(t, err)
 
-		err = client.UpdateCampaign(campaign)
+		var response *StandardResponse
+		response, err = client.UpdateCampaign(campaign)
 		assert.NoError(t, err)
 		assert.NotNil(t, campaign)
+		assert.NotNil(t, response)
 		assert.Equal(t, "TonicPow Title", campaign.Title)
 	})
 
@@ -662,8 +686,10 @@ func TestClient_UpdateCampaign(t *testing.T) {
 		err = mockResponseData(http.MethodPut, endpoint, http.StatusOK, campaign)
 		assert.NoError(t, err)
 
-		err = client.UpdateCampaign(campaign)
+		var response *StandardResponse
+		response, err = client.UpdateCampaign(campaign)
 		assert.Error(t, err)
+		assert.Nil(t, response)
 	})
 
 	t.Run("error from api (status code)", func(t *testing.T) {
@@ -678,8 +704,10 @@ func TestClient_UpdateCampaign(t *testing.T) {
 		err = mockResponseData(http.MethodPut, endpoint, http.StatusBadRequest, campaign)
 		assert.NoError(t, err)
 
-		err = client.UpdateCampaign(campaign)
+		var response *StandardResponse
+		response, err = client.UpdateCampaign(campaign)
 		assert.Error(t, err)
+		assert.NotNil(t, response)
 	})
 
 	t.Run("error from api (api error)", func(t *testing.T) {
@@ -705,9 +733,11 @@ func TestClient_UpdateCampaign(t *testing.T) {
 		err = mockResponseData(http.MethodPut, endpoint, http.StatusBadRequest, apiError)
 		assert.NoError(t, err)
 
-		err = client.UpdateCampaign(campaign)
+		var response *StandardResponse
+		response, err = client.UpdateCampaign(campaign)
 		assert.Error(t, err)
 		assert.Equal(t, apiError.Message, err.Error())
+		assert.NotNil(t, response)
 	})
 }
 
@@ -734,7 +764,7 @@ func ExampleClient_UpdateCampaign() {
 	)
 
 	// Update campaign (using mocking response)
-	err = client.UpdateCampaign(responseCampaign)
+	_, err = client.UpdateCampaign(responseCampaign)
 	if err != nil {
 		fmt.Printf("error updating campaign: " + err.Error())
 		return
@@ -754,7 +784,7 @@ func BenchmarkClient_UpdateCampaign(b *testing.B) {
 		campaign,
 	)
 	for i := 0; i < b.N; i++ {
-		_ = client.UpdateCampaign(campaign)
+		_, _ = client.UpdateCampaign(campaign)
 	}
 }
 
@@ -785,11 +815,13 @@ func TestClient_ListCampaigns(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newResults *CampaignResults
-		newResults, err = client.ListCampaigns(
+		var response *StandardResponse
+		newResults, response, err = client.ListCampaigns(
 			1, 25, SortByFieldBalance, SortOrderAsc, "", 0, false,
 		)
 		assert.NoError(t, err)
 		assert.NotNil(t, newResults)
+		assert.NotNil(t, response)
 		assert.Equal(t, testCampaignID, newResults.Campaigns[0].ID)
 	})
 
@@ -816,11 +848,13 @@ func TestClient_ListCampaigns(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newResults *CampaignResults
-		newResults, err = client.ListCampaigns(
+		var response *StandardResponse
+		newResults, response, err = client.ListCampaigns(
 			1, 25, "", "", "", 0, false,
 		)
 		assert.NoError(t, err)
 		assert.NotNil(t, newResults)
+		assert.NotNil(t, response)
 		assert.Equal(t, testCampaignID, newResults.Campaigns[0].ID)
 	})
 
@@ -847,7 +881,7 @@ func TestClient_ListCampaigns(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newResults *CampaignResults
-		newResults, err = client.ListCampaigns(
+		newResults, _, err = client.ListCampaigns(
 			1, 25, "bad_field", SortOrderDesc, "", 0, false,
 		)
 		assert.Error(t, err)
@@ -877,7 +911,7 @@ func TestClient_ListCampaigns(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newResults *CampaignResults
-		newResults, err = client.ListCampaigns(
+		newResults, _, err = client.ListCampaigns(
 			2, 5, SortByFieldBalance, SortOrderDesc, "", 0, false,
 		)
 		assert.Error(t, err)
@@ -918,7 +952,7 @@ func TestClient_ListCampaigns(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newResults *CampaignResults
-		newResults, err = client.ListCampaigns(
+		newResults, _, err = client.ListCampaigns(
 			2, 5, SortByFieldBalance, SortOrderDesc, "", 0, false,
 		)
 		assert.Error(t, err)
@@ -951,7 +985,7 @@ func TestClient_ListCampaignsByURL(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newResults *CampaignResults
-		newResults, err = client.ListCampaignsByURL(
+		newResults, _, err = client.ListCampaignsByURL(
 			testCampaignTargetURL, 1, 25, SortByFieldBalance, SortOrderDesc,
 		)
 		assert.NoError(t, err)
@@ -979,7 +1013,7 @@ func TestClient_ListCampaignsByURL(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newResults *CampaignResults
-		newResults, err = client.ListCampaignsByURL(
+		newResults, _, err = client.ListCampaignsByURL(
 			testCampaignTargetURL, 2, 5, "", "",
 		)
 		assert.NoError(t, err)
@@ -1007,7 +1041,7 @@ func TestClient_ListCampaignsByURL(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newResults *CampaignResults
-		newResults, err = client.ListCampaignsByURL(
+		newResults, _, err = client.ListCampaignsByURL(
 			testCampaignTargetURL, 2, 5, "bad_field", "",
 		)
 		assert.Error(t, err)
@@ -1034,7 +1068,7 @@ func TestClient_ListCampaignsByURL(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newResults *CampaignResults
-		newResults, err = client.ListCampaignsByURL(
+		newResults, _, err = client.ListCampaignsByURL(
 			"", 2, 5, SortByFieldCreatedAt, SortOrderDesc,
 		)
 		assert.Error(t, err)
@@ -1061,7 +1095,7 @@ func TestClient_ListCampaignsByURL(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newResults *CampaignResults
-		newResults, err = client.ListCampaignsByURL(
+		newResults, _, err = client.ListCampaignsByURL(
 			testCampaignTargetURL, 2, 5, SortByFieldCreatedAt, SortOrderDesc,
 		)
 		assert.Error(t, err)
@@ -1097,7 +1131,7 @@ func TestClient_ListCampaignsByURL(t *testing.T) {
 		assert.NoError(t, err)
 
 		var newResults *CampaignResults
-		newResults, err = client.ListCampaignsByURL(
+		newResults, _, err = client.ListCampaignsByURL(
 			testCampaignTargetURL, 2, 5, SortByFieldCreatedAt, SortOrderDesc,
 		)
 		assert.Error(t, err)
@@ -1125,9 +1159,11 @@ func TestClient_CampaignsFeed(t *testing.T) {
 		mockResponseFeed(endpoint, http.StatusOK, results)
 
 		var feedResults string
-		feedResults, err = client.CampaignsFeed(FeedTypeRSS)
+		var response *StandardResponse
+		feedResults, response, err = client.CampaignsFeed(FeedTypeRSS)
 		assert.NoError(t, err)
 		assert.Equal(t, results, feedResults)
+		assert.NotNil(t, response)
 	})
 
 	t.Run("campaigns feeds (atom success)", func(t *testing.T) {
@@ -1145,7 +1181,7 @@ func TestClient_CampaignsFeed(t *testing.T) {
 		mockResponseFeed(endpoint, http.StatusOK, results)
 
 		var feedResults string
-		feedResults, err = client.CampaignsFeed(FeedTypeAtom)
+		feedResults, _, err = client.CampaignsFeed(FeedTypeAtom)
 		assert.NoError(t, err)
 		assert.Equal(t, results, feedResults)
 	})
@@ -1165,7 +1201,7 @@ func TestClient_CampaignsFeed(t *testing.T) {
 		mockResponseFeed(endpoint, http.StatusOK, results)
 
 		var feedResults string
-		feedResults, err = client.CampaignsFeed(FeedTypeJSON)
+		feedResults, _, err = client.CampaignsFeed(FeedTypeJSON)
 		assert.NoError(t, err)
 		assert.Equal(t, results, feedResults)
 	})
@@ -1185,7 +1221,7 @@ func TestClient_CampaignsFeed(t *testing.T) {
 		mockResponseFeed(endpoint, http.StatusBadRequest, results)
 
 		var feedResults string
-		feedResults, err = client.CampaignsFeed(FeedTypeJSON)
+		feedResults, _, err = client.CampaignsFeed(FeedTypeJSON)
 		assert.Error(t, err)
 		assert.Equal(t, "", feedResults)
 	})
@@ -1217,7 +1253,7 @@ func TestClient_CampaignsFeed(t *testing.T) {
 		assert.NoError(t, err)
 
 		var feedResults string
-		feedResults, err = client.CampaignsFeed(FeedTypeJSON)
+		feedResults, _, err = client.CampaignsFeed(FeedTypeJSON)
 		assert.Error(t, err)
 		assert.Equal(t, "", feedResults)
 		assert.Equal(t, apiError.Message, err.Error())

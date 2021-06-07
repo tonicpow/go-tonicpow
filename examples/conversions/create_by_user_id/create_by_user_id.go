@@ -20,7 +20,7 @@ func main() {
 
 	// Create conversion
 	var conversion *tonicpow.Conversion
-	conversion, err = client.CreateConversion(
+	conversion, _, err = client.CreateConversion(
 		tonicpow.WithGoalName("example_goal"),
 		tonicpow.WithUserID(43),
 	)

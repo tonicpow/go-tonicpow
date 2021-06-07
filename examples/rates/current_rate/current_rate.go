@@ -20,7 +20,7 @@ func main() {
 
 	// Get current rate
 	var rate *tonicpow.Rate
-	rate, err = client.GetCurrentRate("usd", 1.00)
+	rate, _, err = client.GetCurrentRate("usd", 1.00)
 	if err != nil {
 		log.Fatalf("error in GetCurrentRate: %s", err.Error())
 	}

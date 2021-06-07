@@ -20,14 +20,14 @@ func main() {
 
 	// Get campaign first
 	var campaign *tonicpow.Campaign
-	campaign, err = client.GetCampaign(23)
+	campaign, _, err = client.GetCampaign(23)
 	if err != nil {
 		log.Fatalf("error in GetCampaign: %s", err.Error())
 	}
 
 	// Update a campaign
 	campaign.Title = "Updated Title Name"
-	err = client.UpdateCampaign(campaign)
+	_, err = client.UpdateCampaign(campaign)
 	if err != nil {
 		log.Fatalf("error in UpdateCampaign: %s", err.Error())
 	}

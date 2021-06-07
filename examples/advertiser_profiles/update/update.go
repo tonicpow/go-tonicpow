@@ -29,7 +29,7 @@ func main() {
 
 	// Update the profile
 	profile.Name = "TonicPow Test"
-	if err = client.UpdateAdvertiserProfile(profile); err != nil {
+	if _, err = client.UpdateAdvertiserProfile(profile); err != nil {
 		log.Fatalf("error in UpdateAdvertiserProfile: %s", err.Error())
 	}
 

@@ -20,7 +20,7 @@ func main() {
 
 	// Get the profile
 	var profile *tonicpow.AdvertiserProfile
-	if profile, err = client.GetAdvertiserProfile(23); err != nil {
+	if profile, _, err = client.GetAdvertiserProfile(23); err != nil {
 		log.Fatalf("error in GetAdvertiserProfile: %s", err.Error())
 	}
 

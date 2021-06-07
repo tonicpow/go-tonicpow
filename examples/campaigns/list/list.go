@@ -20,7 +20,7 @@ func main() {
 
 	// List campaign
 	var results *tonicpow.CampaignResults
-	results, err = client.ListCampaigns(
+	results, _, err = client.ListCampaigns(
 		1, 25, "", "", "", 0, false,
 	)
 	if err != nil {

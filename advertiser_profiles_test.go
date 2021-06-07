@@ -57,9 +57,11 @@ func TestClient_GetAdvertiserProfile(t *testing.T) {
 		err = mockResponseData(http.MethodGet, endpoint, http.StatusOK, profile)
 		assert.NoError(t, err)
 
-		profile, err = client.GetAdvertiserProfile(profile.ID)
+		var response *StandardResponse
+		profile, response, err = client.GetAdvertiserProfile(profile.ID)
 		assert.NoError(t, err)
 		assert.NotNil(t, profile)
+		assert.NotNil(t, response)
 		assert.Equal(t, testAdvertiserName, profile.Name)
 	})
 
@@ -77,9 +79,11 @@ func TestClient_GetAdvertiserProfile(t *testing.T) {
 		assert.NoError(t, err)
 
 		var realProfile *AdvertiserProfile
-		realProfile, err = client.GetAdvertiserProfile(profile.ID)
+		var response *StandardResponse
+		realProfile, response, err = client.GetAdvertiserProfile(profile.ID)
 		assert.Error(t, err)
 		assert.Nil(t, realProfile)
+		assert.Nil(t, response)
 	})
 
 	t.Run("error from api (status code)", func(t *testing.T) {
@@ -94,7 +98,7 @@ func TestClient_GetAdvertiserProfile(t *testing.T) {
 		assert.NoError(t, err)
 
 		var realProfile *AdvertiserProfile
-		realProfile, err = client.GetAdvertiserProfile(profile.ID)
+		realProfile, _, err = client.GetAdvertiserProfile(profile.ID)
 		assert.Error(t, err)
 		assert.Nil(t, realProfile)
 	})
@@ -123,7 +127,7 @@ func TestClient_GetAdvertiserProfile(t *testing.T) {
 		assert.NoError(t, err)
 
 		var realProfile *AdvertiserProfile
-		realProfile, err = client.GetAdvertiserProfile(profile.ID)
+		realProfile, _, err = client.GetAdvertiserProfile(profile.ID)
 		assert.Error(t, err)
 		assert.Nil(t, realProfile)
 		assert.Equal(t, apiError.Message, err.Error())
@@ -155,7 +159,7 @@ func ExampleClient_GetAdvertiserProfile() {
 
 	// Get profile (using mocking response)
 	var profile *AdvertiserProfile
-	if profile, err = client.GetAdvertiserProfile(testAdvertiserID); err != nil {
+	if profile, _, err = client.GetAdvertiserProfile(testAdvertiserID); err != nil {
 		fmt.Printf("error getting profile: " + err.Error())
 		return
 	}
@@ -174,7 +178,7 @@ func BenchmarkClient_GetAdvertiserProfile(b *testing.B) {
 		profile,
 	)
 	for i := 0; i < b.N; i++ {
-		_, _ = client.GetAdvertiserProfile(profile.ID)
+		_, _, _ = client.GetAdvertiserProfile(profile.ID)
 	}
 }
 
@@ -195,8 +199,10 @@ func TestClient_UpdateAdvertiserProfile(t *testing.T) {
 		err = mockResponseData(http.MethodPut, endpoint, http.StatusOK, profile)
 		assert.NoError(t, err)
 
-		err = client.UpdateAdvertiserProfile(profile)
+		var response *StandardResponse
+		response, err = client.UpdateAdvertiserProfile(profile)
 		assert.NoError(t, err)
+		assert.NotNil(t, response)
 		assert.Equal(t, testAdvertiserName, profile.Name)
 	})
 
@@ -211,8 +217,10 @@ func TestClient_UpdateAdvertiserProfile(t *testing.T) {
 		err = mockResponseData(http.MethodPut, endpoint, http.StatusOK, profile)
 		assert.NoError(t, err)
 
-		err = client.UpdateAdvertiserProfile(profile)
+		var response *StandardResponse
+		response, err = client.UpdateAdvertiserProfile(profile)
 		assert.Error(t, err)
+		assert.Nil(t, response)
 	})
 
 	t.Run("error from api (status code)", func(t *testing.T) {
@@ -225,7 +233,7 @@ func TestClient_UpdateAdvertiserProfile(t *testing.T) {
 		err = mockResponseData(http.MethodPut, endpoint, http.StatusBadRequest, profile)
 		assert.NoError(t, err)
 
-		err = client.UpdateAdvertiserProfile(profile)
+		_, err = client.UpdateAdvertiserProfile(profile)
 		assert.Error(t, err)
 	})
 
@@ -250,7 +258,7 @@ func TestClient_UpdateAdvertiserProfile(t *testing.T) {
 		err = mockResponseData(http.MethodPut, endpoint, http.StatusBadRequest, apiError)
 		assert.NoError(t, err)
 
-		err = client.UpdateAdvertiserProfile(profile)
+		_, err = client.UpdateAdvertiserProfile(profile)
 		assert.Error(t, err)
 		assert.Equal(t, apiError.Message, err.Error())
 	})
@@ -281,7 +289,7 @@ func ExampleClient_UpdateAdvertiserProfile() {
 	)
 
 	// Update profile
-	err = client.UpdateAdvertiserProfile(profile)
+	_, err = client.UpdateAdvertiserProfile(profile)
 	if err != nil {
 		fmt.Printf("error updating profile: " + err.Error())
 		return
@@ -301,7 +309,7 @@ func BenchmarkClient_UpdateAdvertiserProfile(b *testing.B) {
 		profile,
 	)
 	for i := 0; i < b.N; i++ {
-		_ = client.UpdateAdvertiserProfile(profile)
+		_, _ = client.UpdateAdvertiserProfile(profile)
 	}
 }
 
@@ -328,11 +336,13 @@ func TestClient_ListCampaignsByAdvertiserProfile(t *testing.T) {
 		err = mockResponseData(http.MethodGet, endpoint, http.StatusOK, results)
 		assert.NoError(t, err)
 
-		results, err = client.ListCampaignsByAdvertiserProfile(
+		var response *StandardResponse
+		results, response, err = client.ListCampaignsByAdvertiserProfile(
 			results.Campaigns[0].AdvertiserProfileID, 1, 25, SortByFieldBalance, SortOrderDesc,
 		)
 		assert.NoError(t, err)
 		assert.NotNil(t, results)
+		assert.NotNil(t, response)
 		assert.Equal(t, "TonicPow", results.Campaigns[0].AdvertiserProfile.Name)
 		assert.Equal(t, testCampaignID, results.Campaigns[0].ID)
 		assert.Equal(t, testGoalID, results.Campaigns[0].Goals[0].ID)
@@ -363,11 +373,13 @@ func TestClient_ListCampaignsByAdvertiserProfile(t *testing.T) {
 		err = mockResponseData(http.MethodGet, endpoint, http.StatusOK, results)
 		assert.NoError(t, err)
 
-		results, err = client.ListCampaignsByAdvertiserProfile(
+		var response *StandardResponse
+		results, response, err = client.ListCampaignsByAdvertiserProfile(
 			results.Campaigns[0].AdvertiserProfileID, 1, 25, "", "",
 		)
 		assert.NoError(t, err)
 		assert.NotNil(t, results)
+		assert.NotNil(t, response)
 		assert.Equal(t, 1, len(results.Campaigns))
 		assert.Equal(t, 1, results.Results)
 		assert.Equal(t, 25, results.ResultsPerPage)
@@ -393,7 +405,7 @@ func TestClient_ListCampaignsByAdvertiserProfile(t *testing.T) {
 		err = mockResponseData(http.MethodGet, endpoint, http.StatusOK, results)
 		assert.NoError(t, err)
 
-		results, err = client.ListCampaignsByAdvertiserProfile(
+		results, _, err = client.ListCampaignsByAdvertiserProfile(
 			0, 2, 5, SortByFieldBalance, SortOrderDesc,
 		)
 		assert.Error(t, err)
@@ -419,7 +431,7 @@ func TestClient_ListCampaignsByAdvertiserProfile(t *testing.T) {
 		err = mockResponseData(http.MethodGet, endpoint, http.StatusOK, results)
 		assert.NoError(t, err)
 
-		results, err = client.ListCampaignsByAdvertiserProfile(
+		results, _, err = client.ListCampaignsByAdvertiserProfile(
 			results.Campaigns[0].AdvertiserProfileID, 1, 25, "bad_field_name", SortOrderDesc,
 		)
 		assert.Error(t, err)
@@ -445,7 +457,7 @@ func TestClient_ListCampaignsByAdvertiserProfile(t *testing.T) {
 		err = mockResponseData(http.MethodGet, endpoint, http.StatusBadRequest, results)
 		assert.NoError(t, err)
 
-		results, err = client.ListCampaignsByAdvertiserProfile(
+		results, _, err = client.ListCampaignsByAdvertiserProfile(
 			results.Campaigns[0].AdvertiserProfileID, 1, 25, "bad_field_name", SortOrderDesc,
 		)
 		assert.Error(t, err)
@@ -482,7 +494,7 @@ func TestClient_ListCampaignsByAdvertiserProfile(t *testing.T) {
 		err = mockResponseData(http.MethodGet, endpoint, http.StatusBadRequest, apiError)
 		assert.NoError(t, err)
 
-		results, err = client.ListCampaignsByAdvertiserProfile(
+		results, _, err = client.ListCampaignsByAdvertiserProfile(
 			results.Campaigns[0].AdvertiserProfileID, 1, 25, SortByFieldBalance, SortOrderDesc,
 		)
 		assert.Error(t, err)
@@ -516,11 +528,13 @@ func TestClient_ListAppsByAdvertiserProfile(t *testing.T) {
 		err = mockResponseData(http.MethodGet, endpoint, http.StatusOK, results)
 		assert.NoError(t, err)
 
-		results, err = client.ListAppsByAdvertiserProfile(
+		var response *StandardResponse
+		results, response, err = client.ListAppsByAdvertiserProfile(
 			results.Apps[0].AdvertiserProfileID, 1, 25, SortByFieldName, SortOrderDesc,
 		)
 		assert.NoError(t, err)
 		assert.NotNil(t, results)
+		assert.NotNil(t, response)
 		assert.Equal(t, "TonicPow App", results.Apps[0].Name)
 		assert.Equal(t, testAppID, results.Apps[0].ID)
 		assert.Equal(t, 1, len(results.Apps))
@@ -550,11 +564,13 @@ func TestClient_ListAppsByAdvertiserProfile(t *testing.T) {
 		err = mockResponseData(http.MethodGet, endpoint, http.StatusOK, results)
 		assert.NoError(t, err)
 
-		results, err = client.ListAppsByAdvertiserProfile(
+		var response *StandardResponse
+		results, response, err = client.ListAppsByAdvertiserProfile(
 			results.Apps[0].AdvertiserProfileID, 1, 25, "", "",
 		)
 		assert.NoError(t, err)
 		assert.NotNil(t, results)
+		assert.NotNil(t, response)
 		assert.Equal(t, 1, len(results.Apps))
 		assert.Equal(t, 1, results.Results)
 		assert.Equal(t, 25, results.ResultsPerPage)
@@ -582,11 +598,13 @@ func TestClient_ListAppsByAdvertiserProfile(t *testing.T) {
 		err = mockResponseData(http.MethodGet, endpoint, http.StatusOK, results)
 		assert.NoError(t, err)
 
-		results, err = client.ListAppsByAdvertiserProfile(
+		var response *StandardResponse
+		results, response, err = client.ListAppsByAdvertiserProfile(
 			0, 2, 5, SortByFieldName, SortOrderDesc,
 		)
 		assert.Error(t, err)
 		assert.Nil(t, results)
+		assert.Nil(t, response)
 	})
 
 	t.Run("invalid sort by field", func(t *testing.T) {
@@ -610,7 +628,7 @@ func TestClient_ListAppsByAdvertiserProfile(t *testing.T) {
 		err = mockResponseData(http.MethodGet, endpoint, http.StatusOK, results)
 		assert.NoError(t, err)
 
-		results, err = client.ListAppsByAdvertiserProfile(
+		results, _, err = client.ListAppsByAdvertiserProfile(
 			results.Apps[0].AdvertiserProfileID, 1, 25, "bad_field", SortOrderDesc,
 		)
 		assert.Error(t, err)
@@ -638,7 +656,7 @@ func TestClient_ListAppsByAdvertiserProfile(t *testing.T) {
 		err = mockResponseData(http.MethodGet, endpoint, http.StatusBadRequest, results)
 		assert.NoError(t, err)
 
-		results, err = client.ListAppsByAdvertiserProfile(
+		results, _, err = client.ListAppsByAdvertiserProfile(
 			results.Apps[0].AdvertiserProfileID, 1, 25, SortByFieldName, SortOrderDesc,
 		)
 		assert.Error(t, err)
@@ -677,7 +695,7 @@ func TestClient_ListAppsByAdvertiserProfile(t *testing.T) {
 		err = mockResponseData(http.MethodGet, endpoint, http.StatusBadRequest, apiError)
 		assert.NoError(t, err)
 
-		results, err = client.ListAppsByAdvertiserProfile(
+		results, _, err = client.ListAppsByAdvertiserProfile(
 			results.Apps[0].AdvertiserProfileID, 1, 25, SortByFieldName, SortOrderDesc,
 		)
 		assert.Error(t, err)

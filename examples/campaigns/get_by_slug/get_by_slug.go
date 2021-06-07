@@ -20,7 +20,7 @@ func main() {
 
 	// Get a campaign
 	var campaign *tonicpow.Campaign
-	campaign, err = client.GetCampaignBySlug("tonicpow")
+	campaign, _, err = client.GetCampaignBySlug("tonicpow")
 	if err != nil {
 		log.Fatalf("error in GetCampaign: %s", err.Error())
 	}
