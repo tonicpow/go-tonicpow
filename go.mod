@@ -3,10 +3,10 @@ module github.com/tonicpow/go-tonicpow
 go 1.15
 
 require (
-	github.com/gojektech/heimdall/v6 v6.1.0
-	github.com/gojektech/valkyrie v0.0.0-20190210220504-8f62c1e7ba45 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
-	github.com/stretchr/objx v0.3.0 // indirect
-	github.com/stretchr/testify v1.7.0 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/go-resty/resty/v2 v2.6.0
+	github.com/jarcoal/httpmock v1.0.8
+	github.com/stretchr/testify v1.7.0
+	golang.org/x/net v0.0.0-20210525063256-abc453219eb5 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )

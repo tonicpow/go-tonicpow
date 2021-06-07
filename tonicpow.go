@@ -1,29 +1,17 @@
-/*
-Package tonicpow is the official golang implementation for the TonicPow API
-*/
+// Package tonicpow is the official golang implementation for the TonicPow API
+//
+// If you have any suggestions or comments, please feel free to open an issue on
+// this GitHub repository!
+//
+// By TonicPow Inc (https://tonicpow.com)
 package tonicpow
 
-import (
-	"fmt"
-)
+// Version will return the version of the library
+func Version() string {
+	return version
+}
 
-// NewClient creates a new client to submit requests pre-loaded with the API key
-//
-// For more information: https://docs.tonicpow.com
-func NewClient(apiKey string, environment APIEnvironment, clientOptions *Options) (c *Client, err error) {
-
-	// apiKey is required
-	if len(apiKey) == 0 {
-		err = fmt.Errorf("parameter %s cannot be empty", fieldAPIKey)
-		return
-	}
-
-	// Create a client using the given options
-	c = createClient(clientOptions)
-
-	// Set the default parameters
-	c.Parameters.apiKey = apiKey
-	c.Parameters.environment = environment
-
-	return
+// UserAgent will return the default user agent string
+func UserAgent() string {
+	return defaultUserAgent
 }

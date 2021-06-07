@@ -6,117 +6,150 @@ import (
 	"net/http"
 )
 
-// CreateConversionByGoalID will fire a conversion for a given goal id, if successful it will make a new Conversion
+// ConversionOps allow functional options to be supplied
+// that overwrite default conversion options.
+type ConversionOps func(c *conversionOptions)
+
+// conversionOptions holds all the configuration for the conversion
+type conversionOptions struct {
+	goalID           uint64  // Goal by ID
+	goalName         string  // Goal by name
+	tncpwSession     string  // tncpw session
+	customDimensions string  // (optional) custom dimensions to add to the conversion
+	purchaseAmount   float64 // (optional) purchase amount (total for e-commerce)
+	delayInMinutes   uint64  // (optional) delay the conversion x minutes (before processing, allowing cancellation)
+	tonicPowUserID   uint64  // (optional) trigger a conversion for a specific user
+}
+
+// validate will check the options before processing
+func (o *conversionOptions) validate() error {
+	if o.goalID == 0 && len(o.goalName) == 0 {
+		return fmt.Errorf("missing required attribute(s): %s or %s", fieldID, fieldName)
+	} else if o.goalID == 0 && o.tonicPowUserID > 0 {
+		return fmt.Errorf("missing required attribute: %s", fieldID)
+	} else if o.tonicPowUserID == 0 && len(o.tncpwSession) == 0 {
+		return fmt.Errorf("missing required attribute(s): %s or %s", fieldVisitorSessionGUID, fieldUserID)
+	}
+	return nil
+}
+
+// payload will generate the payload given the options
+func (o *conversionOptions) payload() map[string]string {
+	m := map[string]string{}
+
+	// Set goal id
+	if o.goalID > 0 {
+		m[fieldGoalID] = fmt.Sprintf("%d", o.goalID)
+	}
+
+	// Set goal name
+	if len(o.goalName) > 0 {
+		m[fieldName] = o.goalName
+	}
+
+	// Set tonic pow user
+	if o.tonicPowUserID > 0 {
+		m[fieldUserID] = fmt.Sprintf("%d", o.tonicPowUserID)
+	} else if len(o.tncpwSession) > 0 {
+		m[fieldVisitorSessionGUID] = o.tncpwSession
+	}
+
+	// Set delay in minutes
+	if o.delayInMinutes > 0 {
+		m[fieldDelayInMinutes] = fmt.Sprintf("%d", o.delayInMinutes)
+	}
+
+	// Set purchase amount
+	if o.purchaseAmount > 0 {
+		m[fieldAmount] = fmt.Sprintf("%f", o.purchaseAmount)
+	}
+
+	// Set custom dimensions
+	if len(o.customDimensions) > 0 {
+		m[fieldCustomDimensions] = o.customDimensions
+	}
+
+	return m
+}
+
+// WithGoalID will set a goal ID
+func WithGoalID(goalID uint64) ConversionOps {
+	return func(c *conversionOptions) {
+		c.goalID = goalID
+	}
+}
+
+// WithGoalName will set a goal name
+func WithGoalName(name string) ConversionOps {
+	return func(c *conversionOptions) {
+		c.goalName = name
+	}
+}
+
+// WithTncpwSession will set a tncpw_session
+func WithTncpwSession(session string) ConversionOps {
+	return func(c *conversionOptions) {
+		c.tncpwSession = session
+	}
+}
+
+// WithCustomDimensions will set custom dimensions (string / json)
+func WithCustomDimensions(dimensions string) ConversionOps {
+	return func(c *conversionOptions) {
+		c.customDimensions = dimensions
+	}
+}
+
+// WithPurchaseAmount will set purchase amount from e-commerce
+func WithPurchaseAmount(amount float64) ConversionOps {
+	return func(c *conversionOptions) {
+		c.purchaseAmount = amount
+	}
+}
+
+// WithDelay will set a delay in minutes
+func WithDelay(minutes uint64) ConversionOps {
+	return func(c *conversionOptions) {
+		c.delayInMinutes = minutes
+	}
+}
+
+// WithUserID will set a tonicpow user ID
+func WithUserID(userID uint64) ConversionOps {
+	return func(c *conversionOptions) {
+		c.tonicPowUserID = userID
+	}
+}
+
+// CreateConversion will fire a conversion for a given goal, if successful it will make a new Conversion
 //
 // For more information: https://docs.tonicpow.com/#caeffdd5-eaad-4fc8-ac01-8288b50e8e27
-func (c *Client) CreateConversionByGoalID(goalID uint64, tncpwSession, customDimensions string, optionalPurchaseAmount float64, delayInMinutes int64) (conversion *Conversion, err error) {
+func (c *Client) CreateConversion(opts ...ConversionOps) (conversion *Conversion, err error) {
 
-	// Must have a name
-	if goalID == 0 {
-		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
-		return
+	// Start the options
+	options := new(conversionOptions)
+
+	// Set the conversion options
+	for _, opt := range opts {
+		opt(options)
 	}
 
-	// Must have a session guid
-	if len(tncpwSession) == 0 {
-		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldVisitorSessionGUID), http.StatusBadRequest)
+	// Validate options
+	if err = options.validate(); err != nil {
 		return
 	}
-
-	// Start the post data
-	data := map[string]string{fieldGoalID: fmt.Sprintf("%d", goalID), fieldVisitorSessionGUID: tncpwSession, fieldCustomDimensions: customDimensions, fieldDelayInMinutes: fmt.Sprintf("%d", delayInMinutes), fieldAmount: fmt.Sprintf("%f", optionalPurchaseAmount)}
 
 	// Fire the Request
-	var response string
-	if response, err = c.Request(modelConversion, http.MethodPost, data); err != nil {
+	var response StandardResponse
+	if response, err = c.Request(
+		http.MethodPost,
+		"/"+modelConversion,
+		options.payload(), http.StatusCreated,
+	); err != nil {
 		return
 	}
 
-	// Only a 201 is treated as a success
-	if err = c.Error(http.StatusCreated, response); err != nil {
-		return
-	}
-
-	// Convert model response
-	if err = json.Unmarshal([]byte(response), &conversion); err != nil {
-		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "conversion"), http.StatusExpectationFailed)
-	}
-	return
-}
-
-// CreateConversionByGoalName will fire a conversion for a given goal name, if successful it will make a new Conversion
-//
-// For more information: https://docs.tonicpow.com/#d19c9850-3832-45b2-b880-3ef2f3b7dc37
-func (c *Client) CreateConversionByGoalName(goalName, tncpwSession, customDimensions string, optionalPurchaseAmount float64, delayInMinutes int64) (conversion *Conversion, err error) {
-
-	// Must have a name
-	if len(goalName) == 0 {
-		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldName), http.StatusBadRequest)
-		return
-	}
-
-	// Must have a session guid
-	if len(tncpwSession) == 0 {
-		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldVisitorSessionGUID), http.StatusBadRequest)
-		return
-	}
-
-	// Start the post data
-	data := map[string]string{fieldName: goalName, fieldVisitorSessionGUID: tncpwSession, fieldCustomDimensions: customDimensions, fieldDelayInMinutes: fmt.Sprintf("%d", delayInMinutes), fieldAmount: fmt.Sprintf("%f", optionalPurchaseAmount)}
-
-	// Fire the Request
-	var response string
-	if response, err = c.Request(modelConversion, http.MethodPost, data); err != nil {
-		return
-	}
-
-	// Only a 201 is treated as a success
-	if err = c.Error(http.StatusCreated, response); err != nil {
-		return
-	}
-
-	// Convert model response
-	if err = json.Unmarshal([]byte(response), &conversion); err != nil {
-		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "conversion"), http.StatusExpectationFailed)
-	}
-	return
-}
-
-// CreateConversionByUserID will fire a conversion for a given goal and user id, if successful it will make a new Conversion
-//
-// For more information: https://docs.tonicpow.com/#d724f762-329e-473d-bdc4-aebc19dd9ea8
-func (c *Client) CreateConversionByUserID(goalID, userID uint64, customDimensions string, optionalPurchaseAmount float64, delayInMinutes int64) (conversion *Conversion, err error) {
-
-	// Must have a name
-	if goalID == 0 {
-		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
-		return
-	}
-
-	// Must have a user id
-	if userID == 0 {
-		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldUserID), http.StatusBadRequest)
-		return
-	}
-
-	// Start the post data
-	data := map[string]string{fieldGoalID: fmt.Sprintf("%d", goalID), fieldUserID: fmt.Sprintf("%d", userID), fieldCustomDimensions: customDimensions, fieldDelayInMinutes: fmt.Sprintf("%d", delayInMinutes), fieldAmount: fmt.Sprintf("%f", optionalPurchaseAmount)}
-
-	// Fire the Request
-	var response string
-	if response, err = c.Request(modelConversion, http.MethodPost, data); err != nil {
-		return
-	}
-
-	// Only a 201 is treated as a success
-	if err = c.Error(http.StatusCreated, response); err != nil {
-		return
-	}
-
-	// Convert model response
-	if err = json.Unmarshal([]byte(response), &conversion); err != nil {
-		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "conversion"), http.StatusExpectationFailed)
-	}
+	err = json.Unmarshal(response.Body, &conversion)
 	return
 }
 
@@ -126,27 +159,23 @@ func (c *Client) CreateConversionByUserID(goalID, userID uint64, customDimension
 // For more information: https://docs.tonicpow.com/#fce465a1-d8d5-442d-be22-95169170167e
 func (c *Client) GetConversion(conversionID uint64) (conversion *Conversion, err error) {
 
-	// Must have an id
+	// Must have an ID
 	if conversionID == 0 {
-		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
+		err = fmt.Errorf("missing required attribute: %s", fieldID)
 		return
 	}
 
 	// Fire the Request
-	var response string
-	if response, err = c.Request(fmt.Sprintf("%s/details/%d", modelConversion, conversionID), http.MethodGet, nil); err != nil {
+	var response StandardResponse
+	if response, err = c.Request(
+		http.MethodGet,
+		fmt.Sprintf("/%s/details/%d", modelConversion, conversionID),
+		nil, http.StatusOK,
+	); err != nil {
 		return
 	}
 
-	// Only a 200 is treated as a success
-	if err = c.Error(http.StatusOK, response); err != nil {
-		return
-	}
-
-	// Convert model response
-	if err = json.Unmarshal([]byte(response), &conversion); err != nil {
-		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "conversion"), http.StatusExpectationFailed)
-	}
+	err = json.Unmarshal(response.Body, &conversion)
 	return
 }
 
@@ -155,29 +184,26 @@ func (c *Client) GetConversion(conversionID uint64) (conversion *Conversion, err
 // For more information: https://docs.tonicpow.com/#e650b083-bbb4-4ff7-9879-c14b1ab3f753
 func (c *Client) CancelConversion(conversionID uint64, cancelReason string) (conversion *Conversion, err error) {
 
-	// Must have an id
+	// Must have an ID
 	if conversionID == 0 {
-		err = c.createError(fmt.Sprintf("missing required attribute: %s", fieldID), http.StatusBadRequest)
+		err = fmt.Errorf("missing required attribute: %s", fieldID)
 		return
 	}
-
-	// Start the post data
-	data := map[string]string{fieldID: fmt.Sprintf("%d", conversionID), fieldReason: cancelReason}
 
 	// Fire the Request
-	var response string
-	if response, err = c.Request(fmt.Sprintf("%s/cancel", modelConversion), http.MethodPut, data); err != nil {
+	var response StandardResponse
+	if response, err = c.Request(
+		http.MethodPut,
+		fmt.Sprintf("/%s/cancel", modelConversion),
+		map[string]string{
+			fieldID:     fmt.Sprintf("%d", conversionID),
+			fieldReason: cancelReason,
+		},
+		http.StatusOK,
+	); err != nil {
 		return
 	}
 
-	// Only a 200 is treated as a success
-	if err = c.Error(http.StatusOK, response); err != nil {
-		return
-	}
-
-	// Convert model response
-	if err = json.Unmarshal([]byte(response), &conversion); err != nil {
-		err = c.createError(fmt.Sprintf("failed unmarshaling data: %s", "conversion"), http.StatusExpectationFailed)
-	}
+	err = json.Unmarshal(response.Body, &conversion)
 	return
 }

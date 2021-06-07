@@ -1,252 +1,242 @@
 package tonicpow
 
 import (
-	"bytes"
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
-	"net"
 	"net/http"
-	"net/url"
+	"strconv"
+	"strings"
 	"time"
 
-	"github.com/gojektech/heimdall/v6"
-	"github.com/gojektech/heimdall/v6/httpclient"
+	"github.com/go-resty/resty/v2"
 )
 
-// Client is the parent struct that wraps the heimdall client
+// Client is the TonicPow client/configuration
 type Client struct {
-	httpClient  heimdall.Client // carries out the http operations
-	LastRequest *LastRequest    // is the raw information from the last Request
-	Parameters  *Parameters     // contains application specific values
+	httpClient *resty.Client
+	options    *clientOptions // Options are all the default settings / configuration
 }
 
-// Options holds all the configuration for connection, dialer and transport
-type Options struct {
-	BackOffExponentFactor          float64       `json:"back_off_exponent_factor"`
-	BackOffInitialTimeout          time.Duration `json:"back_off_initial_timeout"`
-	BackOffMaximumJitterInterval   time.Duration `json:"back_off_maximum_jitter_interval"`
-	BackOffMaxTimeout              time.Duration `json:"back_off_max_timeout"`
-	DialerKeepAlive                time.Duration `json:"dialer_keep_alive"`
-	DialerTimeout                  time.Duration `json:"dialer_timeout"`
-	RequestRetryCount              int           `json:"request_retry_count"`
-	RequestTimeout                 time.Duration `json:"request_timeout"`
-	TransportExpectContinueTimeout time.Duration `json:"transport_expect_continue_timeout"`
-	TransportIdleTimeout           time.Duration `json:"transport_idle_timeout"`
-	TransportMaxIdleConnections    int           `json:"transport_max_idle_connections"`
-	TransportTLSHandshakeTimeout   time.Duration `json:"transport_tls_handshake_timeout"`
-	UserAgent                      string        `json:"user_agent"`
+// clientOptions holds all the configuration for client requests and default resources
+type clientOptions struct {
+	apiKey         string              // API key
+	apiURL         string              // API endpoint (URL by environment)
+	environment    string              // Name of the current environment
+	customHeaders  map[string][]string // Custom headers on outgoing requests
+	httpTimeout    time.Duration       // Default timeout in seconds for GET requests
+	requestTracing bool                // If enabled, it will trace the request timing
+	retryCount     int                 // Default retry count for HTTP requests
+	userAgent      string              // User agent for all outgoing requests
 }
 
-// LastRequest is used to track what was submitted via the Request()
-type LastRequest struct {
-	Error      *Error `json:"Error"`       // Error is the last Error response from the api
-	Method     string `json:"method"`      // method is the HTTP method used
-	PostData   string `json:"post_data"`   // postData is the post data submitted if POST/PUT Request
-	StatusCode int    `json:"status_code"` // statusCode is the last code from the Request
-	URL        string `json:"url"`         // url is the url used for the Request
+// StandardResponse is the standard fields returned on all responses
+type StandardResponse struct {
+	Body       []byte          `json:"-"` // Body of the response request
+	Error      *Error          `json:"-"` // API error response
+	StatusCode int             `json:"-"` // Status code returned on the request
+	Tracing    resty.TraceInfo `json:"-"` // Trace information if enabled on the request
 }
 
-// Parameters are application specific values for requests
-type Parameters struct {
-	apiKey        string              // is the given api key for the user
-	CustomHeaders map[string][]string // is used for setting custom header values on requests
-	environment   APIEnvironment      // is the current api environment to use
-	UserAgent     string              // (optional for changing user agents)
+// ClientOps allow functional options to be supplied
+// that overwrite default client options.
+type ClientOps func(c *clientOptions)
+
+// WithEnvironment will change the environment
+func WithEnvironment(e environment) ClientOps {
+	return func(c *clientOptions) {
+		c.apiURL = e.apiURL
+		c.environment = e.name
+	}
 }
 
-// ClientDefaultOptions will return an Options struct with the default settings
+// WithEnvironmentString will change the environment
+func WithEnvironmentString(e string) ClientOps {
+	e = strings.ToLower(strings.TrimSpace(e))
+	if e == environmentStagingName || e == environmentStagingAlias {
+		return WithEnvironment(EnvironmentStaging)
+	} else if e == environmentDevelopmentName || e == environmentDevelopmentAlias {
+		return WithEnvironment(EnvironmentDevelopment)
+	}
+	return WithEnvironment(EnvironmentLive)
+}
+
+// WithHTTPTimeout can be supplied to adjust the default http client timeouts.
+// The http client is used when creating requests
+// Default timeout is 10 seconds.
+func WithHTTPTimeout(timeout time.Duration) ClientOps {
+	return func(c *clientOptions) {
+		c.httpTimeout = timeout
+	}
+}
+
+// WithRequestTracing will enable tracing.
+// Tracing is disabled by default.
+func WithRequestTracing() ClientOps {
+	return func(c *clientOptions) {
+		c.requestTracing = true
+	}
+}
+
+// WithRetryCount will overwrite the default retry count for http requests.
+// Default retries is 2.
+func WithRetryCount(retries int) ClientOps {
+	return func(c *clientOptions) {
+		c.retryCount = retries
+	}
+}
+
+// WithUserAgent will overwrite the default useragent.
+// Default is package name + version.
+func WithUserAgent(userAgent string) ClientOps {
+	return func(c *clientOptions) {
+		c.userAgent = userAgent
+	}
+}
+
+// WithAPIKey provides the API key
+func WithAPIKey(appAPIKey string) ClientOps {
+	return func(c *clientOptions) {
+		c.apiKey = appAPIKey
+	}
+}
+
+// WithCustomHeaders will add custom headers to outgoing requests
+// Custom headers is empty by default
+func WithCustomHeaders(headers map[string][]string) ClientOps {
+	return func(c *clientOptions) {
+		c.customHeaders = headers
+	}
+}
+
+// WithCustomHTTPClient will overwrite the default client with a custom client.
+func (c *Client) WithCustomHTTPClient(client *resty.Client) *Client {
+	c.httpClient = client
+	return c
+}
+
+// GetUserAgent will return the user agent string of the client
+func (c *Client) GetUserAgent() string {
+	return c.options.userAgent
+}
+
+// GetEnvironment will return the environment of the client
+func (c *Client) GetEnvironment() string {
+	return c.options.environment
+}
+
+// defaultClientOptions will return a clientOptions struct with the default settings
+//
 // Useful for starting with the default and then modifying as needed
-func ClientDefaultOptions() (clientOptions *Options) {
-	return &Options{
-		BackOffExponentFactor:          2.0,
-		BackOffInitialTimeout:          2 * time.Millisecond,
-		BackOffMaximumJitterInterval:   2 * time.Millisecond,
-		BackOffMaxTimeout:              10 * time.Millisecond,
-		DialerKeepAlive:                20 * time.Second,
-		DialerTimeout:                  5 * time.Second,
-		RequestRetryCount:              2,
-		RequestTimeout:                 10 * time.Second,
-		TransportExpectContinueTimeout: 3 * time.Second,
-		TransportIdleTimeout:           20 * time.Second,
-		TransportMaxIdleConnections:    10,
-		TransportTLSHandshakeTimeout:   5 * time.Second,
-		UserAgent:                      defaultUserAgent,
-	}
-}
-
-// createClient will make a new http client based on the options provided
-func createClient(options *Options) (c *Client) {
-
-	// Create a client
-	c = new(Client)
-
-	// Set options (either default or user modified)
-	if options == nil {
-		options = ClientDefaultOptions()
-	}
-
-	// dial is the net dialer for clientDefaultTransport
-	dial := &net.Dialer{KeepAlive: options.DialerKeepAlive, Timeout: options.DialerTimeout}
-
-	// clientDefaultTransport is the default transport struct for the HTTP client
-	clientDefaultTransport := &http.Transport{
-		DialContext:           dial.DialContext,
-		ExpectContinueTimeout: options.TransportExpectContinueTimeout,
-		IdleConnTimeout:       options.TransportIdleTimeout,
-		MaxIdleConns:          options.TransportMaxIdleConnections,
-		Proxy:                 http.ProxyFromEnvironment,
-		TLSHandshakeTimeout:   options.TransportTLSHandshakeTimeout,
-	}
-
-	// Determine the strategy for the http client (no retry enabled)
-	if options.RequestRetryCount <= 0 {
-		c.httpClient = httpclient.NewClient(
-			httpclient.WithHTTPTimeout(options.RequestTimeout),
-			httpclient.WithHTTPClient(&http.Client{
-				Transport: clientDefaultTransport,
-				Timeout:   options.RequestTimeout,
-			}),
-		)
-	} else { // Retry enabled
-		// Create exponential back-off
-		backOff := heimdall.NewExponentialBackoff(
-			options.BackOffInitialTimeout,
-			options.BackOffMaxTimeout,
-			options.BackOffExponentFactor,
-			options.BackOffMaximumJitterInterval,
-		)
-
-		c.httpClient = httpclient.NewClient(
-			httpclient.WithHTTPTimeout(options.RequestTimeout),
-			httpclient.WithRetrier(heimdall.NewRetrier(backOff)),
-			httpclient.WithRetryCount(options.RequestRetryCount),
-			httpclient.WithHTTPClient(&http.Client{
-				Transport: clientDefaultTransport,
-				Timeout:   options.RequestTimeout,
-			}),
-		)
-	}
-
-	// Create a last Request and parameters struct
-	c.LastRequest = new(LastRequest)
-	c.LastRequest.Error = new(Error)
-	c.Parameters = &Parameters{
-		UserAgent: options.UserAgent,
+func defaultClientOptions() (opts *clientOptions) {
+	// Set the default options
+	opts = &clientOptions{
+		apiURL:         EnvironmentLive.apiURL,
+		environment:    EnvironmentLive.name,
+		httpTimeout:    defaultHTTPTimeout,
+		requestTracing: false,
+		retryCount:     defaultRetryCount,
+		userAgent:      defaultUserAgent,
 	}
 	return
 }
 
-// Request is a generic wrapper for all api requests
-func (c *Client) Request(endpoint string, method string, payload interface{}) (response string, err error) {
+// NewClient creates a new client for all TonicPow requests
+//
+// If no options are given, it will use the DefaultClientOptions()
+// If there is no client is supplied, it will use a default Resty HTTP client.
+func NewClient(opts ...ClientOps) (*Client, error) {
+	defaults := defaultClientOptions()
 
-	// Set post value
-	var jsonValue []byte
-
-	// Add the environment
-	endpoint = fmt.Sprintf("%s%s", c.Parameters.environment, endpoint)
-
-	// Switch on methods
-	switch method {
-	case http.MethodPost, http.MethodPut, http.MethodDelete:
-		{
-			if jsonValue, err = json.Marshal(payload); err != nil {
-				err = c.createError("error marshaling data: "+err.Error(), http.StatusBadRequest)
-				return
-			}
-		}
-	case http.MethodGet:
-		{
-			if payload != nil {
-				params := payload.(url.Values)
-				endpoint += "?" + params.Encode()
-			}
-		}
+	// Create a new client
+	client := &Client{
+		options: defaults,
 	}
-
-	// Store for debugging purposes
-	c.LastRequest.Method = method
-	c.LastRequest.PostData = string(jsonValue)
-	c.LastRequest.URL = endpoint
-
-	// Start the Request
-	var request *http.Request
-	if request, err = http.NewRequestWithContext(context.Background(), method, endpoint, bytes.NewBuffer(jsonValue)); err != nil {
-		err = c.createError("error creating new request: "+err.Error(), http.StatusBadRequest)
-		return
+	// overwrite defaults with any set by user
+	for _, opt := range opts {
+		opt(client.options)
 	}
-
-	// Set the auth header
-	request.Header.Set(fieldAPIKey, c.Parameters.apiKey)
-
-	// Change the user agent
-	request.Header.Set("User-Agent", c.Parameters.UserAgent)
-
-	// Custom headers?
-	for key, headers := range c.Parameters.CustomHeaders {
-		for _, value := range headers {
-			request.Header.Set(key, value)
-		}
+	// Check for API key
+	if client.options.apiKey == "" {
+		return nil, errors.New("missing an API Key")
 	}
-
-	// Set the content type
-	if method == http.MethodPost || method == http.MethodPut {
-		request.Header.Set("Content-Type", "application/json")
+	// Set the Resty HTTP client
+	if client.httpClient == nil {
+		client.httpClient = resty.New()
+		// Set defaults (for GET requests)
+		client.httpClient.SetTimeout(client.options.httpTimeout)
+		client.httpClient.SetRetryCount(client.options.retryCount)
 	}
-
-	// Fire the http Request
-	var resp *http.Response
-	if resp, err = c.httpClient.Do(request); err != nil {
-		err = c.createError("error in do request: "+err.Error(), http.StatusExpectationFailed)
-		return
-	}
-
-	// Close the response body
-	defer func() {
-		_ = resp.Body.Close()
-	}()
-
-	// Save the status
-	c.LastRequest.StatusCode = resp.StatusCode
-
-	// Read the body
-	var body []byte
-	if body, err = ioutil.ReadAll(resp.Body); err != nil {
-		err = c.createError("error reading body: "+err.Error(), http.StatusExpectationFailed)
-		return
-	}
-
-	// Clear headers
-	c.Parameters.CustomHeaders = make(map[string][]string)
-
-	// Parse the response
-	response = string(body)
-	return
+	return client, nil
 }
 
-// Error will handle all basic error cases
-func (c *Client) Error(expectedStatusCode int, response string) (err error) {
-	if c.LastRequest.StatusCode != expectedStatusCode {
-		c.LastRequest.Error = new(Error)
-		if err = json.Unmarshal([]byte(response), c.LastRequest.Error); err != nil {
+// Request is a standard GET / POST / PUT / DELETE request for all outgoing HTTP requests
+// Omit the data attribute if using a GET request
+func (c *Client) Request(httpMethod string, requestEndpoint string,
+	data interface{}, expectedCode int) (response StandardResponse, err error) {
+
+	// Set the user agent
+	req := c.httpClient.R().SetHeader("User-Agent", c.options.userAgent)
+
+	// Set the body if (PUT || POST)
+	if httpMethod != http.MethodGet && httpMethod != http.MethodDelete {
+		var j []byte
+		if j, err = json.Marshal(data); err != nil {
 			return
 		}
-		err = fmt.Errorf("%s", c.LastRequest.Error.Message)
+		req = req.SetBody(string(j))
+		req.Header.Add("Content-Length", strconv.Itoa(len(j)))
+		req.Header.Set("Content-Type", "application/json")
 	}
-	return
-}
 
-// createError will create an internal error and return a standard Go error
-//
-// Sets the minimum needed for message and HTTP status (used by apps etc)
-// This error can be raised before a TonicPow request is even created
-func (c *Client) createError(message string, statusCode int) error {
-	c.LastRequest.Error.StatusCode = statusCode
-	c.LastRequest.Error.Message = message
-	if c.LastRequest.StatusCode <= 0 {
-		c.LastRequest.StatusCode = statusCode
+	// Enable tracing
+	if c.options.requestTracing {
+		req.EnableTrace()
 	}
-	return errors.New(message)
+
+	// Set the authorization and content type
+	req.Header.Set(fieldAPIKey, c.options.apiKey)
+
+	// Custom headers?
+	for key, headers := range c.options.customHeaders {
+		for _, value := range headers {
+			req.Header.Set(key, value)
+		}
+	}
+
+	// Fire the request
+	var resp *resty.Response
+	switch httpMethod {
+	case http.MethodPost:
+		resp, err = req.Post(c.options.apiURL + requestEndpoint)
+	case http.MethodPut:
+		resp, err = req.Put(c.options.apiURL + requestEndpoint)
+	case http.MethodDelete:
+		resp, err = req.Delete(c.options.apiURL + requestEndpoint)
+	case http.MethodGet:
+		resp, err = req.Get(c.options.apiURL + requestEndpoint)
+	}
+	if err != nil {
+		return
+	}
+
+	// Tracing enabled?
+	if c.options.requestTracing {
+		response.Tracing = resp.Request.TraceInfo()
+	}
+
+	// Set the status code & body
+	response.StatusCode = resp.StatusCode()
+	response.Body = resp.Body()
+
+	// Check expected code if set
+	if expectedCode > 0 && response.StatusCode != expectedCode {
+		response.Error = new(Error)
+		if err = json.Unmarshal(response.Body, &response.Error); err != nil {
+			return
+		}
+		err = fmt.Errorf("%s", response.Error.Message)
+	}
+
+	return
 }

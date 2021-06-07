@@ -6,7 +6,7 @@
 [![Build Status](https://img.shields.io/github/workflow/status/tonicpow/go-tonicpow/run-go-tests?logo=github&v=3)](https://github.com/tonicpow/go-tonicpow/actions)
 [![Report](https://goreportcard.com/badge/github.com/tonicpow/go-tonicpow?style=flat&v=3)](https://goreportcard.com/report/github.com/tonicpow/go-tonicpow)
 [![Go](https://img.shields.io/github/go-mod/go-version/tonicpow/go-tonicpow?v=3)](https://golang.org/)
-[![Slack](https://img.shields.io/badge/slack-tonicpow-orange.svg?logo=slack&style=flat&v=3)](https://atlantistic.slack.com/app_redirect?channel=tonicpow)
+[![Slack](https://img.shields.io/badge/slack-tonicpow-orange.svg?logo=slack&style=flat&v=3)](https://join.slack.com/t/tonicpow/shared_invite/zt-mlccqx28-IEabvOGPx_QLyFJJbWE3hQ)
 [![GoDoc](https://godoc.org/github.com/tonicpow/go-tonicpow?status.svg&style=flat&v=3)](https://pkg.go.dev/github.com/tonicpow/go-tonicpow)
 
 <br/>
@@ -104,7 +104,7 @@ vet                  Run the Go vet application
 All unit tests and [examples](examples) run via [Github Actions](https://github.com/tonicpow/go-tonicpow/actions) and
 uses [Go version 1.15.x](https://golang.org/doc/go1.15). View the [configuration file](.github/workflows/run-tests.yml).
 
-View a [full example application](examples/examples.go).
+View a [real working examples](examples).
 
 Run all tests (including integration tests)
 ```shell script
@@ -132,23 +132,7 @@ Read more about this Go project's [code standards](CODE_STANDARDS.md).
 <br/>
 
 ## Usage
-View the [examples & benchmarks](tonicpow_test.go)
-
-Basic implementation:
-```go
-package main
-
-import (
-    "os"
-    
-    "github.com/tonicpow/go-tonicpow"
-)
-
-func main() {
-    api, _ := tonicpow.NewClient(os.Getenv("TONICPOW_API_KEY"), tonicpow.LiveEnvironment, nil)
-    _, _ = api.CreateConversionByGoalName("landing-page-lead", "visitor-tncpw-session", "from: my blog", 0, 0)
-}
-```
+View the [working examples](examples)
 
 <br/>
 
