@@ -29,7 +29,7 @@ func (c *Client) CreateCampaign(campaign *Campaign) error {
 	}
 
 	// Fire the Request
-	var response StandardResponse
+	var response *StandardResponse
 	var err error
 	if response, err = c.Request(
 		http.MethodPost,
@@ -56,7 +56,7 @@ func (c *Client) GetCampaign(campaignID uint64) (campaign *Campaign, err error) 
 	}
 
 	// Fire the Request
-	var response StandardResponse
+	var response *StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
 		fmt.Sprintf("/%s/details/?%s=%d", modelCampaign, fieldID, campaignID),
@@ -83,7 +83,7 @@ func (c *Client) GetCampaignBySlug(slug string) (campaign *Campaign, err error) 
 	}
 
 	// Fire the Request
-	var response StandardResponse
+	var response *StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
 		fmt.Sprintf("/%s/details/?%s=%s", modelCampaign, fieldSlug, slug),
@@ -112,7 +112,7 @@ func (c *Client) UpdateCampaign(campaign *Campaign) (err error) {
 	campaign.permitFields()
 
 	// Fire the Request
-	var response StandardResponse
+	var response *StandardResponse
 	if response, err = c.Request(
 		http.MethodPut,
 		"/"+modelCampaign,
@@ -132,7 +132,7 @@ func (c *Client) UpdateCampaign(campaign *Campaign) (err error) {
 func (c *Client) CampaignsFeed(feedType feedType) (feed string, err error) {
 
 	// Fire the Request
-	var response StandardResponse
+	var response *StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
 		fmt.Sprintf("/%s/feed/?%s=%s", modelCampaign, fieldFeedType, feedType),
@@ -164,7 +164,7 @@ func (c *Client) ListCampaigns(page, resultsPerPage int, sortBy, sortOrder, sear
 	}
 
 	// Fire the Request
-	var response StandardResponse
+	var response *StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
 		fmt.Sprintf(
@@ -212,7 +212,7 @@ func (c *Client) ListCampaignsByURL(targetURL string, page, resultsPerPage int,
 	}
 
 	// Fire the Request
-	var response StandardResponse
+	var response *StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
 		fmt.Sprintf("/%s/list?%s=%s&%s=%d&%s=%d&%s=%s&%s=%s",

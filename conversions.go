@@ -140,7 +140,7 @@ func (c *Client) CreateConversion(opts ...ConversionOps) (conversion *Conversion
 	}
 
 	// Fire the Request
-	var response StandardResponse
+	var response *StandardResponse
 	if response, err = c.Request(
 		http.MethodPost,
 		"/"+modelConversion,
@@ -166,7 +166,7 @@ func (c *Client) GetConversion(conversionID uint64) (conversion *Conversion, err
 	}
 
 	// Fire the Request
-	var response StandardResponse
+	var response *StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
 		fmt.Sprintf("/%s/details/%d", modelConversion, conversionID),
@@ -191,7 +191,7 @@ func (c *Client) CancelConversion(conversionID uint64, cancelReason string) (con
 	}
 
 	// Fire the Request
-	var response StandardResponse
+	var response *StandardResponse
 	if response, err = c.Request(
 		http.MethodPut,
 		fmt.Sprintf("/%s/cancel", modelConversion),

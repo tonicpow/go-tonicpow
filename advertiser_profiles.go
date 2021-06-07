@@ -26,7 +26,7 @@ func (c *Client) GetAdvertiserProfile(profileID uint64) (profile *AdvertiserProf
 	}
 
 	// Fire the Request
-	var response StandardResponse
+	var response *StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
 		fmt.Sprintf("/%s/details/%d", modelAdvertiser, profileID),
@@ -55,7 +55,7 @@ func (c *Client) UpdateAdvertiserProfile(profile *AdvertiserProfile) (err error)
 	profile.permitFields()
 
 	// Fire the Request
-	var response StandardResponse
+	var response *StandardResponse
 	if response, err = c.Request(
 		http.MethodPut,
 		"/"+modelAdvertiser,
@@ -93,7 +93,7 @@ func (c *Client) ListCampaignsByAdvertiserProfile(profileID uint64, page, result
 	}
 
 	// Fire the Request
-	var response StandardResponse
+	var response *StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
 		fmt.Sprintf("/%s/%s/%d?%s=%d&%s=%d&%s=%s&%s=%s", modelAdvertiser, modelCampaign, profileID,
@@ -136,7 +136,7 @@ func (c *Client) ListAppsByAdvertiserProfile(profileID uint64, page, resultsPerP
 	}
 
 	// Fire the Request
-	var response StandardResponse
+	var response *StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
 		fmt.Sprintf(

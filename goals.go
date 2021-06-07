@@ -26,7 +26,7 @@ func (c *Client) CreateGoal(goal *Goal) (err error) {
 	}
 
 	// Fire the Request
-	var response StandardResponse
+	var response *StandardResponse
 	if response, err = c.Request(
 		http.MethodPost,
 		"/"+modelGoal,
@@ -52,7 +52,7 @@ func (c *Client) GetGoal(goalID uint64) (goal *Goal, err error) {
 	}
 
 	// Fire the Request
-	var response StandardResponse
+	var response *StandardResponse
 	if response, err = c.Request(
 		http.MethodGet,
 		fmt.Sprintf("/%s/details/%d", modelGoal, goalID),
@@ -80,7 +80,7 @@ func (c *Client) UpdateGoal(goal *Goal) (err error) {
 	goal.permitFields()
 
 	// Fire the Request
-	var response StandardResponse
+	var response *StandardResponse
 	if response, err = c.Request(
 		http.MethodPut,
 		"/"+modelGoal,

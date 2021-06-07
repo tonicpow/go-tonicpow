@@ -173,7 +173,7 @@ func NewClient(opts ...ClientOps) (*Client, error) {
 // Request is a standard GET / POST / PUT / DELETE request for all outgoing HTTP requests
 // Omit the data attribute if using a GET request
 func (c *Client) Request(httpMethod string, requestEndpoint string,
-	data interface{}, expectedCode int) (response StandardResponse, err error) {
+	data interface{}, expectedCode int) (response *StandardResponse, err error) {
 
 	// Set the user agent
 	req := c.httpClient.R().SetHeader("User-Agent", c.options.userAgent)
@@ -219,6 +219,9 @@ func (c *Client) Request(httpMethod string, requestEndpoint string,
 	if err != nil {
 		return
 	}
+
+	// Start the response
+	response = new(StandardResponse)
 
 	// Tracing enabled?
 	if c.options.requestTracing {
