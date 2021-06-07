@@ -2,12 +2,12 @@
 
 > The official Go implementation for interacting with the [TonicPow API](https://docs.tonicpow.com)
 
-[![Release](https://img.shields.io/github/release-pre/tonicpow/go-tonicpow.svg?logo=github&style=flat&v=3)](https://github.com/tonicpow/go-tonicpow/releases)
-[![Build Status](https://img.shields.io/github/workflow/status/tonicpow/go-tonicpow/run-go-tests?logo=github&v=3)](https://github.com/tonicpow/go-tonicpow/actions)
-[![Report](https://goreportcard.com/badge/github.com/tonicpow/go-tonicpow?style=flat&v=3)](https://goreportcard.com/report/github.com/tonicpow/go-tonicpow)
-[![Go](https://img.shields.io/github/go-mod/go-version/tonicpow/go-tonicpow?v=3)](https://golang.org/)
-[![Slack](https://img.shields.io/badge/slack-tonicpow-orange.svg?logo=slack&style=flat&v=3)](https://join.slack.com/t/tonicpow/shared_invite/zt-mlccqx28-IEabvOGPx_QLyFJJbWE3hQ)
-[![GoDoc](https://godoc.org/github.com/tonicpow/go-tonicpow?status.svg&style=flat&v=3)](https://pkg.go.dev/github.com/tonicpow/go-tonicpow)
+[![Release](https://img.shields.io/github/release-pre/tonicpow/go-tonicpow.svg?logo=github&style=flat&v=1)](https://github.com/tonicpow/go-tonicpow/releases)
+[![Build Status](https://img.shields.io/github/workflow/status/tonicpow/go-tonicpow/run-go-tests?logo=github&v=1)](https://github.com/tonicpow/go-tonicpow/actions)
+[![Report](https://goreportcard.com/badge/github.com/tonicpow/go-tonicpow?style=flat&v=1)](https://goreportcard.com/report/github.com/tonicpow/go-tonicpow)
+[![codecov](https://codecov.io/gh/tonicpow/go-tonicpow/branch/master/graph/badge.svg?v=1)](https://codecov.io/gh/tonicpow/go-tonicpow)
+[![Go](https://img.shields.io/github/go-mod/go-version/tonicpow/go-tonicpow?v=1)](https://golang.org/)
+[![Slack](https://img.shields.io/badge/slack-tonicpow-orange.svg?logo=slack&style=flat&v=1)](https://join.slack.com/t/tonicpow/shared_invite/zt-mlccqx28-IEabvOGPx_QLyFJJbWE3hQ)
 
 <br/>
 
@@ -150,10 +150,10 @@ View the [contributing guidelines](CONTRIBUTING.md) and follow the [code of cond
 
 Support the development of this project 🙏
 
-[![Donate](https://img.shields.io/badge/donate-bitcoin-brightgreen.svg?v=3)](https://tonicpow.com/?af=go-tonicpow) [![Twetch](https://img.shields.io/badge/share-twitter-00ACEE.svg?v=3)](https://twitter.com/intent/tweet?text=TonicPow%20integration%20with%20Go%20rocks!%20Check%20it%20out:%20https%3A%2F%2Ftncpw.co%2F7ca46e94) [![Twitter](https://img.shields.io/badge/share-twetch-085AF6.svg?v=3)](https://twetch.app/compose?description=TonicPow%20integration%20with%20Go%20rocks!%20Check%20it%20out:%20https%3A%2F%2Ftncpw.co%2F7ca46e94)
+[![Donate](https://img.shields.io/badge/donate-bitcoin-brightgreen.svg?v=1)](https://tonicpow.com/?af=go-tonicpow) [![Twetch](https://img.shields.io/badge/share-twitter-00ACEE.svg?v=1)](https://twitter.com/intent/tweet?text=TonicPow%20integration%20with%20Go%20rocks!%20Check%20it%20out:%20https%3A%2F%2Ftncpw.co%2F7ca46e94) [![Twitter](https://img.shields.io/badge/share-twetch-085AF6.svg?v=1)](https://twetch.app/compose?description=TonicPow%20integration%20with%20Go%20rocks!%20Check%20it%20out:%20https%3A%2F%2Ftncpw.co%2F7ca46e94)
 
 <br/>
 
 ## License
 
-[![license](https://img.shields.io/badge/license-Open%20BSV-brightgreen.svg?style=flat&v=3)](/LICENSE)
+[![license](https://img.shields.io/badge/license-Open%20BSV-brightgreen.svg?style=flat&v=1)](/LICENSE)
