@@ -128,7 +128,7 @@ func (c *Client) UpdateCampaign(campaign *Campaign) (response *StandardResponse,
 // This will return an Error if no campaigns are found (404)
 //
 // For more information: https://docs.tonicpow.com/#b3fe69d3-24ba-4c2a-a485-affbb0a738de
-func (c *Client) CampaignsFeed(feedType feedType) (feed string, response *StandardResponse, err error) {
+func (c *Client) CampaignsFeed(feedType FeedType) (feed string, response *StandardResponse, err error) {
 
 	// Fire the Request
 	if response, err = c.Request(

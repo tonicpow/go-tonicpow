@@ -44,6 +44,16 @@ func TestUserAgent(t *testing.T) {
 	})
 }
 
+// TestGetFeedType will test the method GetFeedType()
+func TestGetFeedType(t *testing.T) {
+	t.Run("test valid cases", func(t *testing.T) {
+		assert.Equal(t, FeedTypeRSS, GetFeedType("rss"))
+		assert.Equal(t, FeedTypeJSON, GetFeedType("json"))
+		assert.Equal(t, FeedTypeAtom, GetFeedType("atom"))
+		assert.Equal(t, FeedTypeRSS, GetFeedType(""))
+	})
+}
+
 // mockResponseData is used for mocking the response
 func mockResponseData(method, endpoint string, statusCode int, model interface{}) error {
 	httpmock.Reset()

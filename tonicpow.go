@@ -11,7 +11,19 @@ func Version() string {
 	return version
 }
 
-// UserAgent will return the default user agent string
+// UserAgent will return the default user-agent string
 func UserAgent() string {
 	return defaultUserAgent
+}
+
+// GetFeedType will return the feed type based on the provided string
+func GetFeedType(feedType string) FeedType {
+	switch feedType {
+	case "atom":
+		return FeedTypeAtom
+	case "json":
+		return FeedTypeJSON
+	default:
+		return FeedTypeRSS
+	}
 }

@@ -10,7 +10,7 @@ const (
 	defaultHTTPTimeout        = 10 * time.Second          // Default timeout for all GET requests in seconds
 	defaultRetryCount  int    = 2                         // Default retry count for HTTP requests
 	defaultUserAgent          = "go-tonicpow: " + version // Default user agent
-	version            string = "v0.6.2"                  // go-tonicpow version
+	version            string = "v0.6.3"                  // go-tonicpow version
 
 	// Field key names for various model requests
 	fieldAdvertiserProfileID = "advertiser_profile_id"
@@ -80,13 +80,13 @@ const (
 	SortOrderDesc string = "desc"
 
 	// FeedTypeAtom is for using the feed type: Atom
-	FeedTypeAtom feedType = "atom"
+	FeedTypeAtom FeedType = "atom"
 
 	// FeedTypeJSON is for using the feed type: JSON
-	FeedTypeJSON feedType = "json"
+	FeedTypeJSON FeedType = "json"
 
 	// FeedTypeRSS is for using the feed type: RSS
-	FeedTypeRSS feedType = "rss"
+	FeedTypeRSS FeedType = "rss"
 )
 
 var (
@@ -107,8 +107,8 @@ var (
 	}
 )
 
-// feedType is used for the campaign feeds (rss, atom, json)
-type feedType string
+// FeedType is used for the campaign feeds (rss, atom, json)
+type FeedType string
 
 // environment is used for changing the environment for running client requests
 type environment struct {
