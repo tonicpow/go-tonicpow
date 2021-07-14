@@ -157,7 +157,7 @@ func TestClient_GetUserAgent(t *testing.T) {
 // See more examples in /examples/
 func ExampleVersion() {
 	fmt.Printf("version: %s", Version())
-	// Output:version: v0.6.4
+	// Output:version: v0.6.5
 }
 
 // ExampleUserAgent example using UserAgent()
@@ -165,7 +165,7 @@ func ExampleVersion() {
 // See more examples in /examples/
 func ExampleUserAgent() {
 	fmt.Printf("user agent: %s", UserAgent())
-	// Output:user agent: go-tonicpow: v0.6.4
+	// Output:user agent: go-tonicpow: v0.6.5
 }
 
 // TestClient_GetEnvironment will test the method GetEnvironment()
@@ -191,7 +191,7 @@ func ExampleNewClient() {
 		return
 	}
 	fmt.Printf("loaded client: %s", client.options.userAgent)
-	// Output:loaded client: go-tonicpow: v0.6.4
+	// Output:loaded client: go-tonicpow: v0.6.5
 }
 
 // BenchmarkNewClient benchmarks the method NewClient()

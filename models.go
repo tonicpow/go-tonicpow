@@ -71,6 +71,7 @@ type Campaign struct {
 	LinkServiceDomainID   uint64                `json:"link_service_domain_id"`
 	PaidClicks            uint64                `json:"paid_clicks"`
 	PaidConversions       uint64                `json:"paid_conversions"`
+	PayoutMode            int                   `json:"payout_mode"`
 	Requirements          *CampaignRequirements `json:"requirements"`
 	BotProtection         bool                  `json:"bot_protection"`
 	ContributeEnabled     bool                  `json:"contribute_enabled"`
@@ -79,7 +80,7 @@ type Campaign struct {
 	MatchDomain           bool                  `json:"match_domain"`
 }
 
-// CampaignImage is the structure of the image meta data
+// CampaignImage is the structure of the image metadata
 type CampaignImage struct {
 	Height   int    `json:"height"`
 	MimeType string `json:"mime_type"`
