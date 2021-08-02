@@ -10,7 +10,7 @@ const (
 	defaultHTTPTimeout        = 10 * time.Second          // Default timeout for all GET requests in seconds
 	defaultRetryCount  int    = 2                         // Default retry count for HTTP requests
 	defaultUserAgent          = "go-tonicpow: " + version // Default user agent
-	version            string = "v0.6.5"                  // go-tonicpow version
+	version            string = "v0.6.6"                  // go-tonicpow version
 
 	// Field key names for various model requests
 	fieldAdvertiserProfileID = "advertiser_profile_id"
@@ -54,6 +54,11 @@ const (
 	environmentLiveName         string = "live"
 	environmentStagingAlias     string = "beta"
 	environmentStagingName      string = "staging"
+
+	// Environment API URLs
+	developmentURL = "http://localhost:3000/" + apiVersion
+	liveAPIURL     = "https://api.tonicpow.com/" + apiVersion
+	stagingAPIURL  = "https://api.staging.tonicpow.com/" + apiVersion
 
 	// SortByFieldBalance is for sorting results by field: balance
 	SortByFieldBalance string = "balance"
@@ -117,20 +122,35 @@ type environment struct {
 	name   string
 }
 
+// Alias will return the environment's alias
+func (e environment) Alias() string {
+	return e.alias
+}
+
+// Name will return the environment's name
+func (e environment) Name() string {
+	return e.name
+}
+
+// URL will return the environment's url
+func (e environment) URL() string {
+	return e.apiURL
+}
+
 // Current environments available
 var (
 	EnvironmentLive = environment{
-		apiURL: "https://api.tonicpow.com/" + apiVersion,
+		apiURL: liveAPIURL,
 		name:   environmentLiveName,
 		alias:  environmentLiveAlias,
 	}
 	EnvironmentStaging = environment{
-		apiURL: "https://api.staging.tonicpow.com/" + apiVersion,
+		apiURL: stagingAPIURL,
 		name:   environmentStagingName,
 		alias:  environmentStagingAlias,
 	}
 	EnvironmentDevelopment = environment{
-		apiURL: "http://localhost:3000/" + apiVersion,
+		apiURL: developmentURL,
 		name:   environmentDevelopmentName,
 		alias:  environmentDevelopmentAlias,
 	}
