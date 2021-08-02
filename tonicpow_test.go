@@ -54,6 +54,33 @@ func TestGetFeedType(t *testing.T) {
 	})
 }
 
+// TestEnvironment_Alias will test the method Alias()
+func TestEnvironment_Alias(t *testing.T) {
+	assert.Equal(t, environmentStagingAlias, EnvironmentStaging.Alias())
+	assert.Equal(t, environmentDevelopmentAlias, EnvironmentDevelopment.Alias())
+	assert.Equal(t, environmentLiveAlias, EnvironmentLive.Alias())
+	e := environment{}
+	assert.Equal(t, "", e.Alias())
+}
+
+// TestEnvironment_Name will test the method Name()
+func TestEnvironment_Name(t *testing.T) {
+	assert.Equal(t, environmentStagingName, EnvironmentStaging.Name())
+	assert.Equal(t, environmentDevelopmentName, EnvironmentDevelopment.Name())
+	assert.Equal(t, environmentLiveName, EnvironmentLive.Name())
+	e := environment{}
+	assert.Equal(t, "", e.Name())
+}
+
+// TestEnvironment_URL will test the method URL()
+func TestEnvironment_URL(t *testing.T) {
+	assert.Equal(t, stagingAPIURL, EnvironmentStaging.URL())
+	assert.Equal(t, developmentURL, EnvironmentDevelopment.URL())
+	assert.Equal(t, liveAPIURL, EnvironmentLive.URL())
+	e := environment{}
+	assert.Equal(t, "", e.URL())
+}
+
 // mockResponseData is used for mocking the response
 func mockResponseData(method, endpoint string, statusCode int, model interface{}) error {
 	httpmock.Reset()

@@ -108,12 +108,6 @@ func TestNewClient(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, client.options.apiURL, EnvironmentStaging.apiURL)
 		assert.Equal(t, client.options.environment, environmentStagingName)
-
-		client, err = NewClient(WithAPIKey(testAPIKey), WithEnvironmentString(environmentStagingName))
-		assert.NotNil(t, client)
-		assert.NoError(t, err)
-		assert.Equal(t, client.options.apiURL, EnvironmentStaging.apiURL)
-		assert.Equal(t, client.options.environment, environmentStagingName)
 	})
 
 	t.Run("custom environment (development)", func(t *testing.T) {
@@ -122,12 +116,17 @@ func TestNewClient(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, client.options.apiURL, EnvironmentDevelopment.apiURL)
 		assert.Equal(t, client.options.environment, environmentDevelopmentName)
+	})
 
-		client, err = NewClient(WithAPIKey(testAPIKey), WithEnvironmentString(environmentDevelopmentName))
+	t.Run("custom environment (custom)", func(t *testing.T) {
+		client, err := NewClient(
+			WithAPIKey(testAPIKey),
+			WithCustomEnvironment("custom", "alias", "http://localhost:5000"),
+		)
 		assert.NotNil(t, client)
 		assert.NoError(t, err)
-		assert.Equal(t, client.options.apiURL, EnvironmentDevelopment.apiURL)
-		assert.Equal(t, client.options.environment, environmentDevelopmentName)
+		assert.Equal(t, client.options.apiURL, "http://localhost:5000")
+		assert.Equal(t, client.options.environment, "custom")
 	})
 
 	t.Run("default no environment", func(t *testing.T) {
@@ -157,7 +156,7 @@ func TestClient_GetUserAgent(t *testing.T) {
 // See more examples in /examples/
 func ExampleVersion() {
 	fmt.Printf("version: %s", Version())
-	// Output:version: v0.6.5
+	// Output:version: v0.6.6
 }
 
 // ExampleUserAgent example using UserAgent()
@@ -165,7 +164,7 @@ func ExampleVersion() {
 // See more examples in /examples/
 func ExampleUserAgent() {
 	fmt.Printf("user agent: %s", UserAgent())
-	// Output:user agent: go-tonicpow: v0.6.5
+	// Output:user agent: go-tonicpow: v0.6.6
 }
 
 // TestClient_GetEnvironment will test the method GetEnvironment()
@@ -191,7 +190,7 @@ func ExampleNewClient() {
 		return
 	}
 	fmt.Printf("loaded client: %s", client.options.userAgent)
-	// Output:loaded client: go-tonicpow: v0.6.5
+	// Output:loaded client: go-tonicpow: v0.6.6
 }
 
 // BenchmarkNewClient benchmarks the method NewClient()

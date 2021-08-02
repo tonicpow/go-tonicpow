@@ -50,6 +50,15 @@ func WithEnvironment(e environment) ClientOps {
 	}
 }
 
+// WithCustomEnvironment will set a custom environment
+func WithCustomEnvironment(name, alias, apiURL string) ClientOps {
+	return WithEnvironment(environment{
+		alias:  alias,
+		apiURL: apiURL,
+		name:   name,
+	})
+}
+
 // WithEnvironmentString will change the environment
 func WithEnvironmentString(e string) ClientOps {
 	e = strings.ToLower(strings.TrimSpace(e))
