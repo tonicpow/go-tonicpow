@@ -10,7 +10,7 @@ const (
 	defaultHTTPTimeout        = 10 * time.Second          // Default timeout for all GET requests in seconds
 	defaultRetryCount  int    = 2                         // Default retry count for HTTP requests
 	defaultUserAgent          = "go-tonicpow: " + version // Default user agent
-	version            string = "v0.6.6"                  // go-tonicpow version
+	version            string = "v0.6.7"                  // go-tonicpow version
 
 	// Field key names for various model requests
 	fieldAdvertiserProfileID = "advertiser_profile_id"
