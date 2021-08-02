@@ -2,6 +2,7 @@ package tonicpow
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"testing"
 
@@ -34,6 +35,14 @@ func TestVersion(t *testing.T) {
 	})
 }
 
+// ExampleVersion example using Version()
+//
+// See more examples in /examples/
+func ExampleVersion() {
+	fmt.Printf("version: %s", Version())
+	// Output:version: v0.6.6
+}
+
 // TestUserAgent will test the method UserAgent()
 func TestUserAgent(t *testing.T) {
 	t.Parallel()
@@ -42,6 +51,14 @@ func TestUserAgent(t *testing.T) {
 		agent := UserAgent()
 		assert.Equal(t, defaultUserAgent, agent)
 	})
+}
+
+// ExampleUserAgent example using UserAgent()
+//
+// See more examples in /examples/
+func ExampleUserAgent() {
+	fmt.Printf("user agent: %s", UserAgent())
+	// Output:user agent: go-tonicpow: v0.6.6
 }
 
 // TestGetFeedType will test the method GetFeedType()
@@ -59,8 +76,17 @@ func TestEnvironment_Alias(t *testing.T) {
 	assert.Equal(t, environmentStagingAlias, EnvironmentStaging.Alias())
 	assert.Equal(t, environmentDevelopmentAlias, EnvironmentDevelopment.Alias())
 	assert.Equal(t, environmentLiveAlias, EnvironmentLive.Alias())
-	e := environment{}
+	e := Environment{}
 	assert.Equal(t, "", e.Alias())
+}
+
+// ExampleEnvironment_Alias example using Alias()
+//
+// See more examples in /examples/
+func ExampleEnvironment_Alias() {
+	env := EnvironmentLive
+	fmt.Printf("name: %s alias: %s", env.Name(), env.Alias())
+	// Output:name: live alias: production
 }
 
 // TestEnvironment_Name will test the method Name()
@@ -68,8 +94,17 @@ func TestEnvironment_Name(t *testing.T) {
 	assert.Equal(t, environmentStagingName, EnvironmentStaging.Name())
 	assert.Equal(t, environmentDevelopmentName, EnvironmentDevelopment.Name())
 	assert.Equal(t, environmentLiveName, EnvironmentLive.Name())
-	e := environment{}
+	e := Environment{}
 	assert.Equal(t, "", e.Name())
+}
+
+// ExampleEnvironment_Name example using Name()
+//
+// See more examples in /examples/
+func ExampleEnvironment_Name() {
+	env := EnvironmentLive
+	fmt.Printf("name: %s alias: %s", env.Name(), env.Alias())
+	// Output:name: live alias: production
 }
 
 // TestEnvironment_URL will test the method URL()
@@ -77,8 +112,17 @@ func TestEnvironment_URL(t *testing.T) {
 	assert.Equal(t, stagingAPIURL, EnvironmentStaging.URL())
 	assert.Equal(t, developmentURL, EnvironmentDevelopment.URL())
 	assert.Equal(t, liveAPIURL, EnvironmentLive.URL())
-	e := environment{}
+	e := Environment{}
 	assert.Equal(t, "", e.URL())
+}
+
+// ExampleEnvironment_URL example using URL()
+//
+// See more examples in /examples/
+func ExampleEnvironment_URL() {
+	env := EnvironmentLive
+	fmt.Printf("name: %s url: %s", env.Name(), env.URL())
+	// Output:name: live url: https://api.tonicpow.com/v1
 }
 
 // mockResponseData is used for mocking the response

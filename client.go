@@ -21,8 +21,7 @@ type Client struct {
 // clientOptions holds all the configuration for client requests and default resources
 type clientOptions struct {
 	apiKey         string              // API key
-	apiURL         string              // API endpoint (URL by environment)
-	environment    string              // Name of the current environment
+	env            Environment         // Environment
 	customHeaders  map[string][]string // Custom headers on outgoing requests
 	httpTimeout    time.Duration       // Default timeout in seconds for GET requests
 	requestTracing bool                // If enabled, it will trace the request timing
@@ -42,24 +41,23 @@ type StandardResponse struct {
 // that overwrite default client options.
 type ClientOps func(c *clientOptions)
 
-// WithEnvironment will change the environment
-func WithEnvironment(e environment) ClientOps {
+// WithEnvironment will change the Environment
+func WithEnvironment(e Environment) ClientOps {
 	return func(c *clientOptions) {
-		c.apiURL = e.apiURL
-		c.environment = e.name
+		c.env = e
 	}
 }
 
-// WithCustomEnvironment will set a custom environment
+// WithCustomEnvironment will set a custom Environment
 func WithCustomEnvironment(name, alias, apiURL string) ClientOps {
-	return WithEnvironment(environment{
+	return WithEnvironment(Environment{
 		alias:  alias,
 		apiURL: apiURL,
 		name:   name,
 	})
 }
 
-// WithEnvironmentString will change the environment
+// WithEnvironmentString will change the Environment
 func WithEnvironmentString(e string) ClientOps {
 	e = strings.ToLower(strings.TrimSpace(e))
 	if e == environmentStagingName || e == environmentStagingAlias {
@@ -129,9 +127,9 @@ func (c *Client) GetUserAgent() string {
 	return c.options.userAgent
 }
 
-// GetEnvironment will return the environment of the client
-func (c *Client) GetEnvironment() string {
-	return c.options.environment
+// GetEnvironment will return the Environment of the client
+func (c *Client) GetEnvironment() Environment {
+	return c.options.env
 }
 
 // defaultClientOptions will return a clientOptions struct with the default settings
@@ -140,8 +138,7 @@ func (c *Client) GetEnvironment() string {
 func defaultClientOptions() (opts *clientOptions) {
 	// Set the default options
 	opts = &clientOptions{
-		apiURL:         EnvironmentLive.apiURL,
-		environment:    EnvironmentLive.name,
+		env:            EnvironmentLive,
 		httpTimeout:    defaultHTTPTimeout,
 		requestTracing: false,
 		retryCount:     defaultRetryCount,
@@ -217,13 +214,13 @@ func (c *Client) Request(httpMethod string, requestEndpoint string,
 	var resp *resty.Response
 	switch httpMethod {
 	case http.MethodPost:
-		resp, err = req.Post(c.options.apiURL + requestEndpoint)
+		resp, err = req.Post(c.options.env.URL() + requestEndpoint)
 	case http.MethodPut:
-		resp, err = req.Put(c.options.apiURL + requestEndpoint)
+		resp, err = req.Put(c.options.env.URL() + requestEndpoint)
 	case http.MethodDelete:
-		resp, err = req.Delete(c.options.apiURL + requestEndpoint)
+		resp, err = req.Delete(c.options.env.URL() + requestEndpoint)
 	case http.MethodGet:
-		resp, err = req.Get(c.options.apiURL + requestEndpoint)
+		resp, err = req.Get(c.options.env.URL() + requestEndpoint)
 	}
 	if err != nil {
 		return

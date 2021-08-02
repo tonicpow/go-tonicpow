@@ -115,41 +115,41 @@ var (
 // FeedType is used for the campaign feeds (rss, atom, json)
 type FeedType string
 
-// environment is used for changing the environment for running client requests
-type environment struct {
+// Environment is used for changing the Environment for running client requests
+type Environment struct {
 	alias  string
 	apiURL string
 	name   string
 }
 
-// Alias will return the environment's alias
-func (e environment) Alias() string {
+// Alias will return the Environment's alias
+func (e Environment) Alias() string {
 	return e.alias
 }
 
-// Name will return the environment's name
-func (e environment) Name() string {
+// Name will return the Environment's name
+func (e Environment) Name() string {
 	return e.name
 }
 
-// URL will return the environment's url
-func (e environment) URL() string {
+// URL will return the Environment's url
+func (e Environment) URL() string {
 	return e.apiURL
 }
 
 // Current environments available
 var (
-	EnvironmentLive = environment{
+	EnvironmentLive = Environment{
 		apiURL: liveAPIURL,
 		name:   environmentLiveName,
 		alias:  environmentLiveAlias,
 	}
-	EnvironmentStaging = environment{
+	EnvironmentStaging = Environment{
 		apiURL: stagingAPIURL,
 		name:   environmentStagingName,
 		alias:  environmentStagingAlias,
 	}
-	EnvironmentDevelopment = environment{
+	EnvironmentDevelopment = Environment{
 		apiURL: developmentURL,
 		name:   environmentDevelopmentName,
 		alias:  environmentDevelopmentAlias,
