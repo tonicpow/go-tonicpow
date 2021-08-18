@@ -7,6 +7,8 @@
 [![Report](https://goreportcard.com/badge/github.com/tonicpow/go-tonicpow?style=flat&v=1)](https://goreportcard.com/report/github.com/tonicpow/go-tonicpow)
 [![codecov](https://codecov.io/gh/tonicpow/go-tonicpow/branch/master/graph/badge.svg?v=1)](https://codecov.io/gh/tonicpow/go-tonicpow)
 [![Go](https://img.shields.io/github/go-mod/go-version/tonicpow/go-tonicpow?v=1)](https://golang.org/)
+<br>
+[![Mergify Status](https://img.shields.io/endpoint.svg?url=https://gh.mergify.io/badges/tonicpow/go-tonicpow&style=flat&v=3)](https://mergify.io)
 [![Slack](https://img.shields.io/badge/slack-tonicpow-orange.svg?logo=slack&style=flat&v=1)](https://join.slack.com/t/tonicpow/shared_invite/zt-mlccqx28-IEabvOGPx_QLyFJJbWE3hQ)
 
 <br/>
@@ -73,6 +75,7 @@ all                  Runs multiple commands
 clean                Remove previous builds and any test cache data
 clean-mods           Remove all the Go mod cache
 coverage             Shows the test coverage
+generate             Runs the go generate command in the base of the repo
 godocs               Sync the latest tag with GoDocs
 help                 Show this help message
 install              Install the application
@@ -92,6 +95,7 @@ test-ci              Runs all tests via CI (exports coverage)
 test-ci-no-race      Runs all tests via CI (no race) (exports coverage)
 test-ci-short        Runs unit tests via CI (exports coverage)
 test-short           Runs vet, lint and tests (excludes integration tests)
+test-unit            Runs tests and outputs coverage
 uninstall            Uninstall the application (and remove files)
 update-linter        Update the golangci-lint package (macOS only)
 vet                  Run the Go vet application
@@ -163,6 +167,8 @@ View the [contributing guidelines](CONTRIBUTING.md) and follow the [code of cond
 Support the development of this project 🙏
 
 [![Donate](https://img.shields.io/badge/donate-bitcoin-brightgreen.svg?v=1)](https://tonicpow.com/?af=go-tonicpow) [![Twetch](https://img.shields.io/badge/share-twitter-00ACEE.svg?v=1)](https://twitter.com/intent/tweet?text=TonicPow%20integration%20with%20Go%20rocks!%20Check%20it%20out:%20https%3A%2F%2Ftncpw.co%2F7ca46e94) [![Twitter](https://img.shields.io/badge/share-twetch-085AF6.svg?v=1)](https://twetch.app/compose?description=TonicPow%20integration%20with%20Go%20rocks!%20Check%20it%20out:%20https%3A%2F%2Ftncpw.co%2F7ca46e94)
+
+[![Stars](https://img.shields.io/github/stars/tonicpow/go-tonicpow?label=Please%20like%20us&style=social)](https://github.com/tonicpow/go-tonicpow/stargazers)
 
 <br/>
 
