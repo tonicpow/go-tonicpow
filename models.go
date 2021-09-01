@@ -94,13 +94,13 @@ type CampaignImage struct {
 //
 type CampaignRequirements struct {
 	VisitorCountries    []string `json:"visitor_countries"`
-	Application         bool     `json:"application"`
 	DotWallet           bool     `json:"dotwallet"`
 	Facebook            bool     `json:"facebook"`
 	Google              bool     `json:"google"`
 	HandCash            bool     `json:"handcash"`
 	KYC                 bool     `json:"kyc"`
 	MoneyButton         bool     `json:"moneybutton"`
+	PPCBid              bool     `json:"ppc_bid"`
 	Relay               bool     `json:"relay"`
 	Twitter             bool     `json:"twitter"`
 	VisitorRestrictions bool     `json:"visitor_restrictions"`
