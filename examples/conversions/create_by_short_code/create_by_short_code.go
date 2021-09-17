@@ -22,7 +22,7 @@ func main() {
 	var conversion *tonicpow.Conversion
 	conversion, _, err = client.CreateConversion(
 		tonicpow.WithGoalID(123),
-		tonicpow.WithUserID(43),
+		tonicpow.WithShortCode("MyShortCode"),
 	)
 	if err != nil {
 		log.Fatalf("error in CreateConversion: %s", err.Error())
