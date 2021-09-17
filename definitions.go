@@ -31,6 +31,7 @@ const (
 	fieldReason              = "reason"
 	fieldResultsPerPage      = "results_per_page"
 	fieldSearchQuery         = "query"
+	fieldShortCode           = "short_code"
 	fieldSlug                = "slug"
 	fieldSortBy              = "sort_by"
 	fieldSortOrder           = "sort_order"

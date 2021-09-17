@@ -12,12 +12,13 @@ type ConversionOps func(c *conversionOptions)
 
 // conversionOptions holds all the configuration for the conversion
 type conversionOptions struct {
+	customDimensions string  // (optional) custom dimensions to add to the conversion
+	delayInMinutes   uint64  // (optional) delay the conversion x minutes (before processing, allowing cancellation)
 	goalID           uint64  // Goal by ID
 	goalName         string  // Goal by name
-	tncpwSession     string  // tncpw session
-	customDimensions string  // (optional) custom dimensions to add to the conversion
 	purchaseAmount   float64 // (optional) purchase amount (total for e-commerce)
-	delayInMinutes   uint64  // (optional) delay the conversion x minutes (before processing, allowing cancellation)
+	shortCode        string  // (optional) trigger a conversion for a link short_code
+	tncpwSession     string  // tncpw session
 	tonicPowUserID   uint64  // (optional) trigger a conversion for a specific user
 }
 
@@ -27,8 +28,11 @@ func (o *conversionOptions) validate() error {
 		return fmt.Errorf("missing required attribute(s): %s or %s", fieldID, fieldName)
 	} else if o.goalID == 0 && o.tonicPowUserID > 0 {
 		return fmt.Errorf("missing required attribute: %s", fieldID)
-	} else if o.tonicPowUserID == 0 && len(o.tncpwSession) == 0 {
-		return fmt.Errorf("missing required attribute(s): %s or %s", fieldVisitorSessionGUID, fieldUserID)
+	} else if o.tonicPowUserID == 0 && len(o.tncpwSession) == 0 && len(o.shortCode) == 0 {
+		return fmt.Errorf(
+			"missing required attribute(s): %s or %s or %s",
+			fieldVisitorSessionGUID, fieldUserID, fieldShortCode,
+		)
 	}
 	return nil
 }
@@ -50,6 +54,8 @@ func (o *conversionOptions) payload() map[string]string {
 	// Set tonic pow user
 	if o.tonicPowUserID > 0 {
 		m[fieldUserID] = fmt.Sprintf("%d", o.tonicPowUserID)
+	} else if len(o.shortCode) > 0 {
+		m[fieldShortCode] = o.shortCode
 	} else if len(o.tncpwSession) > 0 {
 		m[fieldVisitorSessionGUID] = o.tncpwSession
 	}
@@ -118,6 +124,13 @@ func WithDelay(minutes uint64) ConversionOps {
 func WithUserID(userID uint64) ConversionOps {
 	return func(c *conversionOptions) {
 		c.tonicPowUserID = userID
+	}
+}
+
+// WithShortCode will set a link short code
+func WithShortCode(shortCode string) ConversionOps {
+	return func(c *conversionOptions) {
+		c.shortCode = shortCode
 	}
 }
 

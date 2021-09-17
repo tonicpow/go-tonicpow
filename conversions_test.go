@@ -130,6 +130,32 @@ func TestClient_CreateConversion(t *testing.T) {
 		assert.Equal(t, testGoalID, newConversion.GoalID)
 	})
 
+	t.Run("create a conversion by goal id / short code (success)", func(t *testing.T) {
+		client, err := newTestClient()
+		assert.NoError(t, err)
+		assert.NotNil(t, client)
+
+		conversion := newTestConversion()
+
+		endpoint := fmt.Sprintf("%s/%s", EnvironmentDevelopment.apiURL, modelConversion)
+
+		err = mockResponseData(http.MethodPost, endpoint, http.StatusCreated, conversion)
+		assert.NoError(t, err)
+
+		var newConversion *Conversion
+		var response *StandardResponse
+		newConversion, response, err = client.CreateConversion(
+			WithGoalID(testGoalID),
+			WithShortCode(testShortCode),
+		)
+
+		assert.NoError(t, err)
+		assert.NotNil(t, newConversion)
+		assert.NotNil(t, response)
+		assert.Equal(t, testConversionID, newConversion.ID)
+		assert.Equal(t, testGoalID, newConversion.GoalID)
+	})
+
 	t.Run("missing goal id and session/user_id", func(t *testing.T) {
 		client, err := newTestClient()
 		assert.NoError(t, err)

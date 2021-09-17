@@ -19,9 +19,10 @@ const (
 	testCampaignTargetURL string = "https://tonicpow.com"
 	testConversionID      uint64 = 99
 	testGoalID            uint64 = 13
-	testRateCurrency      string = "usd"
-	testTncpwSession      string = "TestSessionKey12345678987654321"
 	testGoalName          string = "example_goal"
+	testRateCurrency      string = "usd"
+	testShortCode         string = "test_short_code"
+	testTncpwSession      string = "TestSessionKey12345678987654321"
 	testUserID            uint64 = 43
 )
 
