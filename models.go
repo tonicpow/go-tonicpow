@@ -142,6 +142,7 @@ type Goal struct {
 	MaxPerPromoter  int16   `json:"max_per_promoter"`
 	MaxPerVisitor   int16   `json:"max_per_visitor"`
 	Name            string  `json:"name"`
+	PayoutInstant   bool    `json:"payout_instant"`
 	PayoutRate      float64 `json:"payout_rate"`
 	Payouts         int     `json:"payouts"`
 	PayoutType      string  `json:"payout_type"`
