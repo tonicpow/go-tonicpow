@@ -9,6 +9,7 @@
 [![Go](https://img.shields.io/github/go-mod/go-version/tonicpow/go-tonicpow?v=1)](https://golang.org/)
 <br>
 [![Mergify Status](https://img.shields.io/endpoint.svg?url=https://gh.mergify.io/badges/tonicpow/go-tonicpow&style=flat&v=3)](https://mergify.io)
+[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/tonicpow/go-tonicpow)
 [![Slack](https://img.shields.io/badge/slack-tonicpow-orange.svg?logo=slack&style=flat&v=1)](https://join.slack.com/t/tonicpow/shared_invite/zt-mlccqx28-IEabvOGPx_QLyFJJbWE3hQ)
 
 <br/>
@@ -137,7 +138,7 @@ make bench
 <br/>
 
 ## Code Standards
-Read more about this Go project's [code standards](CODE_STANDARDS.md).
+Read more about this Go project's [code standards](.github/CODE_STANDARDS.md).
 
 <br/>
 
@@ -162,7 +163,7 @@ Checkout all the [real working examples](examples).
 ## Contributing
 If you're looking for a library using JavaScript, checkout [tonicpow-js](https://github.com/tonicpow/tonicpow-js)
 
-View the [contributing guidelines](CONTRIBUTING.md) and follow the [code of conduct](CODE_OF_CONDUCT.md).
+View the [contributing guidelines](.github/CONTRIBUTING.md) and follow the [code of conduct](.github/CODE_OF_CONDUCT.md).
 
 Support the development of this project 🙏
 
