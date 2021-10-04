@@ -89,20 +89,17 @@ type CampaignImage struct {
 }
 
 // CampaignRequirements is the structure for "requirements"
-//
-// DO NOT CHANGE ORDER - malign
-//
 type CampaignRequirements struct {
-	VisitorCountries    []string `json:"visitor_countries"`
+	ContractRequired    bool     `json:"contract_required"`
 	DotWallet           bool     `json:"dotwallet"`
 	Facebook            bool     `json:"facebook"`
 	Google              bool     `json:"google"`
 	HandCash            bool     `json:"handcash"`
 	KYC                 bool     `json:"kyc"`
 	MoneyButton         bool     `json:"moneybutton"`
-	PPCBid              bool     `json:"ppc_bid"`
 	Relay               bool     `json:"relay"`
 	Twitter             bool     `json:"twitter"`
+	VisitorCountries    []string `json:"visitor_countries"`
 	VisitorRestrictions bool     `json:"visitor_restrictions"`
 }
 
