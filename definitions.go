@@ -37,6 +37,7 @@ const (
 	fieldSortOrder           = "sort_order"
 	fieldTargetURL           = "target_url"
 	fieldTitle               = "title"
+	fieldTwitterID           = "twitter_id"
 	fieldUserID              = "user_id"
 	fieldVisitorSessionGUID  = "tncpw_session"
 
