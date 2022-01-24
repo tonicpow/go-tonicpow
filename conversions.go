@@ -20,7 +20,7 @@ type conversionOptions struct {
 	shortCode        string  // (optional) trigger a conversion for a link short_code
 	tncpwSession     string  // tncpw session
 	tonicPowUserID   uint64  // (optional) trigger a conversion for a specific user
-	twitterID        uint64  // (optional) trigger a conversion for a specific Twitter user
+	twitterID        string  // (optional) trigger a conversion for a specific Twitter user
 }
 
 // validate will check the options before processing
@@ -29,7 +29,7 @@ func (o *conversionOptions) validate() error {
 		return fmt.Errorf("missing required attribute(s): %s or %s", fieldID, fieldName)
 	} else if o.goalID == 0 && o.tonicPowUserID > 0 {
 		return fmt.Errorf("missing required attribute: %s", fieldID)
-	} else if o.tonicPowUserID == 0 && len(o.tncpwSession) == 0 && len(o.shortCode) == 0 && o.twitterID == 0 {
+	} else if o.tonicPowUserID == 0 && len(o.tncpwSession) == 0 && len(o.shortCode) == 0 && len(o.twitterID) == 0 {
 		return fmt.Errorf(
 			"missing required attribute(s): %s or %s or %s or %s",
 			fieldVisitorSessionGUID, fieldUserID, fieldShortCode, fieldTwitterID,
@@ -57,8 +57,8 @@ func (o *conversionOptions) payload() map[string]string {
 		m[fieldUserID] = fmt.Sprintf("%d", o.tonicPowUserID)
 	} else if len(o.shortCode) > 0 {
 		m[fieldShortCode] = o.shortCode
-	} else if o.twitterID > 0 {
-		m[fieldTwitterID] = fmt.Sprintf("%d", o.twitterID)
+	} else if len(o.twitterID) > 0 {
+		m[fieldTwitterID] = o.twitterID
 	} else if len(o.tncpwSession) > 0 {
 		m[fieldVisitorSessionGUID] = o.tncpwSession
 	}
@@ -138,7 +138,7 @@ func WithShortCode(shortCode string) ConversionOps {
 }
 
 // WithTwitterID will set a Twitter user ID
-func WithTwitterID(twitterID uint64) ConversionOps {
+func WithTwitterID(twitterID string) ConversionOps {
 	return func(c *conversionOptions) {
 		c.twitterID = twitterID
 	}

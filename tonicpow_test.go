@@ -23,7 +23,7 @@ const (
 	testRateCurrency      string = "usd"
 	testShortCode         string = "test_short_code"
 	testTncpwSession      string = "TestSessionKey12345678987654321"
-	testTwitterID         uint64 = 22413277
+	testTwitterID         string = "22413277"
 	testUserID            uint64 = 43
 )
 
