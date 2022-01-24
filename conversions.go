@@ -137,7 +137,7 @@ func WithShortCode(shortCode string) ConversionOps {
 	}
 }
 
-// WithTwitterID will set a link short code
+// WithTwitterID will set a twitter user ID
 func WithTwitterID(twitterID uint64) ConversionOps {
 	return func(c *conversionOptions) {
 		c.twitterID = twitterID
