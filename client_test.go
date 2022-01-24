@@ -11,7 +11,7 @@ import (
 )
 
 // newTestClient will return a client for testing purposes
-func newTestClient() (*Client, error) {
+func newTestClient() (ClientInterface, error) {
 	// Create a Resty Client
 	client := resty.New()
 
@@ -46,12 +46,12 @@ func TestNewClient(t *testing.T) {
 		client, err := NewClient(WithAPIKey(testAPIKey))
 		assert.NoError(t, err)
 		assert.NotNil(t, client)
-		assert.Equal(t, defaultHTTPTimeout, client.options.httpTimeout)
-		assert.Equal(t, defaultRetryCount, client.options.retryCount)
-		assert.Equal(t, defaultUserAgent, client.options.userAgent)
-		assert.Equal(t, false, client.options.requestTracing)
-		assert.Equal(t, EnvironmentLive.apiURL, client.options.env.URL())
-		assert.Equal(t, EnvironmentLive.name, client.options.env.Name())
+		assert.Equal(t, defaultHTTPTimeout, client.Options().httpTimeout)
+		assert.Equal(t, defaultRetryCount, client.Options().retryCount)
+		assert.Equal(t, defaultUserAgent, client.Options().userAgent)
+		assert.Equal(t, false, client.Options().requestTracing)
+		assert.Equal(t, EnvironmentLive.apiURL, client.Options().env.URL())
+		assert.Equal(t, EnvironmentLive.name, client.Options().env.Name())
 	})
 
 	t.Run("missing api key", func(t *testing.T) {
@@ -73,14 +73,14 @@ func TestNewClient(t *testing.T) {
 		client, err := NewClient(WithAPIKey(testAPIKey), WithHTTPTimeout(10*time.Second))
 		assert.NoError(t, err)
 		assert.NotNil(t, client)
-		assert.Equal(t, 10*time.Second, client.options.httpTimeout)
+		assert.Equal(t, 10*time.Second, client.Options().httpTimeout)
 	})
 
 	t.Run("custom retry count", func(t *testing.T) {
 		client, err := NewClient(WithAPIKey(testAPIKey), WithRetryCount(3))
 		assert.NoError(t, err)
 		assert.NotNil(t, client)
-		assert.Equal(t, 3, client.options.retryCount)
+		assert.Equal(t, 3, client.Options().retryCount)
 	})
 
 	t.Run("custom headers", func(t *testing.T) {
@@ -91,8 +91,8 @@ func TestNewClient(t *testing.T) {
 		client, err := NewClient(WithAPIKey(testAPIKey), WithCustomHeaders(headers))
 		assert.NoError(t, err)
 		assert.NotNil(t, client)
-		assert.Equal(t, 2, len(client.options.customHeaders))
-		assert.Equal(t, []string{"value_1"}, client.options.customHeaders["custom_header_1"])
+		assert.Equal(t, 2, len(client.Options().customHeaders))
+		assert.Equal(t, []string{"value_1"}, client.Options().customHeaders["custom_header_1"])
 	})
 
 	t.Run("custom options", func(t *testing.T) {
@@ -106,27 +106,48 @@ func TestNewClient(t *testing.T) {
 		client, err := NewClient(WithAPIKey(testAPIKey), WithEnvironment(EnvironmentLive))
 		assert.NotNil(t, client)
 		assert.NoError(t, err)
-		assert.Equal(t, liveAPIURL, client.options.env.URL())
-		assert.Equal(t, environmentLiveName, client.options.env.Name())
-		assert.Equal(t, environmentLiveAlias, client.options.env.Alias())
+		assert.Equal(t, liveAPIURL, client.Options().env.URL())
+		assert.Equal(t, environmentLiveName, client.Options().env.Name())
+		assert.Equal(t, environmentLiveAlias, client.Options().env.Alias())
+
+		client, err = NewClient(WithAPIKey(testAPIKey), WithEnvironmentString(environmentLiveName))
+		assert.NotNil(t, client)
+		assert.NoError(t, err)
+		assert.Equal(t, liveAPIURL, client.Options().env.URL())
+		assert.Equal(t, environmentLiveName, client.Options().env.Name())
+		assert.Equal(t, environmentLiveAlias, client.Options().env.Alias())
 	})
 
 	t.Run("custom Environment (staging)", func(t *testing.T) {
 		client, err := NewClient(WithAPIKey(testAPIKey), WithEnvironment(EnvironmentStaging))
 		assert.NotNil(t, client)
 		assert.NoError(t, err)
-		assert.Equal(t, stagingAPIURL, client.options.env.URL())
-		assert.Equal(t, environmentStagingName, client.options.env.Name())
-		assert.Equal(t, environmentStagingAlias, client.options.env.Alias())
+		assert.Equal(t, stagingAPIURL, client.Options().env.URL())
+		assert.Equal(t, environmentStagingName, client.Options().env.Name())
+		assert.Equal(t, environmentStagingAlias, client.Options().env.Alias())
+
+		client, err = NewClient(WithAPIKey(testAPIKey), WithEnvironmentString(environmentStagingName))
+		assert.NotNil(t, client)
+		assert.NoError(t, err)
+		assert.Equal(t, stagingAPIURL, client.Options().env.URL())
+		assert.Equal(t, environmentStagingName, client.Options().env.Name())
+		assert.Equal(t, environmentStagingAlias, client.Options().env.Alias())
 	})
 
 	t.Run("custom Environment (development)", func(t *testing.T) {
 		client, err := NewClient(WithAPIKey(testAPIKey), WithEnvironment(EnvironmentDevelopment))
 		assert.NotNil(t, client)
 		assert.NoError(t, err)
-		assert.Equal(t, developmentURL, client.options.env.URL())
-		assert.Equal(t, environmentDevelopmentName, client.options.env.Name())
-		assert.Equal(t, environmentDevelopmentAlias, client.options.env.Alias())
+		assert.Equal(t, developmentURL, client.Options().env.URL())
+		assert.Equal(t, environmentDevelopmentName, client.Options().env.Name())
+		assert.Equal(t, environmentDevelopmentAlias, client.Options().env.Alias())
+
+		client, err = NewClient(WithAPIKey(testAPIKey), WithEnvironmentString(environmentDevelopmentName))
+		assert.NotNil(t, client)
+		assert.NoError(t, err)
+		assert.Equal(t, developmentURL, client.Options().env.URL())
+		assert.Equal(t, environmentDevelopmentName, client.Options().env.Name())
+		assert.Equal(t, environmentDevelopmentAlias, client.Options().env.Alias())
 	})
 
 	t.Run("custom Environment (custom)", func(t *testing.T) {
@@ -136,17 +157,17 @@ func TestNewClient(t *testing.T) {
 		)
 		assert.NotNil(t, client)
 		assert.NoError(t, err)
-		assert.Equal(t, "http://localhost:5000", client.options.env.URL())
-		assert.Equal(t, "custom", client.options.env.Name())
-		assert.Equal(t, "alias", client.options.env.Alias())
+		assert.Equal(t, "http://localhost:5000", client.Options().env.URL())
+		assert.Equal(t, "custom", client.Options().env.Name())
+		assert.Equal(t, "alias", client.Options().env.Alias())
 	})
 
 	t.Run("default no Environment", func(t *testing.T) {
 		client, err := NewClient(WithAPIKey(testAPIKey), WithEnvironmentString(""))
 		assert.NotNil(t, client)
 		assert.NoError(t, err)
-		assert.Equal(t, liveAPIURL, client.options.env.URL())
-		assert.Equal(t, environmentLiveName, client.options.env.Name())
+		assert.Equal(t, liveAPIURL, client.Options().env.URL())
+		assert.Equal(t, environmentLiveName, client.Options().env.Name())
 	})
 }
 
@@ -186,8 +207,8 @@ func ExampleNewClient() {
 		fmt.Printf("error loading client: %s", err.Error())
 		return
 	}
-	fmt.Printf("loaded client: %s", client.options.userAgent)
-	// Output:loaded client: go-tonicpow: v0.6.16
+	fmt.Printf("loaded client: %s", client.Options().userAgent)
+	// Output:loaded client: go-tonicpow: v0.7.0
 }
 
 // BenchmarkNewClient benchmarks the method NewClient()

@@ -20,7 +20,7 @@ type conversionOptions struct {
 	shortCode        string  // (optional) trigger a conversion for a link short_code
 	tncpwSession     string  // tncpw session
 	tonicPowUserID   uint64  // (optional) trigger a conversion for a specific user
-	twitterID        uint64  // (optional) trigger a conversion for a specific twitter user
+	twitterID        uint64  // (optional) trigger a conversion for a specific Twitter user
 }
 
 // validate will check the options before processing
@@ -137,7 +137,7 @@ func WithShortCode(shortCode string) ConversionOps {
 	}
 }
 
-// WithTwitterID will set a twitter user ID
+// WithTwitterID will set a Twitter user ID
 func WithTwitterID(twitterID uint64) ConversionOps {
 	return func(c *conversionOptions) {
 		c.twitterID = twitterID
