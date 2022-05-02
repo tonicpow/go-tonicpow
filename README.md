@@ -8,7 +8,7 @@
 [![codecov](https://codecov.io/gh/tonicpow/go-tonicpow/branch/master/graph/badge.svg?v=1)](https://codecov.io/gh/tonicpow/go-tonicpow)
 [![Go](https://img.shields.io/github/go-mod/go-version/tonicpow/go-tonicpow?v=1)](https://golang.org/)
 <br>
-[![Mergify Status](https://img.shields.io/endpoint.svg?url=https://gh.mergify.io/badges/tonicpow/go-tonicpow&style=flat&v=3)](https://mergify.io)
+[![Mergify Status](https://img.shields.io/endpoint.svg?url=https://api.mergify.com/v1/badges/tonicpow/go-tonicpow&style=flat&v=3)](https://mergify.io)
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/tonicpow/go-tonicpow)
 [![Slack](https://img.shields.io/badge/slack-tonicpow-orange.svg?logo=slack&style=flat&v=1)](https://join.slack.com/t/tonicpow/shared_invite/zt-mlccqx28-IEabvOGPx_QLyFJJbWE3hQ)
 
