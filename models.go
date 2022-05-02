@@ -49,12 +49,13 @@ type Campaign struct {
 	Goals                 []*Goal               `json:"goals"`
 	Images                []*CampaignImage      `json:"images"`
 	CreatedAt             string                `json:"created_at"`
-	LastEventAt           string                `json:"last_event_at"`
 	Currency              string                `json:"currency"`
 	Description           string                `json:"description"`
 	ExpiresAt             string                `json:"expires_at"`
 	FundingAddress        string                `json:"funding_address"`
+	FundingPaymailAddress string                `json:"funding_paymail_address"`
 	ImageURL              string                `json:"image_url"`
+	LastEventAt           string                `json:"last_event_at"`
 	PublicGUID            string                `json:"public_guid"`
 	Slug                  string                `json:"slug"`
 	TargetURL             string                `json:"target_url"`
