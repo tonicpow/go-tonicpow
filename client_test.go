@@ -208,7 +208,7 @@ func ExampleNewClient() {
 		return
 	}
 	fmt.Printf("loaded client: %s", client.Options().userAgent)
-	// Output:loaded client: go-tonicpow: v0.7.1
+	// Output:loaded client: go-tonicpow: v0.7.2
 }
 
 // BenchmarkNewClient benchmarks the method NewClient()

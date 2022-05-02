@@ -3,7 +3,6 @@ package tonicpow
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -156,7 +155,10 @@ func (c *Client) Request(httpMethod string, requestEndpoint string,
 		if err = json.Unmarshal(response.Body, &response.Error); err != nil {
 			return
 		}
-		err = fmt.Errorf("%s", response.Error.Message)
+		err = errors.New(response.Error.Message)
+		if response.StatusCode == 0 { // If a 200 is expected, but you get a 201, this case occurs (improper status code check)
+			response.StatusCode = http.StatusInternalServerError
+		}
 	}
 
 	return
