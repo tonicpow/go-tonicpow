@@ -178,4 +178,4 @@ Support the development of this project 🙏
 
 ## License
 
-[![license](https://img.shields.io/badge/license-Open%20BSV-brightgreen.svg?style=flat&v=1)](/LICENSE)
+[![License](https://img.shields.io/github/license/tonicpow/go-tonicpow.svg?style=flat&v=1)](LICENSE)
