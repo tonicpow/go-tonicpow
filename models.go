@@ -59,6 +59,8 @@ type Campaign struct {
 	PublicGUID            string                `json:"public_guid"`
 	Slug                  string                `json:"slug"`
 	TargetURL             string                `json:"target_url"`
+	TargetType            string                `json:"target_type"`
+	TargetData            string                `json:"target_data"`
 	Title                 string                `json:"title"`
 	TxID                  string                `json:"-"`
 	AdvertiserProfile     *AdvertiserProfile    `json:"advertiser_profile"`
