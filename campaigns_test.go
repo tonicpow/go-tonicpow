@@ -20,6 +20,7 @@ func newTestCampaign() *Campaign {
 		ImageURL:            "https://res.cloudinary.com/tonicpow/image/upload/c_crop,x_0,y_0,w_2048,h_1024/w_600,h_300,c_limit,g_center/v1611266301/glfwmr0yhyjydeyfhyih.jpg",
 		PublicGUID:          "b02e13a7001546b1b7efb9df40ab75e5",
 		Slug:                "tonicpow",
+		TargetType:          "url",
 		TargetURL:           "https://tonicpow.com",
 		Title:               "TonicPow",
 		AdvertiserProfileID: testAdvertiserID,
