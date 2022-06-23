@@ -36,10 +36,13 @@ const (
 	fieldSortBy              = "sort_by"
 	fieldSortOrder           = "sort_order"
 	fieldTargetURL           = "target_url"
-	fieldTitle               = "title"
-	fieldTwitterID           = "twitter_id"
-	fieldUserID              = "user_id"
-	fieldVisitorSessionGUID  = "tncpw_session"
+	fieldTargetData          = "target_data"
+	fieldTargetType          = "target_type"
+
+	fieldTitle              = "title"
+	fieldTwitterID          = "twitter_id"
+	fieldUserID             = "user_id"
+	fieldVisitorSessionGUID = "tncpw_session"
 
 	// Model names (used for Request endpoints)
 	modelAdvertiser string = "advertisers"

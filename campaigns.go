@@ -24,8 +24,12 @@ func (c *Client) CreateCampaign(campaign *Campaign) (*StandardResponse, error) {
 		return nil, fmt.Errorf("missing required attribute: %s", fieldTitle)
 	} else if len(campaign.Description) == 0 {
 		return nil, fmt.Errorf("missing required attribute: %s", fieldDescription)
-	} else if len(campaign.TargetURL) == 0 {
+	} else if len(campaign.TargetType) == 0 {
+		return nil, fmt.Errorf("missing required attribute: %s", fieldTargetType)
+	} else if campaign.TargetType == "url" && len(campaign.TargetURL) == 0 {
 		return nil, fmt.Errorf("missing required attribute: %s", fieldTargetURL)
+	} else if campaign.TargetType == "hosted" && len(campaign.TargetData) == 0 {
+		return nil, fmt.Errorf("missing required attribute: %s", fieldTargetData)
 	}
 
 	// Fire the Request
