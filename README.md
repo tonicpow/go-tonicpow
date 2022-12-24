@@ -3,7 +3,7 @@
 > The official Go implementation for interacting with the [TonicPow API](https://docs.tonicpow.com)
 
 [![Release](https://img.shields.io/github/release-pre/tonicpow/go-tonicpow.svg?logo=github&style=flat&v=1)](https://github.com/tonicpow/go-tonicpow/releases)
-[![Build Status](https://img.shields.io/github/workflow/status/tonicpow/go-tonicpow/run-go-tests?logo=github&v=1)](https://github.com/tonicpow/go-tonicpow/actions)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/tonicpow/go-tonicpow/run-tests.yml?branch=master&logo=github&v=1)](https://github.com/tonicpow/go-tonicpow/actions)
 [![Report](https://goreportcard.com/badge/github.com/tonicpow/go-tonicpow?style=flat&v=1)](https://goreportcard.com/report/github.com/tonicpow/go-tonicpow)
 [![codecov](https://codecov.io/gh/tonicpow/go-tonicpow/branch/master/graph/badge.svg?v=1)](https://codecov.io/gh/tonicpow/go-tonicpow)
 [![Go](https://img.shields.io/github/go-mod/go-version/tonicpow/go-tonicpow?v=1)](https://golang.org/)
