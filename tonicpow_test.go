@@ -42,7 +42,7 @@ func TestVersion(t *testing.T) {
 // See more examples in /examples/
 func ExampleVersion() {
 	fmt.Printf("version: %s", Version())
-	// Output:version: v0.7.7
+	// Output:version: v0.8.0
 }
 
 // TestUserAgent will test the method UserAgent()
@@ -60,7 +60,7 @@ func TestUserAgent(t *testing.T) {
 // See more examples in /examples/
 func ExampleUserAgent() {
 	fmt.Printf("user agent: %s", UserAgent())
-	// Output:user agent: go-tonicpow: v0.7.7
+	// Output:user agent: go-tonicpow: v0.8.0
 }
 
 // TestGetFeedType will test the method GetFeedType()
